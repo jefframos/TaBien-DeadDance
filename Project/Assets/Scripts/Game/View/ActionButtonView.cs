@@ -19,6 +19,20 @@ public class ActionButtonView : MonoBehaviour {
     public float maxTime = 5f;
     public bool finishing;
     public Animator feedbackAnimator;
+
+    [SerializeField]
+    public class FeedbackStateView
+    {
+        public Animator animator;
+        public Text label;
+        public RectTransform content;
+        public RectTransform popContent;
+    }
+    public FeedbackStateView missState;
+    public FeedbackStateView normalState;
+    public FeedbackStateView greatState;
+    public FeedbackStateView perfectState;
+
     // Use this for initialization
     void Start () {
 
@@ -38,7 +52,6 @@ public class ActionButtonView : MonoBehaviour {
 
     private void ClickCallback()
     {
-        print("CLICK");
         finish();        
     }
 
