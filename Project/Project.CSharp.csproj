@@ -73,6 +73,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Game\Controller\GameController.cs" />
+    <Compile Include="Assets\Scripts\Game\Model\ActionButtonModel.cs" />
+    <Compile Include="Assets\Scripts\Game\Model\WaveModel.cs" />
     <Compile Include="Assets\Scripts\Game\View\ActionButtonView.cs" />
     <Compile Include="Assets\Scripts\Game\View\CharSelectView.cs" />
   </ItemGroup>
