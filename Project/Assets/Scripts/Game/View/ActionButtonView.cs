@@ -44,17 +44,13 @@ public class ActionButtonView : MonoBehaviour {
     public float maxTime = 5f;
     public bool finishing;
     private FeedbackStateView currentState;
-    
-    
+    private float timeStretch;
+
+
     // Use this for initialization
     void Start () {
 
         finishing = false;
-        currentScale = maxScale;
-        updateScale();
-        Build(2);
-
-        timeDecress = maxTime;
 
         button.onClick.AddListener(()=> {
             ClickCallback();
@@ -66,8 +62,16 @@ public class ActionButtonView : MonoBehaviour {
         feedbackState.SetActive(false);
     }
 
-    internal void Build(ActionButtonModel model)
+    internal void Build(ActionButtonModel model, float _timeStretch)
     {
+        timeStretch = _timeStretch;
+        maxTime = model.timeToTap * timeStretch;
+        maxScale = model.maxScale;
+
+        currentScale = maxScale;
+        timeDecress = maxTime;
+        updateScale();
+
         text.text = model.order.ToString();
         
         missState.Hide();
@@ -78,13 +82,13 @@ public class ActionButtonView : MonoBehaviour {
 
     private void ClickCallback()
     {
+        if (finishing)
+        {
+            return;
+        }
         finish();        
     }
 
-    public void Build(int level)
-    {
-        
-    }
     private void updateScale()
     {
         Vector2 tempScale = outerContent.localScale;
@@ -110,7 +114,7 @@ public class ActionButtonView : MonoBehaviour {
             finish(true);
         }
         else {
-            timeDecress -= Time.deltaTime;            
+            timeDecress -= Time.deltaTime * timeStretch;            
             currentScale = (maxScale * (timeDecress / maxTime));
             updateScale();
         }
