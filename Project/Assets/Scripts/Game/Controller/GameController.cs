@@ -2,39 +2,60 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
     public RectTransform actionArea;
     public GameObject actionButtonPrefab;
     public float gameTime = 0;
     private List<ActionButtonView> buttonWave;
-    public float timeStretch = 1;
     public List<WaveModel> wavesList;
     public int currentWave = 1;
+    public int bpm = 126;
+    private float _beatCounter = 0;
+    public AudioSource mainAudioSource;
+    public Metronome metronome;
+
+    public Text beatCounter;
     // Use this for initialization
     void Start () {
         foreach (ActionButtonModel item in wavesList[0].actionList)
         {
-            print(item.gridPosition);
+            //print(item.gridPosition);
         }
-    }
-	
-	// Update is called once per frame
-	void Update () {
 
-        gameTime += Time.deltaTime * timeStretch;
+        mainAudioSource.Play();
+        metronome.beatCallback = BeatCallback;
+    }
+
+    private void BeatCallback()
+    {
+        _beatCounter += 0.25f;
+
+        beatCounter.text = Mathf.Floor(_beatCounter).ToString();
+    }
+
+    // Update is called once per frame
+    void Update () {
+
+        //print(Time.fixedDeltaTime);
+        if (!mainAudioSource.isPlaying)
+        {
+            return;
+        }
+        //gameTime += Time.deltaTime * timeStretch;
 
         foreach(ActionButtonModel model in wavesList[currentWave].actionList)
         {
-            if(!model.placed && gameTime > ((model.timeToShow * timeStretch) - (model.timeToTap * timeStretch)))
+            if(!model.placed && _beatCounter >= ((float)(model.quarterBeatAppear - model.quarterBeatToTap)/4))
             {
                 addAction(model);
             }
         }
 
-        if (Mathf.Floor(gameTime) > wavesList[currentWave].duration * timeStretch)
+        if (_beatCounter > wavesList[currentWave].totalBeats)
         {
-            gameTime = 0;
+            _beatCounter = 0;
             foreach (ActionButtonModel model in wavesList[currentWave].actionList)
             {
                 model.placed = false;
@@ -59,7 +80,7 @@ public class GameController : MonoBehaviour {
 
         GameObject tempObject = (GameObject)Instantiate(actionButtonPrefab, tempV3, Quaternion.identity);
         tempObject.transform.SetParent(actionArea.transform, false);
-        tempObject.GetComponent<ActionButtonView>().Build(model, timeStretch);
+        tempObject.GetComponent<ActionButtonView>().Build(model);
         model.placed = true;
     }
 }

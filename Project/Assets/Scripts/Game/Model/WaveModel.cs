@@ -9,6 +9,7 @@ public class WaveModel : MonoBehaviour{
     public Vector2 grid = new Vector2(5,4);
     public bool firstConf = false;
     public float duration;
+    public int totalBeats;
 }
 [CustomEditor(typeof(WaveModel))]
 public class CatchActions : Editor
@@ -23,6 +24,7 @@ public class CatchActions : Editor
         myScript.grid = new Vector2(5, 4);
         myScript.firstConf = true;
         myScript.duration = 5;
+        myScript.totalBeats = 20;
     }
     override public void OnInspectorGUI()
     {
@@ -31,12 +33,10 @@ public class CatchActions : Editor
 
         myScript.difficulty = EditorGUILayout.IntField("Difficulty", myScript.difficulty);
         myScript.grid = EditorGUILayout.Vector2Field("Grid", myScript.grid);
-        myScript.duration = EditorGUILayout.FloatField("Duration", myScript.duration);
+        myScript.totalBeats = EditorGUILayout.IntField("Total Beats", myScript.totalBeats);
 
-        if (GUI.changed)
-        {
-            EditorUtility.SetDirty(myScript);
-        }
+        
+        EditorUtility.SetDirty(myScript);
     }
 }
 

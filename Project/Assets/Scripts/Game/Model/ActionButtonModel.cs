@@ -3,13 +3,18 @@ using System.Collections;
 using UnityEditor;
 
 public class ActionButtonModel : MonoBehaviour{
-    public float timeToShow = 1;
+    //public float timeToShow = 1;
     public Color color = new Color();
     public Vector2 gridPosition = new Vector2();
     public int order = 0;
     public bool placed = false;
-    public float timeToTap = 3;
+    //public float timeToTap = 3;
     public float maxScale = 5;
+    public int quarterBeatAppear = 20;
+    public int quarterBeatToTap = 4;
+
+    public int frameBeatAppear = 20;
+    public int frameBeatToTap = 4;
 }
 
 [CustomEditor(typeof(ActionButtonModel))]
@@ -35,10 +40,17 @@ public class MyScriptEditor : Editor
                
         myScript.gridPosition = EditorGUILayout.Vector2Field("GridPos", tempV3);
 
-        myScript.timeToShow = EditorGUILayout.FloatField("Time", myScript.timeToShow);
-        myScript.timeToTap = EditorGUILayout.FloatField("Time to tap", myScript.timeToTap);
-        myScript.maxScale = EditorGUILayout.FloatField("Max Scale", myScript.maxScale);
+       // myScript.timeToShow = EditorGUILayout.FloatField("Time", myScript.timeToShow);
         myScript.order = EditorGUILayout.IntField("Order", myScript.order);
+        myScript.quarterBeatAppear = EditorGUILayout.IntField("1/4 Beat Appear", myScript.quarterBeatAppear);
+        myScript.quarterBeatToTap = EditorGUILayout.IntField("1/4 Beat Tap", myScript.quarterBeatToTap);
+
+        myScript.frameBeatAppear = EditorGUILayout.IntField("Beat Appear", myScript.quarterBeatAppear / 4);
+        myScript.frameBeatToTap = EditorGUILayout.IntField("Beat Tap", myScript.quarterBeatToTap / 4);
+
+        //  myScript.timeToTap = EditorGUILayout.FloatField("Time to tap", myScript.timeToTap);
+        myScript.maxScale = EditorGUILayout.FloatField("Max Scale", myScript.maxScale);
+        
         myScript.color = EditorGUILayout.ColorField("Color", myScript.color);
         
 

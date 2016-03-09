@@ -40,12 +40,17 @@ public class ActionButtonView : MonoBehaviour {
     private float currentScale = 5f;
     public float maxScale = 5f;
     public float minScale = 0.3f;
-    private float timeDecress = 5f;
-    public float maxTime = 5f;
+    //private float timeDecress = 5f;
+    private float beatDecress = 5f;
+    //public float maxTime = 5f;
     public bool finishing;
     private FeedbackStateView currentState;
-    private float timeStretch;
 
+    public AudioSource audioSource;
+    public AudioClip corretAudioClip;
+    public AudioClip perfectAudioClip;
+    public AudioClip wrongAudioClip;
+    private int maxBeat;
 
     // Use this for initialization
     void Start () {
@@ -62,14 +67,16 @@ public class ActionButtonView : MonoBehaviour {
         feedbackState.SetActive(false);
     }
 
-    internal void Build(ActionButtonModel model, float _timeStretch)
+    internal void Build(ActionButtonModel model)
     {
-        timeStretch = _timeStretch;
-        maxTime = model.timeToTap * timeStretch;
+        //maxTime = model.timeToTap;
         maxScale = model.maxScale;
 
+        beatDecress = model.quarterBeatToTap;
+        maxBeat = model.quarterBeatToTap;
+
         currentScale = maxScale;
-        timeDecress = maxTime;
+        //timeDecress = maxTime;
         updateScale();
 
         text.text = model.order.ToString();
@@ -82,6 +89,7 @@ public class ActionButtonView : MonoBehaviour {
 
     private void ClickCallback()
     {
+        print("CLICK");
         if (finishing)
         {
             return;
@@ -94,11 +102,16 @@ public class ActionButtonView : MonoBehaviour {
         Vector2 tempScale = outerContent.localScale;
         tempScale.x = currentScale;
         tempScale.y = currentScale;
-        outerContent.localScale = tempScale;
+        if(currentScale <= 1)
+        {
+            goodState.Show();
+        }
+        outerContent.DOScale(tempScale, Time.fixedDeltaTime).SetEase(Ease.Linear);
+        //outerContent.localScale = tempScale;
     }
 
     // Update is called once per frame
-    void Update () {
+    void FixedUpdate() {
 
         if (finishing)
         {
@@ -114,8 +127,9 @@ public class ActionButtonView : MonoBehaviour {
             finish(true);
         }
         else {
-            timeDecress -= Time.deltaTime * timeStretch;            
-            currentScale = (maxScale * (timeDecress / maxTime));
+            //timeDecress -= Time.fixedDeltaTime;
+            beatDecress -= 1;
+            currentScale = (maxScale * (beatDecress / maxBeat));
             updateScale();
         }
 
@@ -133,30 +147,38 @@ public class ActionButtonView : MonoBehaviour {
         {
             currentState = missState;
             currentState.title = "MISS";
+            audioSource.PlayOneShot(wrongAudioClip);
         }
         else if (distance < 0.25f)
         {
             currentState = perfectState;
+            audioSource.PlayOneShot(perfectAudioClip);
             //print("PERFECT");
-        }else if (distance < 0.40f)
+        }
+        else if (distance < 0.40f)
         {
             currentState = greatState;
+            audioSource.PlayOneShot(corretAudioClip);
             //print("GREAT");
-        }else if (distance < 0.55f)
+        }
+        else if (distance < 0.55f)
         {
             currentState = goodState;
+            audioSource.PlayOneShot(corretAudioClip);
             //print("GOOD");
         }
         else if (currentScale < 1)
         {
             currentState = missState;
             currentState.title = "TO LATE";
+            audioSource.PlayOneShot(wrongAudioClip);
             //print("TO LATE");
         }
         else
         {
             currentState = missState;
             currentState.title = "TO EARLY";
+            audioSource.PlayOneShot(wrongAudioClip);
             //print("TO EARLY");
         }
 
