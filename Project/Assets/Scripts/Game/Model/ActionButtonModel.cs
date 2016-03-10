@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEditor;
+using UnityEngine.UI;
 
 public class ActionButtonModel : MonoBehaviour{
     //public float timeToShow = 1;
@@ -29,6 +30,13 @@ public class MyScriptEditor : Editor
         Vector2 tempV3 = new Vector2();
         RectTransform actionArea = myScript.transform.parent.GetComponent<RectTransform>();
         WaveModel waveModel = myScript.transform.parent.GetComponentInParent<WaveModel>();
+        Image image = myScript.transform.GetComponent<Image>();
+
+        myScript.color = image.color;
+        EditorGUILayout.ColorField("Color", image.color);
+        //myScript.color = EditorGUILayout.ColorField("New Color", myScript.color);
+
+
         int rndX = (int)(myScript.transform.localPosition.x - actionArea.rect.min.x);
         int rndY = (int)(myScript.transform.localPosition.y - actionArea.rect.min.y);
 
@@ -42,16 +50,21 @@ public class MyScriptEditor : Editor
 
        // myScript.timeToShow = EditorGUILayout.FloatField("Time", myScript.timeToShow);
         myScript.order = EditorGUILayout.IntField("Order", myScript.order);
-        myScript.quarterBeatAppear = EditorGUILayout.IntField("1/4 Beat Appear", myScript.quarterBeatAppear);
-        myScript.quarterBeatToTap = EditorGUILayout.IntField("1/4 Beat Tap", myScript.quarterBeatToTap);
 
-        myScript.frameBeatAppear = EditorGUILayout.IntField("Beat Appear", myScript.quarterBeatAppear / 4);
-        myScript.frameBeatToTap = EditorGUILayout.IntField("Beat Tap", myScript.quarterBeatToTap / 4);
+        EditorGUILayout.LabelField("Beat: " + ((float)myScript.quarterBeatAppear / 4).ToString());
+        myScript.quarterBeatAppear = EditorGUILayout.IntSlider(myScript.quarterBeatAppear, 0, waveModel.totalBeats * 4);
+
+
+        EditorGUILayout.LabelField("Beat to show: " + ((float)myScript.quarterBeatToTap / 4).ToString());
+        myScript.quarterBeatToTap = EditorGUILayout.IntSlider(myScript.quarterBeatToTap, 0, waveModel.totalBeats * 4);
+
+
+        EditorGUILayout.LabelField("Will appear on Beat: " + (((float)myScript.quarterBeatAppear / 4) - (float)myScript.quarterBeatToTap / 4).ToString());
 
         //  myScript.timeToTap = EditorGUILayout.FloatField("Time to tap", myScript.timeToTap);
         myScript.maxScale = EditorGUILayout.FloatField("Max Scale", myScript.maxScale);
         
-        myScript.color = EditorGUILayout.ColorField("Color", myScript.color);
+        
         
 
         EditorUtility.SetDirty(myScript);

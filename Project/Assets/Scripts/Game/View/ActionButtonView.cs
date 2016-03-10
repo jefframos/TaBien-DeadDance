@@ -34,6 +34,8 @@ public class ActionButtonView : MonoBehaviour {
     public GameObject feedbackState;
     public RectTransform innerContent;
     public RectTransform outerContent;
+    public Image innerImage;
+    public Image outerImage;
     public Text text;
     public Button button;
     public Vector2 scale;
@@ -72,7 +74,7 @@ public class ActionButtonView : MonoBehaviour {
         //maxTime = model.timeToTap;
         maxScale = model.maxScale;
 
-        beatDecress = model.quarterBeatToTap;
+        beatDecress = model.quarterBeatToTap + 4;
         maxBeat = model.quarterBeatToTap;
 
         currentScale = maxScale;
@@ -80,7 +82,10 @@ public class ActionButtonView : MonoBehaviour {
         updateScale();
 
         text.text = model.order.ToString();
-        
+
+        outerImage.color = model.color;
+        innerImage.color = model.color;
+
         missState.Hide();
         goodState.Hide();
         greatState.Hide();
@@ -102,10 +107,10 @@ public class ActionButtonView : MonoBehaviour {
         Vector2 tempScale = outerContent.localScale;
         tempScale.x = currentScale;
         tempScale.y = currentScale;
-        if(currentScale <= 1)
-        {
-            goodState.Show();
-        }
+        //if (currentScale <= 1)
+        //{
+        //    goodState.Show();
+        //}
         outerContent.DOScale(tempScale, Time.fixedDeltaTime).SetEase(Ease.Linear);
         //outerContent.localScale = tempScale;
     }
@@ -146,39 +151,39 @@ public class ActionButtonView : MonoBehaviour {
         if (miss)
         {
             currentState = missState;
-            currentState.title = "MISS";
-            audioSource.PlayOneShot(wrongAudioClip);
+            //currentState.title = "MISS";
+            audioSource.PlayOneShot(wrongAudioClip,0.5f);
         }
         else if (distance < 0.25f)
         {
             currentState = perfectState;
-            audioSource.PlayOneShot(perfectAudioClip);
+            audioSource.PlayOneShot(perfectAudioClip, 0.5f);
             //print("PERFECT");
         }
         else if (distance < 0.40f)
         {
             currentState = greatState;
-            audioSource.PlayOneShot(corretAudioClip);
+            audioSource.PlayOneShot(corretAudioClip, 0.5f);
             //print("GREAT");
         }
         else if (distance < 0.55f)
         {
             currentState = goodState;
-            audioSource.PlayOneShot(corretAudioClip);
+            audioSource.PlayOneShot(corretAudioClip, 0.5f);
             //print("GOOD");
         }
         else if (currentScale < 1)
         {
             currentState = missState;
-            currentState.title = "TO LATE";
-            audioSource.PlayOneShot(wrongAudioClip);
+            //currentState.title = "TO LATE";
+            audioSource.PlayOneShot(wrongAudioClip, 0.5f);
             //print("TO LATE");
         }
         else
         {
             currentState = missState;
-            currentState.title = "TO EARLY";
-            audioSource.PlayOneShot(wrongAudioClip);
+            //currentState.title = "TO EARLY";
+            audioSource.PlayOneShot(wrongAudioClip, 0.5f);
             //print("TO EARLY");
         }
 

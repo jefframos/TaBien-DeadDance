@@ -9,20 +9,23 @@ public class GameController : MonoBehaviour {
     public GameObject actionButtonPrefab;
     public float gameTime = 0;
     private List<ActionButtonView> buttonWave;
+    public int testWave = -1;
+
     public List<WaveModel> wavesList;
+    public List<BeatterView> beatterList;
     public int currentWave = 1;
-    public int bpm = 126;
     private float _beatCounter = 0;
+    private int _beatAcum = 0;
     public AudioSource mainAudioSource;
     public Metronome metronome;
+
+    public Animator zombieAnimator;
 
     public Text beatCounter;
     // Use this for initialization
     void Start () {
-        foreach (ActionButtonModel item in wavesList[0].actionList)
-        {
-            //print(item.gridPosition);
-        }
+        
+        getWave();
 
         mainAudioSource.Play();
         metronome.beatCallback = BeatCallback;
@@ -31,6 +34,17 @@ public class GameController : MonoBehaviour {
     private void BeatCallback()
     {
         _beatCounter += 0.25f;
+        _beatAcum++;
+
+        if(_beatAcum >= 4)
+        {
+            zombieAnimator.Play("ZombieBeat", -1, 0f);
+            _beatAcum = 0;
+            foreach (BeatterView item in beatterList)
+            {
+                item.Beat();
+            }
+        }
 
         beatCounter.text = Mathf.Floor(_beatCounter).ToString();
     }
@@ -60,12 +74,24 @@ public class GameController : MonoBehaviour {
             {
                 model.placed = false;
             }
+            getWave();
         }
-
+        
     }
-
+    private void getWave()
+    {
+        if (testWave < 0)
+        {
+            currentWave = UnityEngine.Random.Range(0, wavesList.Count);
+        }
+        else
+        {
+            currentWave = testWave;
+        }
+    }
     private void addAction(ActionButtonModel model)
     {
+
         Vector3 tempV3 = new Vector3();
 
         int rndX = (int)model.gridPosition.x;// UnityEngine.Random.Range(0, (int)grid.x);
