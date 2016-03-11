@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 
 public class ActionButtonView : MonoBehaviour {
-
+    public enum FeedbackStateType {MISS, GOOD, GREAT, BAD, PERFECT, TOLATE, TOEARLY };
     [Serializable]
     public class FeedbackStateView
     {
@@ -29,7 +29,7 @@ public class ActionButtonView : MonoBehaviour {
     public FeedbackStateView goodState;
     public FeedbackStateView greatState;
     public FeedbackStateView perfectState;
-
+    public FeedbackStateType currentFeedbackState;
     public GameObject newState;
     public GameObject feedbackState;
     public RectTransform innerContent;
@@ -54,12 +54,15 @@ public class ActionButtonView : MonoBehaviour {
     public AudioClip wrongAudioClip;
     private int maxBeat;
 
+    public Action callback;
+
     // Use this for initialization
     void Start () {
 
         finishing = false;
 
         button.onClick.AddListener(()=> {
+            
             ClickCallback();
         });
 
@@ -94,7 +97,6 @@ public class ActionButtonView : MonoBehaviour {
 
     private void ClickCallback()
     {
-        print("CLICK");
         if (finishing)
         {
             return;
@@ -150,30 +152,35 @@ public class ActionButtonView : MonoBehaviour {
         float distance = Vector2.Distance(new Vector2(currentScale, 0), new Vector2(1, 0));
         if (miss)
         {
+            currentFeedbackState = FeedbackStateType.MISS;
             currentState = missState;
             //currentState.title = "MISS";
             audioSource.PlayOneShot(wrongAudioClip,0.5f);
         }
         else if (distance < 0.25f)
         {
+            currentFeedbackState = FeedbackStateType.PERFECT;
             currentState = perfectState;
             audioSource.PlayOneShot(perfectAudioClip, 0.5f);
             //print("PERFECT");
         }
         else if (distance < 0.40f)
         {
+            currentFeedbackState = FeedbackStateType.GREAT;
             currentState = greatState;
             audioSource.PlayOneShot(corretAudioClip, 0.5f);
             //print("GREAT");
         }
         else if (distance < 0.55f)
         {
+            currentFeedbackState = FeedbackStateType.GOOD;
             currentState = goodState;
             audioSource.PlayOneShot(corretAudioClip, 0.5f);
             //print("GOOD");
         }
         else if (currentScale < 1)
         {
+            currentFeedbackState = FeedbackStateType.TOLATE;
             currentState = missState;
             //currentState.title = "TO LATE";
             audioSource.PlayOneShot(wrongAudioClip, 0.5f);
@@ -181,12 +188,13 @@ public class ActionButtonView : MonoBehaviour {
         }
         else
         {
+            currentFeedbackState = FeedbackStateType.TOEARLY;
             currentState = missState;
             //currentState.title = "TO EARLY";
             audioSource.PlayOneShot(wrongAudioClip, 0.5f);
             //print("TO EARLY");
         }
-
+        callback();
         currentState.Show();        
     }
 }

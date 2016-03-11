@@ -78,6 +78,7 @@
     <Compile Include="Assets\Scripts\Game\View\ActionButtonView.cs" />
     <Compile Include="Assets\Scripts\Game\View\BeatterView.cs" />
     <Compile Include="Assets\Scripts\Game\View\CharSelectView.cs" />
+    <Compile Include="Assets\Scripts\Game\View\ZombieView.cs" />
     <Compile Include="Assets\Scripts\Metronome.cs" />
   </ItemGroup>
   <ItemGroup>

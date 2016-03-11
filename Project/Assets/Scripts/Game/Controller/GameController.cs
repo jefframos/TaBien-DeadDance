@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class GameController : MonoBehaviour {
     public RectTransform actionArea;
@@ -22,6 +23,9 @@ public class GameController : MonoBehaviour {
     public Animator zombieAnimator;
 
     public Text beatCounter;
+
+    
+    public ZombieView zombieView;
     // Use this for initialization
     void Start () {
         
@@ -29,6 +33,7 @@ public class GameController : MonoBehaviour {
 
         mainAudioSource.Play();
         metronome.beatCallback = BeatCallback;
+        
     }
 
     private void BeatCallback()
@@ -38,7 +43,7 @@ public class GameController : MonoBehaviour {
 
         if(_beatAcum >= 4)
         {
-            zombieAnimator.Play("ZombieBeat", -1, 0f);
+            zombieView.Beat();
             _beatAcum = 0;
             foreach (BeatterView item in beatterList)
             {
@@ -51,14 +56,11 @@ public class GameController : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-
-        //print(Time.fixedDeltaTime);
+        
         if (!mainAudioSource.isPlaying)
         {
             return;
         }
-        //gameTime += Time.deltaTime * timeStretch;
-
         foreach(ActionButtonModel model in wavesList[currentWave].actionList)
         {
             if(!model.placed && _beatCounter >= ((float)(model.quarterBeatAppear - model.quarterBeatToTap)/4))
@@ -106,7 +108,13 @@ public class GameController : MonoBehaviour {
 
         GameObject tempObject = (GameObject)Instantiate(actionButtonPrefab, tempV3, Quaternion.identity);
         tempObject.transform.SetParent(actionArea.transform, false);
-        tempObject.GetComponent<ActionButtonView>().Build(model);
+        ActionButtonView actionView = tempObject.GetComponent<ActionButtonView>();
+        actionView.Build(model);
+        actionView.callback = (() =>
+        {
+            if(actionView.currentFeedbackState != ActionButtonView.FeedbackStateType.MISS)
+                zombieView.updatePart(tempV3);
+        });
         model.placed = true;
     }
 }

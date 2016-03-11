@@ -58,8 +58,8 @@ public class SimpleCCD : MonoBehaviour
 			i++;
 		}
 
-		endTransform.rotation = target.rotation;
-	}
+		endTransform.rotation = target.rotation;        
+    }
 
 	void CalculateIK()
 	{		
