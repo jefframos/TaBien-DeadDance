@@ -2,13 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+
 using UnityEngine.UI;
 using DG.Tweening;
 
 public class GameController : MonoBehaviour {
+    public BehaviourType behaviour;
     public RectTransform actionArea;
     public GameObject actionButtonPrefab;
-    public float gameTime = 0;
+
     private List<ActionButtonView> buttonWave;
     public int testWave = -1;
 
@@ -17,25 +19,32 @@ public class GameController : MonoBehaviour {
     public int currentWave = 1;
     private float _beatCounter = 0;
     private int _beatAcum = 0;
-    public AudioSource mainAudioSource;
+    public AudioController audioController;
+    //public AudioSource mainAudioSource;
     public Metronome metronome;
-
-    public Animator zombieAnimator;
+    
 
     public Text beatCounter;
+    public Text pointsLabel;
 
-    
+    public int points;
+    public ChainController chainController;
+
     public ZombieView zombieView;
+    public bool initedGame;
     // Use this for initialization
     void Start () {
-        
-        getWave();
-
-        mainAudioSource.Play();
+        initedGame = false;        
         metronome.beatCallback = BeatCallback;
-        
+        InitGame();
     }
-
+    public void InitGame()
+    {
+        getWave();
+        audioController.InitAudioController();
+        chainController.ResetChain();
+        initedGame = true;
+    }
     private void BeatCallback()
     {
         _beatCounter += 0.25f;
@@ -57,11 +66,12 @@ public class GameController : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         
-        if (!mainAudioSource.isPlaying)
+        if (!audioController.audioSource.isPlaying)
         {
             return;
         }
-        foreach(ActionButtonModel model in wavesList[currentWave].actionList)
+        metronome.BPM = audioController.currentAudioLoop.BPM;
+        foreach (ActionButtonModel model in wavesList[currentWave].actionList)
         {
             if(!model.placed && _beatCounter >= ((float)(model.quarterBeatAppear - model.quarterBeatToTap)/4))
             {
@@ -110,11 +120,67 @@ public class GameController : MonoBehaviour {
         tempObject.transform.SetParent(actionArea.transform, false);
         ActionButtonView actionView = tempObject.GetComponent<ActionButtonView>();
         actionView.Build(model);
-        actionView.callback = (() =>
+        actionView.finishCallback = (() =>
         {
-            if(actionView.currentFeedbackState != ActionButtonView.FeedbackStateType.MISS)
-                zombieView.updatePart(tempV3);
+           
+
+            int actionPoints = 0;
+                switch (actionView.currentFeedbackState)
+                {
+                    case FeedbackStateType.MISS:
+                        applyChainPoints();
+                        zombieView.updatePart(tempV3);
+                        break;
+                        case FeedbackStateType.GOOD:
+                        actionPoints = 1;
+                        break;
+                    case FeedbackStateType.GREAT:
+                        actionPoints = 2;
+                        break;
+                    case FeedbackStateType.BAD:
+                        applyChainPoints();
+                        break;
+                    case FeedbackStateType.PERFECT:
+                        actionPoints = 3;
+                        break;
+                    case FeedbackStateType.TOLATE:
+                        applyChainPoints();
+                        break;
+                    case FeedbackStateType.TOEARLY:
+                        applyChainPoints();
+                        break;
+                    default:
+                        break;
+                }
+            bool toUpdatePoints = false;
+            toUpdatePoints = chainController.UpdateChain(actionView.currentFeedbackState, actionPoints);
+            if (toUpdatePoints)
+            {
+                updatePoints(actionPoints);
+            }
         });
-        model.placed = true;
+        model.placed = true;       
     }
+    private void updatePoints(int actionPoints)
+    {
+        points += actionPoints;
+        updatePointsLabel();
+
+        if(points > 50)
+        {
+            audioController.IncreaseBPM();
+        }
+    }
+    private void applyChainPoints()
+    {
+        int chainPoints = chainController.FinishChain();
+        points += chainPoints;
+        print(chainPoints);
+        updatePointsLabel();
+    }
+    private void updatePointsLabel()
+    {
+        pointsLabel.text = points.ToString();
+    }
+    
 }

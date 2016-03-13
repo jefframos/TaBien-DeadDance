@@ -5,7 +5,7 @@ using System;
 public class Metronome : MonoBehaviour
 {
 
-    public int bpm = 120; //Beats per minute
+    public int BPM = 120; //Beats per minute
     public int beatsInBar;  //top number of time signature
     public int noteValue;   //bottom number of time signature
     private float _beatCounter;   //count the number of beats
@@ -51,7 +51,7 @@ public class Metronome : MonoBehaviour
     float CalculateInterval()
     {
         float tickSize = CROTCHET / (float)noteValue;
-        float interval = (60.0f / bpm) * tickSize;
+        float interval = (60.0f / BPM) * tickSize;
         return interval / 4;
     }
 }

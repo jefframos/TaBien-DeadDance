@@ -1,0 +1,1 @@
+﻿public enum BehaviourType { SCALE, FROM_TOP, FROM_RIGHT, FROM_BOTTOM, FROM_LEFT }
