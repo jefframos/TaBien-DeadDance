@@ -68,7 +68,6 @@ public class ChainController : MonoBehaviour {
                 break;
         }
         chainLevelAcum++;
-        print(chainLevelAcum + " = " + chainComboFactor);
         if (chainLevelAcum >= chainComboFactor)
         {
             chainLevelAcum = 0;

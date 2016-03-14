@@ -7,31 +7,35 @@ using UnityEngine.UI;
 using DG.Tweening;
 
 public class GameController : MonoBehaviour {
-    public BehaviourType behaviour;
-    public RectTransform actionArea;
-    public GameObject actionButtonPrefab;
-
-    private List<ActionButtonView> buttonWave;
-    public int testWave = -1;
 
     public List<WaveModel> wavesList;
     public List<BeatterView> beatterList;
+
+    public GameObject actionButtonPrefab;
+    public GameObject particlePrefab;
+
+    public RectTransform actionArea;
+    public RectTransform particlesContainer;
+
+    public int testWave = -1;
     public int currentWave = 1;
-    private float _beatCounter = 0;
-    private int _beatAcum = 0;
+
     public AudioController audioController;
-    //public AudioSource mainAudioSource;
     public Metronome metronome;
-    
 
     public Text beatCounter;
     public Text pointsLabel;
+    public RectTransform pointsLabelRect;
 
     public int points;
     public ChainController chainController;
 
     public ZombieView zombieView;
     public bool initedGame;
+
+    private List<ActionButtonView> buttonWave;
+    private float _beatCounter = 0;
+    private int _beatAcum = 0;    
     // Use this for initialization
     void Start () {
         initedGame = false;        
@@ -120,10 +124,9 @@ public class GameController : MonoBehaviour {
         tempObject.transform.SetParent(actionArea.transform, false);
         ActionButtonView actionView = tempObject.GetComponent<ActionButtonView>();
         actionView.Build(model);
+        actionView.gameObject.SetActive(true);
         actionView.finishCallback = (() =>
         {
-           
-
             int actionPoints = 0;
                 switch (actionView.currentFeedbackState)
                 {
@@ -154,9 +157,34 @@ public class GameController : MonoBehaviour {
                 }
             bool toUpdatePoints = false;
             toUpdatePoints = chainController.UpdateChain(actionView.currentFeedbackState, actionPoints);
-            if (toUpdatePoints)
+            //if (toUpdatePoints)
+            //{
+            //    updatePoints(actionPoints);
+            //}
+
+            updatePoints(actionPoints);
+
+            if (actionPoints > 0)
             {
-                updatePoints(actionPoints);
+                for (int i = 0; i < actionPoints; i++)
+                {
+                    GameObject tempParticle = (GameObject)Instantiate(particlePrefab, new Vector3(), Quaternion.identity);
+                    tempParticle.transform.SetParent(particlesContainer.transform, false);
+                    ActionParticleView particleView = tempParticle.GetComponent<ActionParticleView>();
+
+                    float distance = Vector2.Distance(new Vector2(pointsLabelRect.position.x, pointsLabelRect.position.y), new Vector2(tempV3.x, tempV3.y));
+                    particleView.color = actionView.currentState.color;
+
+                    float newPosX = tempV3.x + UnityEngine.Random.Range(-actionView.innerContent.rect.width / 2, actionView.innerContent.rect.width / 2);
+                    float newPosY = tempV3.y + UnityEngine.Random.Range(-actionView.innerContent.rect.height / 2, actionView.innerContent.rect.height / 2);
+                    particleView.initPos = new Vector3(newPosX, newPosY, 0);
+
+                    particleView.time = Screen.height / distance * 0.8f;
+                    particleView.delay = 0.1f + i*0.2f;
+                    particleView.destiny = pointsLabelRect.position;
+                    particleView.rectTarget = pointsLabelRect;
+                    particleView.Build();
+                }                
             }
         });
         model.placed = true;       
@@ -169,13 +197,13 @@ public class GameController : MonoBehaviour {
         if(points > 50)
         {
             audioController.IncreaseBPM();
+            zombieView.updateLevel();
         }
     }
     private void applyChainPoints()
     {
         int chainPoints = chainController.FinishChain();
         points += chainPoints;
-        print(chainPoints);
         updatePointsLabel();
     }
     private void updatePointsLabel()

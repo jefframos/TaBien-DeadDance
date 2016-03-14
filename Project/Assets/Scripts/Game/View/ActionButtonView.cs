@@ -12,21 +12,26 @@ public class ActionButtonView : MonoBehaviour {
     {
         public Animator animator;
         public Text label;
+        public Text labelBack;
         public string title;
         public RectTransform content;
         public RectTransform popContent;
         public CanvasGroup canvasGroup;
+        public Color color;
+        public Image inner;
         public void Hide()
         {
             content.gameObject.SetActive(false);
         }
         public void Show()
         {
-            if(canvasGroup != null)
+            inner.color = color;
+            if (canvasGroup != null)
             {
                 //canvasGroup.DOFade(1f, 0.5f);
             }
             label.text = title;
+            labelBack.text = title;
             content.gameObject.SetActive(true);
         }
     }
@@ -38,7 +43,7 @@ public class ActionButtonView : MonoBehaviour {
 
     public FeedbackStateType currentFeedbackState;
     public GameObject newState;
-    public GameObject feedbackState;
+    //public GameObject feedbackState;
 
     [Serializable]
     public class ArrowsView
@@ -86,6 +91,7 @@ public class ActionButtonView : MonoBehaviour {
     public Image innerImage;
     public Image outerImage;
     public Text text;
+    public Text textBack;
     public Button button;
     public Vector2 scale;
     private float currentBehaviourFactor = 5f;
@@ -97,7 +103,7 @@ public class ActionButtonView : MonoBehaviour {
     private float beatDecress = 5f;
     //public float maxTime = 5f;
     public bool finishing;
-    private FeedbackStateView currentState;
+    public FeedbackStateView currentState;
 
     public AudioSource audioSource;
     public AudioClip corretAudioClip;
@@ -122,7 +128,7 @@ public class ActionButtonView : MonoBehaviour {
         
 
         newState.SetActive(true);
-        feedbackState.SetActive(false);
+        
     }
 
     internal void Build(ActionButtonModel model)
@@ -138,8 +144,20 @@ public class ActionButtonView : MonoBehaviour {
         currentBehaviourFactor = (maxBehaviourFactor * (beatDecress / maxBeat));
         //timeDecress = maxTime;
         arrows.Hide();
-        
-        text.text = model.order.ToString();
+
+
+
+        if (model.order > 0)
+        {
+            text.text = model.order.ToString();
+            textBack.text = model.order.ToString();
+            textBack.color = model.color;
+        }
+        else
+        {
+            text.text = "";
+            textBack.text = "";
+        }
 
         outerImage.color = model.color;
         innerImage.color = model.color;
@@ -240,10 +258,7 @@ public class ActionButtonView : MonoBehaviour {
     private void finish(bool miss = false)
     {
         finishing = true;
-
-        newState.SetActive(false);
-        feedbackState.SetActive(true);
-        
+        newState.SetActive(false);        
         float distance = Vector2.Distance(new Vector2(currentBehaviourFactor, 0), new Vector2(1, 0));
         if (miss)
         {
@@ -252,26 +267,23 @@ public class ActionButtonView : MonoBehaviour {
             //currentState.title = "MISS";
             audioSource.PlayOneShot(wrongAudioClip,0.5f);
         }
-        else if (distance < 0.25f)
+        else if (distance < 0.20f)
         {
             currentFeedbackState = FeedbackStateType.PERFECT;
             currentState = perfectState;
             audioSource.PlayOneShot(perfectAudioClip, 0.5f);
-            //print("PERFECT");
         }
-        else if (distance < 0.40f)
+        else if (distance < 0.30f)
         {
             currentFeedbackState = FeedbackStateType.GREAT;
             currentState = greatState;
             audioSource.PlayOneShot(corretAudioClip, 0.5f);
-            //print("GREAT");
         }
-        else if (distance < 0.55f)
+        else if (distance < 0.50f)
         {
             currentFeedbackState = FeedbackStateType.GOOD;
             currentState = goodState;
             audioSource.PlayOneShot(corretAudioClip, 0.5f);
-            //print("GOOD");
         }
         else if (currentBehaviourFactor < 1)
         {
@@ -279,7 +291,6 @@ public class ActionButtonView : MonoBehaviour {
             currentState = missState;
             //currentState.title = "TO LATE";
             audioSource.PlayOneShot(wrongAudioClip, 0.5f);
-            //print("TO LATE");
         }
         else
         {
@@ -287,7 +298,6 @@ public class ActionButtonView : MonoBehaviour {
             currentState = missState;
             //currentState.title = "TO EARLY";
             audioSource.PlayOneShot(wrongAudioClip, 0.5f);
-            //print("TO EARLY");
         }
         finishCallback();
         currentState.Show();        

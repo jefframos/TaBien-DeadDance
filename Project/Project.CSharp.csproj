@@ -64,6 +64,15 @@
     <Reference Include="DOTween">
       <HintPath>Assets\Plugins\Demigiant\DOTween\DOTween.dll</HintPath>
     </Reference>
+    <Reference Include="DOTween43">
+      <HintPath>Assets\Plugins\Demigiant\DOTween\DOTween43.dll</HintPath>
+    </Reference>
+    <Reference Include="DOTween46">
+      <HintPath>Assets\Plugins\Demigiant\DOTween\DOTween46.dll</HintPath>
+    </Reference>
+    <Reference Include="DOTween50">
+      <HintPath>Assets\Plugins\Demigiant\DOTween\DOTween50.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Project.CSharp.Plugins.csproj">
@@ -80,6 +89,7 @@
     <Compile Include="Assets\Scripts\Game\Model\ActionButtonModel.cs" />
     <Compile Include="Assets\Scripts\Game\Model\WaveModel.cs" />
     <Compile Include="Assets\Scripts\Game\View\ActionButtonView.cs" />
+    <Compile Include="Assets\Scripts\Game\View\ActionParticleView.cs" />
     <Compile Include="Assets\Scripts\Game\View\BeatterView.cs" />
     <Compile Include="Assets\Scripts\Game\View\CharSelectView.cs" />
     <Compile Include="Assets\Scripts\Game\View\ZombieView.cs" />
@@ -87,6 +97,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Plugins\Demigiant\DOTween\DOTween.XML" />
+    <None Include="Assets\Plugins\Demigiant\DOTween\DOTween43.xml" />
+    <None Include="Assets\Plugins\Demigiant\DOTween\DOTween46.xml" />
+    <None Include="Assets\Plugins\Demigiant\DOTween\DOTween50.xml" />
     <None Include="Assets\Plugins\Demigiant\DOTween\Editor\DOTweenEditor.XML" />
     <None Include="Assets\Plugins\Demigiant\DOTween\readme.txt" />
   </ItemGroup>
