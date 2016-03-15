@@ -40,9 +40,11 @@ public class ActionButtonView : MonoBehaviour {
     public FeedbackStateView goodState;
     public FeedbackStateView greatState;
     public FeedbackStateView perfectState;
+    public FeedbackStateView specialState;
 
     public FeedbackStateType currentFeedbackState;
     public GameObject newState;
+    public GameObject special;
     //public GameObject feedbackState;
 
     [Serializable]
@@ -109,11 +111,13 @@ public class ActionButtonView : MonoBehaviour {
     public AudioClip corretAudioClip;
     public AudioClip perfectAudioClip;
     public AudioClip wrongAudioClip;
+    public AudioClip specialAudioClip;
     private int maxBeat;
     private BehaviourType behaviour;
 
     public Action finishCallback;
     private bool builded;
+    public ActionButtonModel model;
 
     // Use this for initialization
     void Start () {
@@ -127,13 +131,24 @@ public class ActionButtonView : MonoBehaviour {
 
         
 
-        newState.SetActive(true);
+        
         
     }
 
-    internal void Build(ActionButtonModel model)
+    internal void Build(ActionButtonModel _model)
     {
+        model = _model;
         builded = true;
+        newState.SetActive(true);
+        if (model.actionType == ActionType.SPECIAL)
+        {
+            special.SetActive(true);
+        }
+        else
+        {
+            special.SetActive(false);
+        }
+
         //maxTime = model.timeToTap;
         maxBehaviourFactor = model.maxScale;
 
@@ -168,7 +183,7 @@ public class ActionButtonView : MonoBehaviour {
         goodState.Hide();
         greatState.Hide();
         perfectState.Hide();
-
+        specialState.Hide();
         //if (canvasGroup != null)
         //{
         //    canvasGroup.DOFade(1f, 0.5f);
@@ -259,13 +274,23 @@ public class ActionButtonView : MonoBehaviour {
     {
         finishing = true;
         newState.SetActive(false);        
+
         float distance = Vector2.Distance(new Vector2(currentBehaviourFactor, 0), new Vector2(1, 0));
+
+        
         if (miss)
         {
             currentFeedbackState = FeedbackStateType.MISS;
             currentState = missState;
             //currentState.title = "MISS";
             audioSource.PlayOneShot(wrongAudioClip,0.5f);
+        }
+        else if (model.actionType == ActionType.SPECIAL)
+        {
+
+            currentFeedbackState = FeedbackStateType.SPECIAL;
+            currentState = specialState;
+            audioSource.PlayOneShot(specialAudioClip, 0.5f);
         }
         else if (distance < 0.20f)
         {

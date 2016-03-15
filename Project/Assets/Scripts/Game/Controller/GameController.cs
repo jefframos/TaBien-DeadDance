@@ -24,10 +24,19 @@ public class GameController : MonoBehaviour {
     public Metronome metronome;
 
     public Text beatCounter;
+
+
+    public int points;
     public Text pointsLabel;
     public RectTransform pointsLabelRect;
 
-    public int points;
+
+    private int currency;
+    public Text currencyLabel;
+    public RectTransform currencyLabelRect;
+    public RectTransform currencyRect;
+
+
     public ChainController chainController;
 
     public ZombieView zombieView;
@@ -35,7 +44,9 @@ public class GameController : MonoBehaviour {
 
     private List<ActionButtonView> buttonWave;
     private float _beatCounter = 0;
-    private int _beatAcum = 0;    
+    private int _beatAcum = 0;
+    
+
     // Use this for initialization
     void Start () {
         initedGame = false;        
@@ -48,7 +59,14 @@ public class GameController : MonoBehaviour {
         audioController.InitAudioController();
         chainController.ResetChain();
         initedGame = true;
+        currency = GetCurrency();
     }
+
+    private int GetCurrency()
+    {
+        return 0;
+    }
+
     private void BeatCallback()
     {
         _beatCounter += 0.25f;
@@ -127,14 +145,27 @@ public class GameController : MonoBehaviour {
         actionView.gameObject.SetActive(true);
         actionView.finishCallback = (() =>
         {
+            
             int actionPoints = 0;
+            int goldenBrain = 0;
+            if (actionView.model.actionType == ActionType.SPECIAL)
+            {
+                if (actionView.currentFeedbackState == FeedbackStateType.MISS)
+                {
+
+                }
+                else{
+                    goldenBrain = 1;
+                }
+            }
+            else {
                 switch (actionView.currentFeedbackState)
                 {
                     case FeedbackStateType.MISS:
                         applyChainPoints();
                         zombieView.updatePart(tempV3);
                         break;
-                        case FeedbackStateType.GOOD:
+                    case FeedbackStateType.GOOD:
                         actionPoints = 1;
                         break;
                     case FeedbackStateType.GREAT:
@@ -155,39 +186,62 @@ public class GameController : MonoBehaviour {
                     default:
                         break;
                 }
+            }
             bool toUpdatePoints = false;
             toUpdatePoints = chainController.UpdateChain(actionView.currentFeedbackState, actionPoints);
-            //if (toUpdatePoints)
-            //{
-            //    updatePoints(actionPoints);
-            //}
 
-            updatePoints(actionPoints);
+            
 
-            if (actionPoints > 0)
+            if (actionPoints + goldenBrain > 0)
             {
-                for (int i = 0; i < actionPoints; i++)
+                for (int i = 0; i < actionPoints + goldenBrain; i++)
                 {
-                    GameObject tempParticle = (GameObject)Instantiate(particlePrefab, new Vector3(), Quaternion.identity);
+                    GameObject tempParticle;
+                    tempParticle = (GameObject)Instantiate(particlePrefab, new Vector3(), Quaternion.identity);
                     tempParticle.transform.SetParent(particlesContainer.transform, false);
                     ActionParticleView particleView = tempParticle.GetComponent<ActionParticleView>();
 
                     float distance = Vector2.Distance(new Vector2(pointsLabelRect.position.x, pointsLabelRect.position.y), new Vector2(tempV3.x, tempV3.y));
-                    particleView.color = actionView.currentState.color;
 
-                    float newPosX = tempV3.x + UnityEngine.Random.Range(-actionView.innerContent.rect.width / 2, actionView.innerContent.rect.width / 2);
-                    float newPosY = tempV3.y + UnityEngine.Random.Range(-actionView.innerContent.rect.height / 2, actionView.innerContent.rect.height / 2);
-                    particleView.initPos = new Vector3(newPosX, newPosY, 0);
+
 
                     particleView.time = Screen.height / distance * 0.8f;
-                    particleView.delay = 0.1f + i*0.2f;
+                    particleView.delay = 0.1f + i * 0.2f;
                     particleView.destiny = pointsLabelRect.position;
                     particleView.rectTarget = pointsLabelRect;
-                    particleView.Build();
+
+                    float newPosX = tempV3.x;
+                    float newPosY = tempV3.y;
+                    if (goldenBrain > 0)
+                    {
+                        particleView.destiny = currencyRect.position;
+                        particleView.rectTarget = currencyRect;
+                        particleView.endTweenCallback = (() => { updateCurrency(1); });
+                        particleView.delay = 0.7f + i * 0.2f;
+                        particleView.time *= 1.2f;
+                        //colocar aqui os destinos certos dos cerebros
+                    }
+                    else
+                    {
+                        particleView.endTweenCallback = (() => { updatePoints(1); });
+                        newPosX = tempV3.x + UnityEngine.Random.Range(-actionView.innerContent.rect.width / 2, actionView.innerContent.rect.width / 2);
+                        newPosY = tempV3.y + UnityEngine.Random.Range(-actionView.innerContent.rect.height / 2, actionView.innerContent.rect.height / 2);
+                    }                    
+                    particleView.initPos = new Vector3(newPosX, newPosY, 0);                   
+
+                    particleView.color = actionView.currentState.color; 
+                    particleView.Build(goldenBrain > 0, actionPoints + goldenBrain);
+
+                    
                 }                
             }
         });
-        model.placed = true;       
+        model.placed = true;
+    }
+    private void updateCurrency(int currencyPoints)
+    {
+        currency += currencyPoints;
+        updateCurrencyLabel();
     }
     private void updatePoints(int actionPoints)
     {
@@ -202,13 +256,18 @@ public class GameController : MonoBehaviour {
     }
     private void applyChainPoints()
     {
-        int chainPoints = chainController.FinishChain();
-        points += chainPoints;
+        int chainPoints = chainController.FinishChain(particlePrefab, pointsLabelRect, particlesContainer);
+
+        points += chainPoints * points;
         updatePointsLabel();
     }
     private void updatePointsLabel()
     {
         pointsLabel.text = points.ToString();
     }
-    
+    private void updateCurrencyLabel()
+    {
+        currencyLabel.text = currency.ToString();
+    }
+
 }

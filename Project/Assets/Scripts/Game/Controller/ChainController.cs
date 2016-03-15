@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System;
+using DG.Tweening;
 
 public class ChainController : MonoBehaviour {
     public Text chainLabel;
@@ -84,15 +85,47 @@ public class ChainController : MonoBehaviour {
             chainLabel.gameObject.SetActive(true);
         }
 
-        chainLabel.text = chainPoints.ToString() + "pts. X "+ chainFactor.ToString();
+        chainLabel.transform.DOScale(new Vector2(1.5f, 1.5f), 0.5f).From();
+
+        //chainLabel.text = chainPoints.ToString() + "pts. X "+ chainFactor.ToString();
+        chainLabel.text = "X "+ chainFactor.ToString();
     }
 
-    internal int FinishChain()
+    internal int FinishChain(GameObject particlePrefab, RectTransform labelDestiny, RectTransform parent)
     {
 
-        int finishedChainPoints = (int)Math.Ceiling(chainLevel * chainFactor);
+        int finishedChainPoints = (int)chainFactor;//(int)Math.Ceiling(chainLevel * chainFactor);
         //print(finishedChainPoints + "= "+ chainLevel + " x " + chainFactor);
+        
+
+
+        for (int i = 0; i < chainFactor; i++)
+        {
+            
+            float newPosX = chainLabel.transform.position.x + chainLabel.transform.parent.transform.position.x;
+            float newPosY = chainLabel.transform.position.y + chainLabel.transform.parent.transform.position.y;
+
+
+            GameObject tempParticle;
+            tempParticle = (GameObject)Instantiate(particlePrefab, new Vector3(), Quaternion.identity);
+            tempParticle.transform.SetParent(parent.transform, false);
+            ActionParticleView particleView = tempParticle.GetComponent<ActionParticleView>();
+
+            float distance = Vector2.Distance(new Vector2(labelDestiny.position.x, labelDestiny.position.y), new Vector2(newPosX , newPosY));
+
+
+
+            particleView.time = Screen.height / distance * 0.2f;
+            particleView.delay = i * 0.1f;
+            particleView.destiny = labelDestiny.position;
+            particleView.rectTarget = labelDestiny;            
+            particleView.initPos = new Vector3(newPosX, newPosY, 0);            
+            particleView.Build(false, 0);
+        }
+
+
         ResetChain();
+
 
         return finishedChainPoints;
     }

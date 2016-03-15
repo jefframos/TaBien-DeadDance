@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class ActionButtonModel : MonoBehaviour{
     
     public BehaviourType behaviour = BehaviourType.SCALE;
+    public ActionType actionType = ActionType.NORMAL;
     //public float timeToShow = 1;
     public Color color = new Color();
     public Vector2 gridPosition = new Vector2();
@@ -67,6 +68,7 @@ public class MyScriptEditor : Editor
         myScript.maxScale = EditorGUILayout.FloatField("Max Scale", myScript.maxScale);
 
         myScript.behaviour = (BehaviourType)EditorGUILayout.EnumPopup(myScript.behaviour);
+        myScript.actionType = (ActionType)EditorGUILayout.EnumPopup(myScript.actionType);
 
 
 

@@ -84,6 +84,7 @@
     <Compile Include="Assets\Scripts\Game\Controller\AudioController.cs" />
     <Compile Include="Assets\Scripts\Game\Controller\ChainController.cs" />
     <Compile Include="Assets\Scripts\Game\Controller\GameController.cs" />
+    <Compile Include="Assets\Scripts\Game\Enum\ActionType.cs" />
     <Compile Include="Assets\Scripts\Game\Enum\BehaviourType.cs" />
     <Compile Include="Assets\Scripts\Game\Enum\FeedbackStateType.cs" />
     <Compile Include="Assets\Scripts\Game\Model\ActionButtonModel.cs" />
