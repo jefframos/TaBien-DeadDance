@@ -7,9 +7,11 @@ using UnityEngine.UI;
 using DG.Tweening;
 
 public class GameController : MonoBehaviour {
-
+    
     public List<WaveModel> wavesList;
     public List<BeatterView> beatterList;
+
+    private List<ActionButtonView> _actionList;
 
     public GameObject actionButtonPrefab;
     public GameObject particlePrefab;
@@ -45,21 +47,61 @@ public class GameController : MonoBehaviour {
     private List<ActionButtonView> buttonWave;
     private float _beatCounter = 0;
     private int _beatAcum = 0;
-    
 
+    public float levelGauge;
+    public float maxGauge;
+    public float levelGaugeDecress;
+    public Text levelGaugeText;
+    public LevelGaugeView levelGaugeView;
+
+
+    [Serializable]
+    public class GaugeValues
+    {
+        public float miss = 0; 
+        public float good = 0; 
+        public float great = 0; 
+        public float perfect = 0; 
+        public float tolate = 0;
+        public float toearly = 0;
+    }
+    public GaugeValues gaugeValues;
+
+    public GameObject middleHUD;
+    public Button playButton;
     // Use this for initialization
+    public void ResetWaves()
+    {
+        wavesList = new List<WaveModel>();
+    }
+    public void AddWave(WaveModel wave)
+    {
+        wavesList.Add(wave);
+    }
     void Start () {
+        //ResetWaves();
+        //WaveModel tempWave = new WaveModel();
+        //ActionButtonModel tempActionModel = new ActionButtonModel();
+        //tempWave.totalBeats = 20;
+        //tempWave.actionList = new List<ActionButtonModel>();
         initedGame = false;        
         metronome.beatCallback = BeatCallback;
-        InitGame();
+        chainController.ResetChain();
+        //InitGame();
     }
     public void InitGame()
     {
+        middleHUD.SetActive(false);
         getWave();
+        _beatAcum = 0;
+        _beatCounter = 0;
+        points = 0;
         audioController.InitAudioController();
         chainController.ResetChain();
         initedGame = true;
         currency = GetCurrency();
+        levelGauge = maxGauge / 2;
+        _actionList = new List<ActionButtonView>();
     }
 
     private int GetCurrency()
@@ -69,6 +111,10 @@ public class GameController : MonoBehaviour {
 
     private void BeatCallback()
     {
+        if (!initedGame)
+        {
+            return;
+        }
         _beatCounter += 0.25f;
         _beatAcum++;
 
@@ -81,14 +127,51 @@ public class GameController : MonoBehaviour {
                 item.Beat();
             }
         }
-
+        levelGauge -= levelGaugeDecress;
+        updateLevelGauge();
         beatCounter.text = Mathf.Floor(_beatCounter).ToString();
+    }
+
+    private void gameOver()
+    {
+        if (!initedGame)
+        {
+            return;
+        }
+        applyChainPoints();
+        middleHUD.SetActive(true);
+        initedGame = false;
+        chainController.ResetChain();
+        audioController.Reset();
+        zombieView.Reset();
+        foreach (ActionButtonView actionView in _actionList)
+        {
+            actionView.ForceDestroy();            
+        }
+    }
+    private void updateLevelGauge()
+    {
+        if(levelGauge < 0)
+        {
+            levelGauge = 0;
+        }
+        if (levelGauge > maxGauge)
+        {
+            levelGauge = maxGauge;
+        }
+        levelGaugeText.text = Math.Ceiling(levelGauge).ToString();
+        levelGaugeView.UpdateBar(levelGauge / 100);
+
+        if(levelGauge <= 0)
+        {
+            gameOver();
+        }
     }
 
     // Update is called once per frame
     void Update () {
         
-        if (!audioController.audioSource.isPlaying)
+        if (!audioController.audioSource.isPlaying || !initedGame)
         {
             return;
         }
@@ -143,11 +226,14 @@ public class GameController : MonoBehaviour {
         ActionButtonView actionView = tempObject.GetComponent<ActionButtonView>();
         actionView.Build(model);
         actionView.gameObject.SetActive(true);
+        _actionList.Add(actionView);
+
         actionView.finishCallback = (() =>
         {
-            
+            _actionList.Remove(actionView);
             int actionPoints = 0;
             int goldenBrain = 0;
+            float gaugeAccum = 0;
             if (actionView.model.actionType == ActionType.SPECIAL)
             {
                 if (actionView.currentFeedbackState == FeedbackStateType.MISS)
@@ -164,24 +250,32 @@ public class GameController : MonoBehaviour {
                     case FeedbackStateType.MISS:
                         applyChainPoints();
                         zombieView.updatePart(tempV3);
+                        actionPoints = -3;
+                        gaugeAccum = gaugeValues.miss;
                         break;
                     case FeedbackStateType.GOOD:
                         actionPoints = 1;
+                        gaugeAccum = gaugeValues.good;
                         break;
                     case FeedbackStateType.GREAT:
                         actionPoints = 2;
+                        gaugeAccum = gaugeValues.great;
                         break;
                     case FeedbackStateType.BAD:
                         applyChainPoints();
+                        gaugeAccum = gaugeValues.miss;
                         break;
                     case FeedbackStateType.PERFECT:
                         actionPoints = 3;
+                        gaugeAccum = gaugeValues.perfect;
                         break;
                     case FeedbackStateType.TOLATE:
                         applyChainPoints();
+                        gaugeAccum = gaugeValues.tolate;
                         break;
                     case FeedbackStateType.TOEARLY:
                         applyChainPoints();
+                        gaugeAccum = gaugeValues.toearly;
                         break;
                     default:
                         break;
@@ -190,7 +284,7 @@ public class GameController : MonoBehaviour {
             bool toUpdatePoints = false;
             toUpdatePoints = chainController.UpdateChain(actionView.currentFeedbackState, actionPoints);
 
-            
+            levelGauge += actionPoints * 2;
 
             if (actionPoints + goldenBrain > 0)
             {
@@ -250,7 +344,7 @@ public class GameController : MonoBehaviour {
 
         if(points > 50)
         {
-            audioController.IncreaseBPM();
+            //audioController.IncreaseBPM();
             zombieView.updateLevel();
         }
     }
@@ -269,5 +363,4 @@ public class GameController : MonoBehaviour {
     {
         currencyLabel.text = currency.ToString();
     }
-
 }

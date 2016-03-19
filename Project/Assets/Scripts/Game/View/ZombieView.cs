@@ -58,4 +58,9 @@ public class ZombieView : MonoBehaviour {
     {
         bodyAnimator.CrossFade("Standard1", 0.5f);
     }
+
+    internal void Reset()
+    {
+        bodyAnimator.Play("BodyStandard", -1, 0f);
+    }
 }

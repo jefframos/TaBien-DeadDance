@@ -41,6 +41,8 @@ public class ActionButtonView : MonoBehaviour {
     public FeedbackStateView greatState;
     public FeedbackStateView perfectState;
     public FeedbackStateView specialState;
+    public FeedbackStateView missSpecialState;
+    public FeedbackStateView wrongState;
 
     public FeedbackStateType currentFeedbackState;
     public GameObject newState;
@@ -92,6 +94,10 @@ public class ActionButtonView : MonoBehaviour {
     public RectTransform outerContent;
     public Image innerImage;
     public Image outerImage;
+    public Image actionImage;
+    public RectTransform actionRectTransform;
+
+
     public Text text;
     public Text textBack;
     public Button button;
@@ -118,6 +124,12 @@ public class ActionButtonView : MonoBehaviour {
     public Action finishCallback;
     private bool builded;
     public ActionButtonModel model;
+    public CanvasGroup outherCanvasGroup;
+
+    internal void ForceDestroy()
+    {
+        Destroy(this.gameObject);
+    }
 
     // Use this for initialization
     void Start () {
@@ -140,6 +152,7 @@ public class ActionButtonView : MonoBehaviour {
         model = _model;
         builded = true;
         newState.SetActive(true);
+        actionRectTransform.DOScale(1.75f, 0.5f).SetEase(Ease.OutBack);
         if (model.actionType == ActionType.SPECIAL)
         {
             special.SetActive(true);
@@ -173,9 +186,11 @@ public class ActionButtonView : MonoBehaviour {
             text.text = "";
             textBack.text = "";
         }
-
+        
         outerImage.color = model.color;
         innerImage.color = model.color;
+        actionImage.color = model.color;
+        actionImage.DOFade(0.15f, 0.6f);
 
         behaviour = model.behaviour;
 
@@ -184,6 +199,8 @@ public class ActionButtonView : MonoBehaviour {
         greatState.Hide();
         perfectState.Hide();
         specialState.Hide();
+        wrongState.Hide();
+        missSpecialState.Hide();
         //if (canvasGroup != null)
         //{
         //    canvasGroup.DOFade(1f, 0.5f);
@@ -204,11 +221,13 @@ public class ActionButtonView : MonoBehaviour {
 
     private void updateBehaviour(bool first = false)
     {
-        //if (currentBehaviourFactor <= 1)
-        //{
-        //    goodState.Show();
-        //}
-        if(behaviour == BehaviourType.SCALE)
+        if (currentBehaviourFactor <= 1)
+        {
+            //print(currentBehaviourFactor);
+            //outherCanvasGroup.alpha = currentBehaviourFactor;
+            outherCanvasGroup.DOFade(0, 1f);
+        }
+        if (behaviour == BehaviourType.SCALE)
         {
             Vector2 tempScale = outerContent.localScale;
             tempScale.x = currentBehaviourFactor;
@@ -267,6 +286,7 @@ public class ActionButtonView : MonoBehaviour {
             currentBehaviourFactor = (maxBehaviourFactor * (beatDecress / maxBeat));
             updateBehaviour();
         }
+        //outherCanvasGroup.alpha = currentBehaviourFactor;
 
     }
 
@@ -281,9 +301,17 @@ public class ActionButtonView : MonoBehaviour {
         if (miss)
         {
             currentFeedbackState = FeedbackStateType.MISS;
-            currentState = missState;
-            //currentState.title = "MISS";
-            audioSource.PlayOneShot(wrongAudioClip,0.5f);
+            if (model.actionType != ActionType.SPECIAL)
+            {
+                currentState = missState;
+                currentState.title = "Missed!";
+                audioSource.PlayOneShot(wrongAudioClip, 0.5f);
+            }
+            else
+            {
+                currentState = missSpecialState;
+                currentState.title = "";                
+            }
         }
         else if (model.actionType == ActionType.SPECIAL)
         {
@@ -292,19 +320,19 @@ public class ActionButtonView : MonoBehaviour {
             currentState = specialState;
             audioSource.PlayOneShot(specialAudioClip, 0.5f);
         }
-        else if (distance < 0.20f)
+        else if (distance < 0.25f)
         {
             currentFeedbackState = FeedbackStateType.PERFECT;
             currentState = perfectState;
             audioSource.PlayOneShot(perfectAudioClip, 0.5f);
         }
-        else if (distance < 0.30f)
+        else if (distance < 0.50f)
         {
             currentFeedbackState = FeedbackStateType.GREAT;
             currentState = greatState;
             audioSource.PlayOneShot(corretAudioClip, 0.5f);
         }
-        else if (distance < 0.50f)
+        else if (distance < 0.750f)
         {
             currentFeedbackState = FeedbackStateType.GOOD;
             currentState = goodState;
@@ -313,18 +341,21 @@ public class ActionButtonView : MonoBehaviour {
         else if (currentBehaviourFactor < 1)
         {
             currentFeedbackState = FeedbackStateType.TOLATE;
-            currentState = missState;
-            //currentState.title = "TO LATE";
+            currentState = wrongState;
+            currentState.title = "To late!";
             audioSource.PlayOneShot(wrongAudioClip, 0.5f);
         }
         else
         {
             currentFeedbackState = FeedbackStateType.TOEARLY;
-            currentState = missState;
-            //currentState.title = "TO EARLY";
+            currentState = wrongState;
+            currentState.title = "To early!";
             audioSource.PlayOneShot(wrongAudioClip, 0.5f);
         }
         finishCallback();
-        currentState.Show();        
+        if (currentState != null)
+        {
+            currentState.Show();
+        }     
     }
 }

@@ -35,4 +35,9 @@ public class AudioController : MonoBehaviour {
         audioSource.clip = currentAudioLoop.audioClip;
         audioSource.Play();
     }
+
+    internal void Reset()
+    {
+        audioSource.Stop();
+    }
 }

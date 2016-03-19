@@ -6,6 +6,7 @@ using DG.Tweening;
 
 public class ChainController : MonoBehaviour {
     public Text chainLabel;
+    public RectTransform chainTransformer;
     public int chainLevel;
     public int chainLevelAcum;
     public int chainPoints;
@@ -24,6 +25,7 @@ public class ChainController : MonoBehaviour {
         activeChain = false;
         firstEntry = false;
         chainLabel.gameObject.SetActive(false);
+        chainTransformer.gameObject.SetActive(false);
     }
     public void InitChain()
     {
@@ -82,10 +84,11 @@ public class ChainController : MonoBehaviour {
     {
         if(chainLevel > 0)
         {
+            chainTransformer.gameObject.SetActive(true);
             chainLabel.gameObject.SetActive(true);
         }
 
-        chainLabel.transform.DOScale(new Vector2(1.5f, 1.5f), 0.5f).From();
+        chainTransformer.transform.DOScale(new Vector2(1.5f, 1.5f), 0.5f).From();
 
         //chainLabel.text = chainPoints.ToString() + "pts. X "+ chainFactor.ToString();
         chainLabel.text = "X "+ chainFactor.ToString();
@@ -102,8 +105,8 @@ public class ChainController : MonoBehaviour {
         for (int i = 0; i < chainFactor; i++)
         {
             
-            float newPosX = chainLabel.transform.position.x + chainLabel.transform.parent.transform.position.x;
-            float newPosY = chainLabel.transform.position.y + chainLabel.transform.parent.transform.position.y;
+            float newPosX = chainLabel.transform.position.x + chainLabel.transform.parent.transform.position.x + this.transform.parent.transform.position.x;
+            float newPosY = chainLabel.transform.position.y + chainLabel.transform.parent.transform.position.y + this.transform.parent.transform.position.y;
 
 
             GameObject tempParticle;
