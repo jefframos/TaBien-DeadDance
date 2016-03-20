@@ -102,6 +102,7 @@ public class GameController : MonoBehaviour {
         currency = GetCurrency();
         levelGauge = maxGauge / 2;
         _actionList = new List<ActionButtonView>();
+        zombieView.Reset();
     }
 
     private int GetCurrency()

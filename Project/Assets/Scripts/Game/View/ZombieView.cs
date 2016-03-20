@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 using DG.Tweening;
+using System.Collections.Generic;
 
 public class ZombieView : MonoBehaviour {
 
@@ -10,7 +11,17 @@ public class ZombieView : MonoBehaviour {
     public RectTransform leftLeg;
     public RectTransform rightLeg;
 
-    public Animator headAnimator;
+    [Serializable]
+    public class AnimationData
+    {
+        public string label;
+        public int level;
+    }
+    public List<AnimationData> animationData;
+    private List<List<AnimationData>> animationList;
+    private AnimationData currentAnimation;
+
+    //public Animator headAnimator;
     public Animator bodyAnimator;
 
     public Vector3 standardLeftArm;
@@ -21,6 +32,11 @@ public class ZombieView : MonoBehaviour {
     {
         standardLeftArm = leftArm.localPosition;
         started = false;
+        //animationList = new List<List<AnimationData>>();
+        //foreach (AnimationData item in animationData)
+        //{
+
+        //}
     }
 
     void Start () {
@@ -34,15 +50,13 @@ public class ZombieView : MonoBehaviour {
 
     internal void Beat()
     {
-        if (!started)
+        if (!bodyAnimator.GetCurrentAnimatorStateInfo(0).IsName(currentAnimation.label))
         {
-            started = true;
-            bodyAnimator.Play("BodyStandard", -1, 0f);
+            print(currentAnimation.label);
+            int rnd = UnityEngine.Random.Range(1, animationData.Count);
+            currentAnimation = animationData[rnd];
+            bodyAnimator.CrossFade(currentAnimation.label, 0.2f);
         }
-        headAnimator.Play("BeatStandard", -1, 0.1f);
-
-        //headAnimator.CrossFade("BeatStandard", 0);
-        //bodyAnimator.Play("BodyStandard", -1, 0f);
 
     }
 
@@ -61,6 +75,7 @@ public class ZombieView : MonoBehaviour {
 
     internal void Reset()
     {
-        bodyAnimator.Play("BodyStandard", -1, 0f);
+        currentAnimation = animationData[1];
+        bodyAnimator.Play(currentAnimation.label, -1, 0f);
     }
 }
