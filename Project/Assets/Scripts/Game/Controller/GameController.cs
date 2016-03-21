@@ -87,6 +87,7 @@ public class GameController : MonoBehaviour {
         initedGame = false;        
         metronome.beatCallback = BeatCallback;
         chainController.ResetChain();
+        middleHUD.SetActive(true);
         //InitGame();
     }
     public void InitGame()
@@ -128,7 +129,7 @@ public class GameController : MonoBehaviour {
                 item.Beat();
             }
         }
-        levelGauge -= levelGaugeDecress;
+        
         updateLevelGauge();
         beatCounter.text = Mathf.Floor(_beatCounter).ToString();
     }
@@ -144,7 +145,7 @@ public class GameController : MonoBehaviour {
         initedGame = false;
         chainController.ResetChain();
         audioController.Reset();
-        zombieView.Reset();
+        zombieView.GameOver();
         foreach (ActionButtonView actionView in _actionList)
         {
             actionView.ForceDestroy();            
@@ -284,8 +285,9 @@ public class GameController : MonoBehaviour {
             }
             bool toUpdatePoints = false;
             toUpdatePoints = chainController.UpdateChain(actionView.currentFeedbackState, actionPoints);
-
-            levelGauge += actionPoints * 2;
+            levelGauge += gaugeAccum;
+            //levelGauge += actionPoints * 2;
+            updateLevelGauge();
 
             if (actionPoints + goldenBrain > 0)
             {
@@ -351,9 +353,8 @@ public class GameController : MonoBehaviour {
     }
     private void applyChainPoints()
     {
-        int chainPoints = chainController.FinishChain(particlePrefab, pointsLabelRect, particlesContainer);
-
-        points += chainPoints * points;
+        float chainPoints = chainController.FinishChain(particlePrefab, pointsLabelRect, particlesContainer);
+        points = (int)(chainPoints * points);
         updatePointsLabel();
     }
     private void updatePointsLabel()

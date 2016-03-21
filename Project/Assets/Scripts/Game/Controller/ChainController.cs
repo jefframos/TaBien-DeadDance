@@ -7,21 +7,19 @@ using DG.Tweening;
 public class ChainController : MonoBehaviour {
     public Text chainLabel;
     public RectTransform chainTransformer;
-    public int chainLevel;
-    public int chainLevelAcum;
-    public int chainPoints;
+    public float chainLevel;
+    public float chainLevelAcum;
+   
     public bool activeChain;
     public int chainComboFactor = 1;
     public float chainFactor;
-    public float chainFactorAcum = 1;
+    public float chainFactorAcum = 0.1f;
     bool firstEntry;
 
     public void ResetChain()
     {
-        chainPoints = 0;
-        chainLevel = 0;
+        chainLevel = 1;
         chainFactor = 0;
-        chainLevelAcum = 0;
         activeChain = false;
         firstEntry = false;
         chainLabel.gameObject.SetActive(false);
@@ -48,20 +46,21 @@ public class ChainController : MonoBehaviour {
             firstEntry = true;
             return true;
         }
-        chainPoints += points;
+
         switch (stateType)
         {
             case FeedbackStateType.MISS:
                 break;
             case FeedbackStateType.GOOD:
+                chainLevel += chainLevelAcum;
                 break;
             case FeedbackStateType.GREAT:
-                chainLevel++;
+                chainLevel += chainLevelAcum;
                 break;
             case FeedbackStateType.BAD:
                 break;
             case FeedbackStateType.PERFECT:
-                chainLevel++;
+                chainLevel += chainLevelAcum;
                 break;
             case FeedbackStateType.TOLATE:
                 break;
@@ -70,39 +69,27 @@ public class ChainController : MonoBehaviour {
             default:
                 break;
         }
-        chainLevelAcum++;
-        if (chainLevelAcum >= chainComboFactor)
-        {
-            chainLevelAcum = 0;
-            chainFactor += chainFactorAcum;
-        }
         updateChainLabel();
         return chainLevel <= 0;
     }
 
     private void updateChainLabel()
     {
-        if(chainLevel > 0)
+        if(chainLevel > 1)
         {
             chainTransformer.gameObject.SetActive(true);
             chainLabel.gameObject.SetActive(true);
         }
 
         chainTransformer.transform.DOScale(new Vector2(1.5f, 1.5f), 0.5f).From();
-
-        //chainLabel.text = chainPoints.ToString() + "pts. X "+ chainFactor.ToString();
-        chainLabel.text = "X "+ chainFactor.ToString();
+        chainLabel.text = "X "+ chainLevel.ToString();
     }
 
-    internal int FinishChain(GameObject particlePrefab, RectTransform labelDestiny, RectTransform parent)
+    internal float FinishChain(GameObject particlePrefab, RectTransform labelDestiny, RectTransform parent)
     {
 
-        int finishedChainPoints = (int)chainFactor;//(int)Math.Ceiling(chainLevel * chainFactor);
-        //print(finishedChainPoints + "= "+ chainLevel + " x " + chainFactor);
-        
 
-
-        for (int i = 0; i < chainFactor; i++)
+        for (int i = 0; i < 1; i++)
         {
             
             float newPosX = chainLabel.transform.position.x + chainLabel.transform.parent.transform.position.x + this.transform.parent.transform.position.x;
@@ -126,11 +113,10 @@ public class ChainController : MonoBehaviour {
             particleView.Build(false, 0);
         }
 
-
+        float returnChain = chainLevel;
         ResetChain();
-
-
-        return finishedChainPoints;
+        
+        return returnChain;
     }
     
 }

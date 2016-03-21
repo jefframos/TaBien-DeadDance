@@ -52,7 +52,7 @@ public class ZombieView : MonoBehaviour {
     {
         if (!bodyAnimator.GetCurrentAnimatorStateInfo(0).IsName(currentAnimation.label))
         {
-            print(currentAnimation.label);
+            //print(currentAnimation.label);
             int rnd = UnityEngine.Random.Range(1, animationData.Count);
             currentAnimation = animationData[rnd];
             bodyAnimator.CrossFade(currentAnimation.label, 0.2f);
@@ -77,5 +77,10 @@ public class ZombieView : MonoBehaviour {
     {
         currentAnimation = animationData[1];
         bodyAnimator.Play(currentAnimation.label, -1, 0f);
+    }
+
+    internal void GameOver()
+    {
+        bodyAnimator.CrossFade("Lost1", 0.2f);
     }
 }
