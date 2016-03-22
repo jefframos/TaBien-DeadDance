@@ -8,6 +8,8 @@ public class ActionButtonModelEditor : Editor
 {
     override public void OnInspectorGUI()
     {
+       
+
         var myScript = target as ActionButtonModel;
 
         Vector2 tempVector = myScript.transform.position;
@@ -53,8 +55,8 @@ public class ActionButtonModelEditor : Editor
         myScript.actionType = (ActionType)EditorGUILayout.EnumPopup(myScript.actionType);
 
 
-
-
+        
+        DrawDefaultInspector();
         EditorUtility.SetDirty(myScript);
 
     }

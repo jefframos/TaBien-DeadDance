@@ -150,6 +150,10 @@ public class ActionButtonView : MonoBehaviour {
     internal void Build(ActionButtonModel _model)
     {
         model = _model;
+
+        corretAudioClip = model.beatSound;
+        perfectAudioClip = model.beatSound;
+        wrongAudioClip = model.wrongSound;
         builded = true;
         newState.SetActive(true);
         actionRectTransform.DOScale(1.75f, 0.5f).SetEase(Ease.OutBack);
@@ -305,7 +309,7 @@ public class ActionButtonView : MonoBehaviour {
             {
                 currentState = missState;
                 currentState.title = "Missed!";
-                audioSource.PlayOneShot(wrongAudioClip, 0.5f);
+                audioSource.PlayOneShot(wrongAudioClip, 0.1f);
             }
             else
             {
@@ -343,14 +347,14 @@ public class ActionButtonView : MonoBehaviour {
             currentFeedbackState = FeedbackStateType.TOLATE;
             currentState = wrongState;
             currentState.title = "To late!";
-            audioSource.PlayOneShot(wrongAudioClip, 0.5f);
+            audioSource.PlayOneShot(wrongAudioClip, 0.1f);
         }
         else
         {
             currentFeedbackState = FeedbackStateType.TOEARLY;
             currentState = wrongState;
             currentState.title = "To early!";
-            audioSource.PlayOneShot(wrongAudioClip, 0.5f);
+            audioSource.PlayOneShot(wrongAudioClip, 0.1f);
         }
         finishCallback();
         if (currentState != null)
