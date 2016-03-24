@@ -19,6 +19,7 @@ public class ZombieView : MonoBehaviour {
     }
     public List<AnimationData> animationData;
     private List<List<AnimationData>> animationList;
+    private AnimationData oldAnimation;
     private AnimationData currentAnimation;
 
     //public Animator headAnimator;
@@ -45,16 +46,30 @@ public class ZombieView : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
-	}
+        if (!started)
+        {
+            return;
+        }
+        
+    }
 
     internal void Beat()
     {
-        if (!bodyAnimator.GetCurrentAnimatorStateInfo(0).IsName(currentAnimation.label))
+        if (!started)
         {
-            //print(currentAnimation.label);
-            int rnd = UnityEngine.Random.Range(1, animationData.Count);
-            currentAnimation = animationData[rnd];
+            return;
+        }
+        if (currentAnimation != null && !bodyAnimator.GetCurrentAnimatorStateInfo(0).IsName(currentAnimation.label))
+        {
+            int counter = 0;
+            
+            while (currentAnimation.label == oldAnimation.label)// || counter < 20)
+                {
+                int rnd = UnityEngine.Random.Range(1, animationData.Count);
+                currentAnimation = animationData[rnd];
+                counter++;
+            }
+            oldAnimation = currentAnimation;
             bodyAnimator.CrossFade(currentAnimation.label, 0.2f);
         }
 
@@ -62,25 +77,25 @@ public class ZombieView : MonoBehaviour {
 
     internal void updatePart(Vector3 tempV3)
     {
-        //leftArm.DOKill(); 
-        //leftArm.DOLocalMove(tempV3, 0.2f);
-        //leftArm.DOLocalMove(standardLeftArm, 0.2f).SetDelay(0.25f);
-        //print(tempV3);
+
     }
 
     internal void updateLevel()
     {
-        bodyAnimator.CrossFade("Standard1", 0.5f);
+        //bodyAnimator.CrossFade("Standard1", 0.5f);
     }
 
     internal void Reset()
     {
+        started = true;
         currentAnimation = animationData[1];
+        oldAnimation = currentAnimation;
         bodyAnimator.Play(currentAnimation.label, -1, 0f);
     }
 
     internal void GameOver()
     {
+        started = false;
         bodyAnimator.CrossFade("Lost1", 0.2f);
     }
 }

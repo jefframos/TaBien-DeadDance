@@ -93,6 +93,7 @@
     <Compile Include="Assets\Scripts\Game\View\ActionParticleView.cs" />
     <Compile Include="Assets\Scripts\Game\View\BeatterView.cs" />
     <Compile Include="Assets\Scripts\Game\View\CharSelectView.cs" />
+    <Compile Include="Assets\Scripts\Game\View\GetSpecialView.cs" />
     <Compile Include="Assets\Scripts\Game\View\LevelGaugeView.cs" />
     <Compile Include="Assets\Scripts\Game\View\ZombieView.cs" />
     <Compile Include="Assets\Scripts\Metronome.cs" />

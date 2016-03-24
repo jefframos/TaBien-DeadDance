@@ -140,7 +140,6 @@ public class GameController : MonoBehaviour {
         {
             return;
         }
-        applyChainPoints();
         middleHUD.SetActive(true);
         initedGame = false;
         chainController.ResetChain();
@@ -207,6 +206,8 @@ public class GameController : MonoBehaviour {
         {
             currentWave = testWave;
         }
+        chainController.ActionsInWave = (wavesList[currentWave].actionList.Count);
+        chainController.ResetChain();
     }
     private void addAction(ActionButtonModel model)
     {
@@ -226,6 +227,7 @@ public class GameController : MonoBehaviour {
         GameObject tempObject = (GameObject)Instantiate(actionButtonPrefab, tempV3, Quaternion.identity);
         tempObject.transform.SetParent(actionArea.transform, false);
         ActionButtonView actionView = tempObject.GetComponent<ActionButtonView>();
+        actionView.chainController = chainController;
         actionView.Build(model);
         actionView.gameObject.SetActive(true);
         _actionList.Add(actionView);
@@ -250,41 +252,40 @@ public class GameController : MonoBehaviour {
                 switch (actionView.currentFeedbackState)
                 {
                     case FeedbackStateType.MISS:
-                        applyChainPoints();
-                        zombieView.updatePart(tempV3);
-                        actionPoints = -3;
+                        //zombieView.updatePart(tempV3);
                         gaugeAccum = gaugeValues.miss;
                         break;
                     case FeedbackStateType.GOOD:
-                        actionPoints = 1;
                         gaugeAccum = gaugeValues.good;
+                        actionPoints = 1;
                         break;
                     case FeedbackStateType.GREAT:
-                        actionPoints = 2;
                         gaugeAccum = gaugeValues.great;
+                        actionPoints = 2;
                         break;
                     case FeedbackStateType.BAD:
-                        applyChainPoints();
                         gaugeAccum = gaugeValues.miss;
                         break;
                     case FeedbackStateType.PERFECT:
-                        actionPoints = 3;
                         gaugeAccum = gaugeValues.perfect;
+                        actionPoints = 3;
                         break;
                     case FeedbackStateType.TOLATE:
-                        applyChainPoints();
                         gaugeAccum = gaugeValues.tolate;
                         break;
                     case FeedbackStateType.TOEARLY:
-                        applyChainPoints();
                         gaugeAccum = gaugeValues.toearly;
                         break;
                     default:
                         break;
                 }
             }
-            bool toUpdatePoints = false;
-            toUpdatePoints = chainController.UpdateChain(actionView.currentFeedbackState, actionPoints);
+
+            bool isFinishedPerfectChain = chainController.UpdateChain(actionView.currentFeedbackState);
+
+            //print(isFinishedPerfectChain);
+
+
             levelGauge += gaugeAccum;
             //levelGauge += actionPoints * 2;
             updateLevelGauge();
@@ -299,9 +300,7 @@ public class GameController : MonoBehaviour {
                     ActionParticleView particleView = tempParticle.GetComponent<ActionParticleView>();
 
                     float distance = Vector2.Distance(new Vector2(pointsLabelRect.position.x, pointsLabelRect.position.y), new Vector2(tempV3.x, tempV3.y));
-
-
-
+                    
                     particleView.time = Screen.height / distance * 0.8f;
                     particleView.delay = 0.1f + i * 0.2f;
                     particleView.destiny = pointsLabelRect.position;
@@ -327,9 +326,7 @@ public class GameController : MonoBehaviour {
                     particleView.initPos = new Vector3(newPosX, newPosY, 0);                   
 
                     particleView.color = actionView.currentState.color; 
-                    particleView.Build(goldenBrain > 0, actionPoints + goldenBrain);
-
-                    
+                    particleView.Build(goldenBrain > 0, actionPoints + goldenBrain);                    
                 }                
             }
         });
@@ -342,6 +339,7 @@ public class GameController : MonoBehaviour {
     }
     private void updatePoints(int actionPoints)
     {
+        print(actionPoints);
         points += actionPoints;
         updatePointsLabel();
 
@@ -350,12 +348,6 @@ public class GameController : MonoBehaviour {
             //audioController.IncreaseBPM();
             zombieView.updateLevel();
         }
-    }
-    private void applyChainPoints()
-    {
-        float chainPoints = chainController.FinishChain(particlePrefab, pointsLabelRect, particlesContainer);
-        points = (int)(chainPoints * points);
-        updatePointsLabel();
     }
     private void updatePointsLabel()
     {

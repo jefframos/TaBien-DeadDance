@@ -8,13 +8,26 @@ public class ChainController : MonoBehaviour {
     public Text chainLabel;
     public RectTransform chainTransformer;
     public float chainLevel;
-    public float chainLevelAcum;
-   
+    public float chainCounter;
+    private float chainLevelAcum;
+    public int maxPitch = 6;
+
     public bool activeChain;
     public int chainComboFactor = 1;
     public float chainFactor;
     public float chainFactorAcum = 0.1f;
     bool firstEntry;
+    private int actionsInWave;
+
+    public int ActionsInWave {
+        get{
+            return actionsInWave;
+        }
+        set {
+            actionsInWave = value;
+            chainLevelAcum = actionsInWave / maxPitch;
+        }
+    }
 
     public void ResetChain()
     {
@@ -30,22 +43,13 @@ public class ChainController : MonoBehaviour {
         ResetChain();
         activeChain = true;
     }
-    public bool UpdateChain(FeedbackStateType stateType, int points)
+    public bool UpdateChain(FeedbackStateType stateType)
     {
-        if(points <= 0)
-        {
-            return true;
-        }
+
         if (!activeChain)
         {
             InitChain();
-        }
-        
-        if (!firstEntry)
-        {
-            firstEntry = true;
-            return true;
-        }
+        }        
 
         switch (stateType)
         {
@@ -70,7 +74,9 @@ public class ChainController : MonoBehaviour {
                 break;
         }
         updateChainLabel();
-        return chainLevel <= 0;
+        chainCounter++;
+        
+        return maxPitch <= chainLevel;
     }
 
     private void updateChainLabel()
@@ -87,8 +93,6 @@ public class ChainController : MonoBehaviour {
 
     internal float FinishChain(GameObject particlePrefab, RectTransform labelDestiny, RectTransform parent)
     {
-
-
         for (int i = 0; i < 1; i++)
         {
             
@@ -118,5 +122,5 @@ public class ChainController : MonoBehaviour {
         
         return returnChain;
     }
-    
+
 }

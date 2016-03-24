@@ -32,6 +32,11 @@ public class ActionButtonView : MonoBehaviour {
             }
             label.text = title;
             labelBack.text = title;
+            float rndAngle = UnityEngine.Random.Range(-20, 20);
+            Quaternion angle = Quaternion.Euler(0,0,rndAngle);
+            print(angle);
+            label.transform.localRotation = angle;
+            labelBack.transform.localRotation = angle;
             content.gameObject.SetActive(true);
         }
     }
@@ -125,7 +130,7 @@ public class ActionButtonView : MonoBehaviour {
     private bool builded;
     public ActionButtonModel model;
     public CanvasGroup outherCanvasGroup;
-
+    public ChainController chainController;
     internal void ForceDestroy()
     {
         Destroy(this.gameObject);
@@ -156,7 +161,7 @@ public class ActionButtonView : MonoBehaviour {
         wrongAudioClip = model.wrongSound;
         builded = true;
         newState.SetActive(true);
-        actionRectTransform.DOScale(1.75f, 0.5f).SetEase(Ease.OutBack);
+        actionRectTransform.DOScale(1.75f, 2f).SetEase(Ease.OutElastic);
         if (model.actionType == ActionType.SPECIAL)
         {
             special.SetActive(true);
@@ -328,18 +333,21 @@ public class ActionButtonView : MonoBehaviour {
         {
             currentFeedbackState = FeedbackStateType.PERFECT;
             currentState = perfectState;
-            audioSource.PlayOneShot(perfectAudioClip, 0.5f);
+            audioSource.pitch = chainController.chainLevel;
+            audioSource.PlayOneShot(perfectAudioClip, 1f);
         }
         else if (distance < 0.50f)
         {
             currentFeedbackState = FeedbackStateType.GREAT;
             currentState = greatState;
+            audioSource.pitch = chainController.chainLevel;
             audioSource.PlayOneShot(corretAudioClip, 0.5f);
         }
         else if (distance < 0.750f)
         {
             currentFeedbackState = FeedbackStateType.GOOD;
             currentState = goodState;
+            audioSource.pitch = chainController.chainLevel;
             audioSource.PlayOneShot(corretAudioClip, 0.5f);
         }
         else if (currentBehaviourFactor < 1)
@@ -356,6 +364,10 @@ public class ActionButtonView : MonoBehaviour {
             currentState.title = "To early!";
             audioSource.PlayOneShot(wrongAudioClip, 0.1f);
         }
+
+
+        //print(chainController.chainLevel);
+
         finishCallback();
         if (currentState != null)
         {
