@@ -282,8 +282,26 @@ public class GameController : MonoBehaviour {
             }
 
             bool isFinishedPerfectChain = chainController.UpdateChain(actionView.currentFeedbackState);
+            
 
-            //print(isFinishedPerfectChain);
+            if (isFinishedPerfectChain)
+            {
+                float finishedFactor = chainController.chainLevel / chainController.ActionsInWave;
+                //print(chainController.chainLevel / chainController.ActionsInWave);
+                //print(chainController.chainLevel + " = " + chainController.ActionsInWave);
+                ChainController.ChainFinishedType finishedType = ChainController.ChainFinishedType.BAD;
+                if (finishedFactor >= 0.9)
+                {
+                    finishedType = ChainController.ChainFinishedType.PERFECT;
+
+                }
+                else if (finishedFactor >= 0.6)
+                {
+                    finishedType = ChainController.ChainFinishedType.GOOD;
+                }
+                zombieView.SetAnimation(finishedType);
+                chainController.FinishChain(finishedType);
+            }
 
 
             levelGauge += gaugeAccum;
@@ -339,15 +357,15 @@ public class GameController : MonoBehaviour {
     }
     private void updatePoints(int actionPoints)
     {
-        print(actionPoints);
+        //print(actionPoints);
         points += actionPoints;
         updatePointsLabel();
 
-        if(points > 50)
-        {
-            //audioController.IncreaseBPM();
-            zombieView.updateLevel();
-        }
+        //if(points > 50)
+        //{
+        //    //audioController.IncreaseBPM();
+        //    zombieView.updateLevel();
+        //}
     }
     private void updatePointsLabel()
     {

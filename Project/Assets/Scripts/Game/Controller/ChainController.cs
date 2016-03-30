@@ -3,38 +3,52 @@ using System.Collections;
 using UnityEngine.UI;
 using System;
 using DG.Tweening;
+using System.Collections.Generic;
 
 public class ChainController : MonoBehaviour {
+    public enum ChainFinishedType { PERFECT, GOOD, BAD};
     public Text chainLabel;
     public RectTransform chainTransformer;
     public float chainLevel;
     public float chainCounter;
     private float chainLevelAcum;
-    public int maxPitch = 6;
+    public float maxPitch;
+    private float pitchAcum;
+    public float currentPitch;
 
     public bool activeChain;
     public int chainComboFactor = 1;
     public float chainFactor;
     public float chainFactorAcum = 0.1f;
-    bool firstEntry;
-    private int actionsInWave;
 
+    private int actionsInWave;
+    public AudioClip perfectWave;
+    public AudioClip goodWave;
+    public AudioClip badWave;
+    public AudioSource audioSource;
+    public AudioSource audienceSource;
+    public List<AudioClip> greatChainSounds;
+    public List<AudioClip> goodChainSounds;
+    public List<AudioClip> badChainSounds;
     public int ActionsInWave {
         get{
             return actionsInWave;
         }
         set {
             actionsInWave = value;
-            chainLevelAcum = actionsInWave / maxPitch;
+            pitchAcum = (maxPitch - 1) / actionsInWave;
+            chainLevelAcum = 1;
         }
     }
 
     public void ResetChain()
     {
-        chainLevel = 1;
+        chainCounter = 0;
+        chainLevel = 0;
         chainFactor = 0;
+        currentPitch = 1;
         activeChain = false;
-        firstEntry = false;
+
         chainLabel.gameObject.SetActive(false);
         chainTransformer.gameObject.SetActive(false);
     }
@@ -49,11 +63,12 @@ public class ChainController : MonoBehaviour {
         if (!activeChain)
         {
             InitChain();
-        }        
-
+        }
+        bool finished = false;
         switch (stateType)
         {
             case FeedbackStateType.MISS:
+                //finished = true;
                 break;
             case FeedbackStateType.GOOD:
                 chainLevel += chainLevelAcum;
@@ -62,21 +77,28 @@ public class ChainController : MonoBehaviour {
                 chainLevel += chainLevelAcum;
                 break;
             case FeedbackStateType.BAD:
+                //finished = true;
                 break;
             case FeedbackStateType.PERFECT:
                 chainLevel += chainLevelAcum;
                 break;
             case FeedbackStateType.TOLATE:
+                //finished = true;
                 break;
             case FeedbackStateType.TOEARLY:
+                //finished = true;
                 break;
             default:
                 break;
         }
         updateChainLabel();
         chainCounter++;
-        
-        return maxPitch <= chainLevel;
+        currentPitch += pitchAcum;
+        if (!finished)
+        {
+            finished = actionsInWave <= chainCounter;
+        }
+        return finished;
     }
 
     private void updateChainLabel()
@@ -90,7 +112,36 @@ public class ChainController : MonoBehaviour {
         chainTransformer.transform.DOScale(new Vector2(1.5f, 1.5f), 0.5f).From();
         chainLabel.text = "X "+ chainLevel.ToString();
     }
+    internal float FinishChain(ChainFinishedType level)
+    {
+        float returnChain = chainLevel;
+        ResetChain();
+        audioSource.gameObject.SetActive(true);
+        audienceSource.gameObject.SetActive(true);
 
+        switch (level)
+        {
+            case ChainFinishedType.PERFECT:
+                audioSource.PlayOneShot(perfectWave, 0.3f);
+                audienceSource.PlayOneShot(greatChainSounds[UnityEngine.Random.Range(0, greatChainSounds.Count)], 0.5f);
+                break;
+            case ChainFinishedType.GOOD:
+                audioSource.PlayOneShot(goodWave, 0.2f);
+                audienceSource.PlayOneShot(goodChainSounds[UnityEngine.Random.Range(0, goodChainSounds.Count)], 0.5f);
+                break;
+            case ChainFinishedType.BAD:
+                //audioSource.PlayOneShot(badWave, 0.3f);
+                audienceSource.PlayOneShot(badChainSounds[UnityEngine.Random.Range(0, badChainSounds.Count)], 0.5f);
+                break;
+            default:
+                break;
+        }
+        audienceSource.volume = 0;
+        audienceSource.DOFade(0.5f, 0.5f);
+        //audienceSource.DOFade(0f, 0.5f).SetDelay(0.55f);
+        
+        return returnChain;
+    }
     internal float FinishChain(GameObject particlePrefab, RectTransform labelDestiny, RectTransform parent)
     {
         for (int i = 0; i < 1; i++)
@@ -119,7 +170,8 @@ public class ChainController : MonoBehaviour {
 
         float returnChain = chainLevel;
         ResetChain();
-        
+        print("FINISH CHAIN");
+        audioSource.PlayOneShot(perfectWave, 0.5f);
         return returnChain;
     }
 

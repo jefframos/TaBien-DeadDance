@@ -17,7 +17,10 @@ public class ZombieView : MonoBehaviour {
         public string label;
         public int level;
     }
-    public List<AnimationData> animationData;
+    public List<AnimationData> standardAnimationData;
+    public List<AnimationData> badAnimationData;
+    public List<AnimationData> goodAnimationData;
+    public List<AnimationData> perfectAnimationData;
     private List<List<AnimationData>> animationList;
     private AnimationData oldAnimation;
     private AnimationData currentAnimation;
@@ -61,18 +64,40 @@ public class ZombieView : MonoBehaviour {
         }
         if (currentAnimation != null && !bodyAnimator.GetCurrentAnimatorStateInfo(0).IsName(currentAnimation.label))
         {
-            int counter = 0;
-            
-            while (currentAnimation.label == oldAnimation.label)// || counter < 20)
-                {
-                int rnd = UnityEngine.Random.Range(1, animationData.Count);
-                currentAnimation = animationData[rnd];
-                counter++;
-            }
-            oldAnimation = currentAnimation;
-            bodyAnimator.CrossFade(currentAnimation.label, 0.2f);
+            changeAnimation(ChainController.ChainFinishedType.GOOD);            
         }
 
+    }
+
+    private void changeAnimation(ChainController.ChainFinishedType type)
+    {
+        List<AnimationData> tempAnimations = perfectAnimationData;
+        switch (type)
+        {
+            case ChainController.ChainFinishedType.PERFECT:
+                tempAnimations = perfectAnimationData;
+                break;
+            case ChainController.ChainFinishedType.GOOD:
+                tempAnimations = goodAnimationData;
+
+                break;
+            case ChainController.ChainFinishedType.BAD:
+                tempAnimations = badAnimationData;
+
+                break;
+            default:
+                break;
+        }
+        int counter = 0;
+        print(tempAnimations);
+        while (currentAnimation.label == oldAnimation.label )// || counter < 20)
+        {
+            int rnd = UnityEngine.Random.Range(0, tempAnimations.Count);
+            currentAnimation = tempAnimations[rnd];
+            counter++;
+        }
+        oldAnimation = currentAnimation;
+        bodyAnimator.CrossFade(currentAnimation.label, 0.2f);
     }
 
     internal void updatePart(Vector3 tempV3)
@@ -88,7 +113,7 @@ public class ZombieView : MonoBehaviour {
     internal void Reset()
     {
         started = true;
-        currentAnimation = animationData[1];
+        currentAnimation = standardAnimationData[0];
         oldAnimation = currentAnimation;
         bodyAnimator.Play(currentAnimation.label, -1, 0f);
     }
@@ -97,5 +122,11 @@ public class ZombieView : MonoBehaviour {
     {
         started = false;
         bodyAnimator.CrossFade("Lost1", 0.2f);
+    }
+
+    internal void SetAnimation(ChainController.ChainFinishedType finishedType)
+    {
+        changeAnimation(finishedType);
+        
     }
 }

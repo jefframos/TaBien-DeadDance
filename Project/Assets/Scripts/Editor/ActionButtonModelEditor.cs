@@ -12,7 +12,7 @@ public class ActionButtonModelEditor : Editor
 
         var myScript = target as ActionButtonModel;
 
-        Vector2 tempVector = myScript.transform.position;
+
 
         Vector2 tempV3 = new Vector2();
         RectTransform actionArea = myScript.transform.parent.GetComponent<RectTransform>();
