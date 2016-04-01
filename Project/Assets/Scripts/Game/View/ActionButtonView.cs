@@ -143,11 +143,7 @@ public class ActionButtonView : MonoBehaviour {
         button.onClick.AddListener(()=> {
             
             ClickCallback();
-        });
-
-        
-
-        
+        });        
         
     }
 
@@ -155,9 +151,9 @@ public class ActionButtonView : MonoBehaviour {
     {
         model = _model;
 
-        corretAudioClip = model.beatSound;
-        perfectAudioClip = model.beatSound;
-        wrongAudioClip = model.wrongSound;
+        //corretAudioClip = model.beatSound;
+        //perfectAudioClip = model.beatSound;
+        //wrongAudioClip = model.wrongSound;
         builded = true;
         newState.SetActive(true);
         actionRectTransform.DOScale(1.75f, 2f).SetEase(Ease.OutElastic);

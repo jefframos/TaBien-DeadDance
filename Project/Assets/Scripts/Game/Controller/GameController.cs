@@ -69,6 +69,9 @@ public class GameController : MonoBehaviour {
 
     public GameObject middleHUD;
     public Button playButton;
+
+    public AudioSource audioSourceAmbient;
+    public CountdownController countdownController;
     // Use this for initialization
     public void ResetWaves()
     {
@@ -88,14 +91,17 @@ public class GameController : MonoBehaviour {
         metronome.beatCallback = BeatCallback;
         chainController.ResetChain();
         middleHUD.SetActive(true);
+        audioSourceAmbient.volume = 0.1f;
+        countdownController.Hide();
         //InitGame();
     }
     public void InitGame()
     {
         middleHUD.SetActive(false);
+        audioSourceAmbient.DOFade(0.25f, 1f);
         getWave();
         _beatAcum = 0;
-        _beatCounter = 0;
+        _beatCounter = -12;
         points = 0;
         audioController.InitAudioController();
         chainController.ResetChain();
@@ -104,6 +110,8 @@ public class GameController : MonoBehaviour {
         levelGauge = maxGauge / 2;
         _actionList = new List<ActionButtonView>();
         zombieView.Reset();
+        countdownController.Reset(3);
+
     }
 
     private int GetCurrency()
@@ -128,6 +136,21 @@ public class GameController : MonoBehaviour {
             {
                 item.Beat();
             }
+            if (_beatCounter < 0)
+            {
+                if (countdownController.started)
+                {
+                    if (Mathf.Abs(_beatCounter) % 3 == 0)
+                    {
+
+                        countdownController.UpdateCounter((int)Mathf.Abs(_beatCounter) / 3);
+                    }
+                }
+            }
+            else
+            {
+                countdownController.Finish();
+            }
         }
         
         updateLevelGauge();
@@ -140,6 +163,7 @@ public class GameController : MonoBehaviour {
         {
             return;
         }
+        audioSourceAmbient.DOFade(0.1f, 1f);
         middleHUD.SetActive(true);
         initedGame = false;
         chainController.ResetChain();
@@ -149,6 +173,7 @@ public class GameController : MonoBehaviour {
         {
             actionView.ForceDestroy();            
         }
+        _actionList = new List<ActionButtonView>();
     }
     private void updateLevelGauge()
     {
@@ -186,8 +211,7 @@ public class GameController : MonoBehaviour {
         }
 
         if (_beatCounter > wavesList[currentWave].totalBeats)
-        {
-            _beatCounter = 0;
+        {            
             foreach (ActionButtonModel model in wavesList[currentWave].actionList)
             {
                 model.placed = false;
@@ -196,8 +220,22 @@ public class GameController : MonoBehaviour {
         }
         
     }
+    private void breakWave()
+    {
+        foreach (ActionButtonView actionView in _actionList)
+        {
+            actionView.ForceDestroy();
+        }
+        _actionList = new List<ActionButtonView>();
+        foreach (ActionButtonModel model in wavesList[currentWave].actionList)
+        {
+            model.placed = false;
+        }
+        getWave();
+    }
     private void getWave()
     {
+        _beatCounter = -8;
         if (testWave < 0)
         {
             currentWave = UnityEngine.Random.Range(0, wavesList.Count);
@@ -281,15 +319,13 @@ public class GameController : MonoBehaviour {
                 }
             }
 
-            bool isFinishedPerfectChain = chainController.UpdateChain(actionView.currentFeedbackState);
-            
+            ChainActionType chainActionType = chainController.UpdateChain(actionView.currentFeedbackState);
 
-            if (isFinishedPerfectChain)
+            ChainController.ChainFinishedType finishedType = ChainController.ChainFinishedType.BAD;
+            if (chainActionType != ChainActionType.STANDARD)
             {
                 float finishedFactor = chainController.chainLevel / chainController.ActionsInWave;
-                //print(chainController.chainLevel / chainController.ActionsInWave);
-                //print(chainController.chainLevel + " = " + chainController.ActionsInWave);
-                ChainController.ChainFinishedType finishedType = ChainController.ChainFinishedType.BAD;
+                
                 if (finishedFactor >= 0.9)
                 {
                     finishedType = ChainController.ChainFinishedType.PERFECT;
@@ -299,9 +335,23 @@ public class GameController : MonoBehaviour {
                 {
                     finishedType = ChainController.ChainFinishedType.GOOD;
                 }
+
+                if (chainActionType == ChainActionType.FINISHED)
+                {
+                    chainController.FinishChain(finishedType);
+                }
+                else if (chainActionType == ChainActionType.BROKE)
+                {
+                    //finishedType = ChainController.ChainFinishedType.BAD;
+                    chainController.BreakChain(finishedType);
+                    breakWave();
+                }
+
+
                 zombieView.SetAnimation(finishedType);
-                chainController.FinishChain(finishedType);
             }
+
+            
 
 
             levelGauge += gaugeAccum;

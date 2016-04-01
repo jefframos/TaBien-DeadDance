@@ -21,7 +21,6 @@ public class ZombieView : MonoBehaviour {
     public List<AnimationData> badAnimationData;
     public List<AnimationData> goodAnimationData;
     public List<AnimationData> perfectAnimationData;
-    private List<List<AnimationData>> animationList;
     private AnimationData oldAnimation;
     private AnimationData currentAnimation;
 
@@ -29,31 +28,22 @@ public class ZombieView : MonoBehaviour {
     public Animator bodyAnimator;
 
     public Vector3 standardLeftArm;
-
+    public AudioSource sourceBreath;
+    public AudioSource sourceActions;
+    public List<AudioClip> audioActionList;
     private bool started;
     // Use this for initialization
     void Awake()
     {
-        standardLeftArm = leftArm.localPosition;
         started = false;
-        //animationList = new List<List<AnimationData>>();
-        //foreach (AnimationData item in animationData)
-        //{
-
-        //}
     }
-
-    void Start () {
-	
-	}
-	
+    
 	// Update is called once per frame
 	void Update () {
         if (!started)
         {
             return;
         }
-        
     }
 
     internal void Beat()
@@ -62,7 +52,9 @@ public class ZombieView : MonoBehaviour {
         {
             return;
         }
-        if (currentAnimation != null && !bodyAnimator.GetCurrentAnimatorStateInfo(0).IsName(currentAnimation.label))
+        
+        //if (currentAnimation != null && !bodyAnimator.GetCurrentAnimatorStateInfo(0).IsName(currentAnimation.label))
+        if (currentAnimation != null && bodyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.95)
         {
             changeAnimation(ChainController.ChainFinishedType.GOOD);            
         }
@@ -71,7 +63,8 @@ public class ZombieView : MonoBehaviour {
 
     private void changeAnimation(ChainController.ChainFinishedType type)
     {
-        List<AnimationData> tempAnimations = perfectAnimationData;
+        
+        List <AnimationData> tempAnimations = perfectAnimationData;
         switch (type)
         {
             case ChainController.ChainFinishedType.PERFECT:
@@ -89,15 +82,25 @@ public class ZombieView : MonoBehaviour {
                 break;
         }
         int counter = 0;
-        print(tempAnimations);
-        while (currentAnimation.label == oldAnimation.label )// || counter < 20)
+        if (tempAnimations.Count == 1)
         {
-            int rnd = UnityEngine.Random.Range(0, tempAnimations.Count);
-            currentAnimation = tempAnimations[rnd];
-            counter++;
+            currentAnimation = tempAnimations[0];
         }
+        else {
+            while (currentAnimation.label == oldAnimation.label)// || counter < 20)
+            {
+                int rnd = UnityEngine.Random.Range(0, tempAnimations.Count);
+                currentAnimation = tempAnimations[rnd];
+                counter++;
+            }
+        }
+
+
+
+
         oldAnimation = currentAnimation;
         bodyAnimator.CrossFade(currentAnimation.label, 0.2f);
+        sourceActions.PlayOneShot(audioActionList[UnityEngine.Random.Range(0, (audioActionList.Count))]);
     }
 
     internal void updatePart(Vector3 tempV3)
@@ -115,7 +118,8 @@ public class ZombieView : MonoBehaviour {
         started = true;
         currentAnimation = standardAnimationData[0];
         oldAnimation = currentAnimation;
-        bodyAnimator.Play(currentAnimation.label, -1, 0f);
+        //bodyAnimator.Play(currentAnimation.label, -1, 0f);
+        bodyAnimator.CrossFade(currentAnimation.label, 0.2f);
     }
 
     internal void GameOver()

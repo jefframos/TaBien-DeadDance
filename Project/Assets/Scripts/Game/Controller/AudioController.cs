@@ -33,7 +33,7 @@ public class AudioController : MonoBehaviour {
         }
         currentAudioLoop = audioLoopDataList[1];
         audioSource.clip = currentAudioLoop.audioClip;
-        audioSource.volume = 0.5f;
+        audioSource.volume = 0.1f;
         audioSource.Play();
     }
 
