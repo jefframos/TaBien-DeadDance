@@ -19,6 +19,7 @@ public class ActionButtonView : MonoBehaviour {
         public CanvasGroup canvasGroup;
         public Color color;
         public Image inner;
+        public List<String> labelList;
         public void Hide()
         {
             content.gameObject.SetActive(false);
@@ -30,6 +31,11 @@ public class ActionButtonView : MonoBehaviour {
             {
                 //canvasGroup.DOFade(1f, 0.5f);
             }
+            if(labelList != null && labelList.Count > 0)
+            {
+                title = labelList[UnityEngine.Random.Range(0, labelList.Count)];
+            }
+            
             label.text = title;
             labelBack.text = title;
             float rndAngle = UnityEngine.Random.Range(-20, 20);
@@ -37,6 +43,7 @@ public class ActionButtonView : MonoBehaviour {
             label.transform.localRotation = angle;
             labelBack.transform.localRotation = angle;
             content.gameObject.SetActive(true);
+            content.parent.SetAsLastSibling();
         }
     }
     public CanvasGroup canvasGroup;
@@ -122,6 +129,7 @@ public class ActionButtonView : MonoBehaviour {
     public AudioClip perfectAudioClip;
     public AudioClip wrongAudioClip;
     public AudioClip specialAudioClip;
+    public AudioClip entraceAudioClip;
     private int maxBeat;
     private BehaviourType behaviour;
 
@@ -205,12 +213,14 @@ public class ActionButtonView : MonoBehaviour {
         specialState.Hide();
         wrongState.Hide();
         missSpecialState.Hide();
-        //if (canvasGroup != null)
-        //{
-        //    canvasGroup.DOFade(1f, 0.5f);
-        //}
+
 
         updateBehaviour(true);
+
+
+
+        audioSource.gameObject.SetActive(true);
+        audioSource.PlayOneShot(entraceAudioClip, 1f);
 
     }
 
@@ -309,7 +319,7 @@ public class ActionButtonView : MonoBehaviour {
             {
                 currentState = missState;
                 currentState.title = "Missed!";
-                audioSource.PlayOneShot(wrongAudioClip, 0.5f);
+                audioSource.PlayOneShot(wrongAudioClip, 0.8f);
             }
             else
             {
@@ -350,14 +360,14 @@ public class ActionButtonView : MonoBehaviour {
             currentFeedbackState = FeedbackStateType.TOLATE;
             currentState = wrongState;
             currentState.title = "To late!";
-            audioSource.PlayOneShot(wrongAudioClip, 0.5f);
+            audioSource.PlayOneShot(wrongAudioClip, 0.8f);
         }
         else
         {
             currentFeedbackState = FeedbackStateType.TOEARLY;
             currentState = wrongState;
             currentState.title = "To early!";
-            audioSource.PlayOneShot(wrongAudioClip, 0.5f);
+            audioSource.PlayOneShot(wrongAudioClip, 0.8f);
         }
 
 

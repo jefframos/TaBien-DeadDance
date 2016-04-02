@@ -101,19 +101,24 @@ public class GameController : MonoBehaviour {
         audioSourceAmbient.DOFade(0.25f, 1f);
         getWave();
         _beatAcum = 0;
-        _beatCounter = -12;
+        _beatCounter = 0;
         points = 0;
-        audioController.InitAudioController();
+        
         chainController.ResetChain();
-        initedGame = true;
         currency = GetCurrency();
         levelGauge = maxGauge / 2;
         _actionList = new List<ActionButtonView>();
         zombieView.Reset();
-        countdownController.Reset(3);
+        countdownController.Init(3, AfterCountdown);       
 
     }
 
+    void AfterCountdown()
+    {
+        initedGame = true;
+        zombieView.Init();
+        audioController.InitAudioController();
+    }
     private int GetCurrency()
     {
         return 0;
@@ -135,22 +140,7 @@ public class GameController : MonoBehaviour {
             foreach (BeatterView item in beatterList)
             {
                 item.Beat();
-            }
-            if (_beatCounter < 0)
-            {
-                if (countdownController.started)
-                {
-                    if (Mathf.Abs(_beatCounter) % 3 == 0)
-                    {
-
-                        countdownController.UpdateCounter((int)Mathf.Abs(_beatCounter) / 3);
-                    }
-                }
-            }
-            else
-            {
-                countdownController.Finish();
-            }
+            }            
         }
         
         updateLevelGauge();
@@ -324,14 +314,15 @@ public class GameController : MonoBehaviour {
             ChainController.ChainFinishedType finishedType = ChainController.ChainFinishedType.BAD;
             if (chainActionType != ChainActionType.STANDARD)
             {
-                float finishedFactor = chainController.chainLevel / chainController.ActionsInWave;
+
+                float finishedFactor = chainController.chainLevel / (chainController.ActionsInWave * 3);
                 
-                if (finishedFactor >= 0.9)
+                if (finishedFactor >= 0.85)
                 {
                     finishedType = ChainController.ChainFinishedType.PERFECT;
 
                 }
-                else if (finishedFactor >= 0.6)
+                else if (finishedFactor >= 0.5)
                 {
                     finishedType = ChainController.ChainFinishedType.GOOD;
                 }
@@ -411,11 +402,12 @@ public class GameController : MonoBehaviour {
         points += actionPoints;
         updatePointsLabel();
 
-        //if(points > 50)
-        //{
-        //    //audioController.IncreaseBPM();
-        //    zombieView.updateLevel();
-        //}
+        if (points > 20 && points < 30)
+        {
+            points = 100;
+            audioController.UpgradeAudioController();
+            //    zombieView.updateLevel();
+        }
     }
     private void updatePointsLabel()
     {

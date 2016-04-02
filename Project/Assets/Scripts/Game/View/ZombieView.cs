@@ -113,9 +113,14 @@ public class ZombieView : MonoBehaviour {
         //bodyAnimator.CrossFade("Standard1", 0.5f);
     }
 
-    internal void Reset()
+    internal void Init()
     {
         started = true;
+    }
+
+    internal void Reset()
+    {
+        
         currentAnimation = standardAnimationData[0];
         oldAnimation = currentAnimation;
         //bodyAnimator.Play(currentAnimation.label, -1, 0f);

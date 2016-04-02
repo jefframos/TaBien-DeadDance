@@ -30,6 +30,11 @@ public class ChainController : MonoBehaviour {
     public List<AudioClip> greatChainSounds;
     public List<AudioClip> goodChainSounds;
     public List<AudioClip> badChainSounds;
+    public float audienceVolume = 0.5f;
+
+    public Text resultLabel;
+    public RectTransform container;
+
     public int ActionsInWave {
         get{
             return actionsInWave;
@@ -69,30 +74,33 @@ public class ChainController : MonoBehaviour {
         switch (stateType)
         {
             case FeedbackStateType.MISS:
-                broke = true;
+                //broke = true;
                 break;
             case FeedbackStateType.GOOD:
-                chainLevel += chainLevelAcum;
+                //chainLevel += chainLevelAcum;
+                chainLevel += 1;
                 break;
             case FeedbackStateType.GREAT:
-                chainLevel += chainLevelAcum;
+                //chainLevel += chainLevelAcum;
+                chainLevel += 2;
                 break;
             case FeedbackStateType.BAD:
-                broke = true;
+                //broke = true;
                 break;
             case FeedbackStateType.PERFECT:
-                chainLevel += chainLevelAcum;
+                //chainLevel += chainLevelAcum;
+                chainLevel += 3;
                 break;
             case FeedbackStateType.TOLATE:
-                broke = true;
+                //broke = true;
                 break;
             case FeedbackStateType.TOEARLY:
-                broke = true;
+                //broke = true;
                 break;
             default:
                 break;
         }
-        updateChainLabel();
+        //updateChainLabel();
         chainCounter++;
         currentPitch += pitchAcum;
         if (!finished)
@@ -119,42 +127,22 @@ public class ChainController : MonoBehaviour {
         ResetChain();
         playSound(finishedType);
         //audienceSource.DOFade(0f, 0.5f).SetDelay(0.55f);
-
+        ShowResult(finishedType);
         return returnChain;
-    }
-    internal float FinishChain(GameObject particlePrefab, RectTransform labelDestiny, RectTransform parent)
+    }    
+    internal void ShowResult(ChainFinishedType finishedType)
     {
-        for (int i = 0; i < 1; i++)
-        {
-            
-            float newPosX = chainLabel.transform.position.x + chainLabel.transform.parent.transform.position.x + this.transform.parent.transform.position.x;
-            float newPosY = chainLabel.transform.position.y + chainLabel.transform.parent.transform.position.y + this.transform.parent.transform.position.y;
+        resultLabel.gameObject.SetActive(true);
+        container.transform.localScale = new Vector3(0.5f, 0.5f);
+        CanvasGroup canvasGroup = container.GetComponent<CanvasGroup>();
+        canvasGroup.alpha = 1;
+        resultLabel.text = finishedType.ToString();
+        Sequence seq = DOTween.Sequence();
+        seq.Append(container.DOScale(1f, 1f).SetEase(Ease.OutElastic));
+        seq.Append(container.DOScale(1.5f, 0.8f).SetEase(Ease.InBack));
+        seq.Insert(1, canvasGroup.DOFade(0, 0.3f).SetDelay(0.5f));
 
-
-            GameObject tempParticle;
-            tempParticle = (GameObject)Instantiate(particlePrefab, new Vector3(), Quaternion.identity);
-            tempParticle.transform.SetParent(parent.transform, false);
-            ActionParticleView particleView = tempParticle.GetComponent<ActionParticleView>();
-
-            float distance = Vector2.Distance(new Vector2(labelDestiny.position.x, labelDestiny.position.y), new Vector2(newPosX , newPosY));
-
-
-
-            particleView.time = Screen.height / distance * 0.2f;
-            particleView.delay = i * 0.1f;
-            particleView.destiny = labelDestiny.position;
-            particleView.rectTarget = labelDestiny;            
-            particleView.initPos = new Vector3(newPosX, newPosY, 0);            
-            particleView.Build(false, 0);
-        }
-
-        float returnChain = chainLevel;
-        ResetChain();
-        print("FINISH CHAIN");
-        audioSource.PlayOneShot(perfectWave, 0.5f);
-        return returnChain;
     }
-
     internal void BreakChain(ChainFinishedType finishedType)
     {
         playSound(finishedType);
@@ -163,25 +151,32 @@ public class ChainController : MonoBehaviour {
     {
         audioSource.gameObject.SetActive(true);
         audienceSource.gameObject.SetActive(true);
-        print("CONCERTAR BAD SOUND");
+
+        AudioClip tempAudioClip;
         switch (finishedType)
         {
             case ChainFinishedType.PERFECT:
                 audioSource.PlayOneShot(perfectWave, 0.3f);
-                audienceSource.PlayOneShot(greatChainSounds[UnityEngine.Random.Range(0, greatChainSounds.Count)], 0.5f);
+                tempAudioClip = greatChainSounds[UnityEngine.Random.Range(0, greatChainSounds.Count)];
+               
                 break;
             case ChainFinishedType.GOOD:
                 audioSource.PlayOneShot(goodWave, 0.2f);
-                audienceSource.PlayOneShot(goodChainSounds[UnityEngine.Random.Range(0, goodChainSounds.Count)], 0.5f);
+                tempAudioClip = goodChainSounds[UnityEngine.Random.Range(0, goodChainSounds.Count)];
+                
                 break;
             case ChainFinishedType.BAD:
-                //audioSource.PlayOneShot(badWave, 0.3f);
+                audioSource.PlayOneShot(badWave, 0.3f);
                 print(badChainSounds);
-                audienceSource.PlayOneShot(badChainSounds[UnityEngine.Random.Range(0, badChainSounds.Count)], 0.5f);
+                tempAudioClip = badChainSounds[UnityEngine.Random.Range(0, badChainSounds.Count)];
                 break;
             default:
+                tempAudioClip = goodChainSounds[UnityEngine.Random.Range(0, goodChainSounds.Count)];
                 break;
         }
+
+        audienceSource.PlayOneShot(tempAudioClip, audienceVolume);
+        audienceSource.DOFade(audienceVolume / 2, 0.3f);
         //audienceSource.volume = 0;
         //audienceSource.DOFade(0.5f, 0.5f);
     }
