@@ -56,25 +56,25 @@ public class ZombieView : MonoBehaviour {
         //if (currentAnimation != null && !bodyAnimator.GetCurrentAnimatorStateInfo(0).IsName(currentAnimation.label))
         if (currentAnimation != null && bodyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.95)
         {
-            changeAnimation(ChainController.ChainFinishedType.GOOD);            
+            changeAnimation(ChainFinishedType.GOOD);            
         }
 
     }
 
-    private void changeAnimation(ChainController.ChainFinishedType type)
+    private void changeAnimation(ChainFinishedType type)
     {
         
         List <AnimationData> tempAnimations = perfectAnimationData;
         switch (type)
         {
-            case ChainController.ChainFinishedType.PERFECT:
+            case ChainFinishedType.PERFECT:
                 tempAnimations = perfectAnimationData;
                 break;
-            case ChainController.ChainFinishedType.GOOD:
+            case ChainFinishedType.GOOD:
                 tempAnimations = goodAnimationData;
 
                 break;
-            case ChainController.ChainFinishedType.BAD:
+            case ChainFinishedType.BAD:
                 tempAnimations = badAnimationData;
 
                 break;
@@ -133,7 +133,7 @@ public class ZombieView : MonoBehaviour {
         bodyAnimator.CrossFade("Lost1", 0.2f);
     }
 
-    internal void SetAnimation(ChainController.ChainFinishedType finishedType)
+    internal void SetAnimation(ChainFinishedType finishedType)
     {
         changeAnimation(finishedType);
         

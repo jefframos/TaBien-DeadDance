@@ -60,7 +60,7 @@ public class CountdownController : MonoBehaviour {
         float volume = 1 - (minVolume + (normalValue * maxVolume)) ;
         volume *= maxVolume;
         audioSource.pitch = 0.8f + volume;
-        audioSource.PlayOneShot(audioClipAlert, volume);
+        audioSource.PlayOneShot(audioClipAlert, maxVolume);
     }
     internal void Hide()
     {

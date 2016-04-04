@@ -79,7 +79,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\PeerPlay\Ripple Water\_scripts\CollisionScript.cs" />
     <Compile Include="Assets\Scripts\Game\Controller\AudioController.cs" />
     <Compile Include="Assets\Scripts\Game\Controller\ChainController.cs" />
     <Compile Include="Assets\Scripts\Game\Controller\CountdownController.cs" />
@@ -87,6 +86,7 @@
     <Compile Include="Assets\Scripts\Game\Enum\ActionType.cs" />
     <Compile Include="Assets\Scripts\Game\Enum\BehaviourType.cs" />
     <Compile Include="Assets\Scripts\Game\Enum\ChainActionType.cs" />
+    <Compile Include="Assets\Scripts\Game\Enum\ChainFinishedType.cs" />
     <Compile Include="Assets\Scripts\Game\Enum\FeedbackStateType.cs" />
     <Compile Include="Assets\Scripts\Game\Model\ActionButtonModel.cs" />
     <Compile Include="Assets\Scripts\Game\Model\WaveModel.cs" />
@@ -100,9 +100,6 @@
     <Compile Include="Assets\Scripts\Metronome.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\PeerPlay\Ripple Water\ReadMe.txt" />
-    <None Include="Assets\PeerPlay\Ripple Water\_shaders\RippleWater.shader" />
-    <None Include="Assets\PeerPlay\bla.shader" />
     <None Include="Assets\Plugins\Demigiant\DOTween\DOTween.XML" />
     <None Include="Assets\Plugins\Demigiant\DOTween\DOTween43.xml" />
     <None Include="Assets\Plugins\Demigiant\DOTween\DOTween46.xml" />

@@ -5,8 +5,7 @@ using System;
 using DG.Tweening;
 using System.Collections.Generic;
 
-public class ChainController : MonoBehaviour {
-    public enum ChainFinishedType { PERFECT, GOOD, BAD};
+public class ChainController : MonoBehaviour {    
     public Text chainLabel;
     public RectTransform chainTransformer;
     public float chainLevel;
@@ -156,18 +155,20 @@ public class ChainController : MonoBehaviour {
         switch (finishedType)
         {
             case ChainFinishedType.PERFECT:
-                audioSource.PlayOneShot(perfectWave, 0.3f);
+                audioSource.PlayOneShot(perfectWave, 1f);
+                print(perfectWave);
+
                 tempAudioClip = greatChainSounds[UnityEngine.Random.Range(0, greatChainSounds.Count)];
                
                 break;
             case ChainFinishedType.GOOD:
-                audioSource.PlayOneShot(goodWave, 0.2f);
+                audioSource.PlayOneShot(goodWave, 1f);
                 tempAudioClip = goodChainSounds[UnityEngine.Random.Range(0, goodChainSounds.Count)];
                 
                 break;
             case ChainFinishedType.BAD:
-                audioSource.PlayOneShot(badWave, 0.3f);
-                print(badChainSounds);
+                audioSource.PlayOneShot(badWave, 1f);
+                print(badWave);
                 tempAudioClip = badChainSounds[UnityEngine.Random.Range(0, badChainSounds.Count)];
                 break;
             default:
@@ -176,7 +177,7 @@ public class ChainController : MonoBehaviour {
         }
 
         audienceSource.PlayOneShot(tempAudioClip, audienceVolume);
-        audienceSource.DOFade(audienceVolume / 2, 0.3f);
+        //audienceSource.DOFade(audienceVolume / 2, 0.3f);
         //audienceSource.volume = 0;
         //audienceSource.DOFade(0.5f, 0.5f);
     }

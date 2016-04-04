@@ -70,9 +70,10 @@ public class GameController : MonoBehaviour {
     public GameObject middleHUD;
     public Button playButton;
 
-    public AudioSource audioSourceAmbient;
+    //public AudioSource audioSourceAmbient;
     public CountdownController countdownController;
     // Use this for initialization
+    public int life = 3;
     public void ResetWaves()
     {
         wavesList = new List<WaveModel>();
@@ -91,26 +92,26 @@ public class GameController : MonoBehaviour {
         metronome.beatCallback = BeatCallback;
         chainController.ResetChain();
         middleHUD.SetActive(true);
-        audioSourceAmbient.volume = 0.1f;
         countdownController.Hide();
         //InitGame();
     }
     public void InitGame()
     {
         middleHUD.SetActive(false);
-        audioSourceAmbient.DOFade(0.25f, 1f);
+        //audioSourceAmbient.DOFade(0.25f, 1f);
         getWave();
         _beatAcum = 0;
         _beatCounter = 0;
         points = 0;
-        
+        life = 3;
+
         chainController.ResetChain();
         currency = GetCurrency();
         levelGauge = maxGauge / 2;
         _actionList = new List<ActionButtonView>();
         zombieView.Reset();
-        countdownController.Init(3, AfterCountdown);       
-
+        countdownController.Init(3, AfterCountdown);
+        updatePoints(points);
     }
 
     void AfterCountdown()
@@ -153,7 +154,7 @@ public class GameController : MonoBehaviour {
         {
             return;
         }
-        audioSourceAmbient.DOFade(0.1f, 1f);
+        //audioSourceAmbient.DOFade(0.1f, 1f);
         middleHUD.SetActive(true);
         initedGame = false;
         chainController.ResetChain();
@@ -225,7 +226,7 @@ public class GameController : MonoBehaviour {
     }
     private void getWave()
     {
-        _beatCounter = -8;
+        _beatCounter = 0;
         if (testWave < 0)
         {
             currentWave = UnityEngine.Random.Range(0, wavesList.Count);
@@ -311,7 +312,7 @@ public class GameController : MonoBehaviour {
 
             ChainActionType chainActionType = chainController.UpdateChain(actionView.currentFeedbackState);
 
-            ChainController.ChainFinishedType finishedType = ChainController.ChainFinishedType.BAD;
+            ChainFinishedType finishedType = ChainFinishedType.BAD;
             if (chainActionType != ChainActionType.STANDARD)
             {
 
@@ -319,12 +320,12 @@ public class GameController : MonoBehaviour {
                 
                 if (finishedFactor >= 0.85)
                 {
-                    finishedType = ChainController.ChainFinishedType.PERFECT;
+                    finishedType = ChainFinishedType.PERFECT;
 
                 }
                 else if (finishedFactor >= 0.5)
                 {
-                    finishedType = ChainController.ChainFinishedType.GOOD;
+                    finishedType = ChainFinishedType.GOOD;
                 }
 
                 if (chainActionType == ChainActionType.FINISHED)
@@ -338,7 +339,7 @@ public class GameController : MonoBehaviour {
                     breakWave();
                 }
 
-
+                updateGameState(finishedType);
                 zombieView.SetAnimation(finishedType);
             }
 
@@ -346,8 +347,8 @@ public class GameController : MonoBehaviour {
 
 
             levelGauge += gaugeAccum;
-            //levelGauge += actionPoints * 2;
-            updateLevelGauge();
+
+            //updateLevelGauge();
 
             if (actionPoints + goldenBrain > 0)
             {
@@ -391,6 +392,32 @@ public class GameController : MonoBehaviour {
         });
         model.placed = true;
     }
+
+    private void updateGameState(ChainFinishedType chainActionType)
+    {
+        switch (chainActionType)
+        {
+            case ChainFinishedType.PERFECT:
+                break;
+            case ChainFinishedType.GOOD:
+                break;
+            case ChainFinishedType.BAD:
+                reduceLife();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void reduceLife()
+    {
+        life--;
+        if(life <= 0)
+        {
+            gameOver();
+        }
+    }
+
     private void updateCurrency(int currencyPoints)
     {
         currency += currencyPoints;
