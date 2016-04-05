@@ -155,14 +155,12 @@ public class ChainController : MonoBehaviour {
         switch (finishedType)
         {
             case ChainFinishedType.PERFECT:
-                audioSource.PlayOneShot(perfectWave, 1f);
-                print(perfectWave);
-
+                audioSource.PlayOneShot(perfectWave, 0.6f);
                 tempAudioClip = greatChainSounds[UnityEngine.Random.Range(0, greatChainSounds.Count)];
                
                 break;
             case ChainFinishedType.GOOD:
-                audioSource.PlayOneShot(goodWave, 1f);
+                audioSource.PlayOneShot(goodWave, 0.8f);
                 tempAudioClip = goodChainSounds[UnityEngine.Random.Range(0, goodChainSounds.Count)];
                 
                 break;

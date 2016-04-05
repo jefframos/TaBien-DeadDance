@@ -14,15 +14,27 @@ public class AudioController : MonoBehaviour {
     public AudioSource audioSourceAux;
     public AudioSource ambientSource;
     public List<AudioLoopData> audioLoopDataList;
+    public List<AudioClip> ambientAudioClipList;
     public AudioLoopData currentAudioLoop;
     public float maxAmbientVolume = 0.3f;
     // Use this for initialization
     private int currentDataID = 0;
+    void Start()
+    {
+        print("START");
+        ambientSource.gameObject.SetActive(true);
+        ambientSource.clip = ambientAudioClipList[UnityEngine.Random.Range(0, ambientAudioClipList.Count)];
+        ambientSource.Play();
+        ambientSource.volume = 0;
+        ambientSource.DOFade(maxAmbientVolume, 2f);
+    }
     public void InitAudioController () {
+        currentDataID = 0;
         currentAudioLoop = audioLoopDataList[currentDataID];
         audioSource.clip = currentAudioLoop.audioClip;
         audioSource.Play();
 
+        
         ambientSource.DOFade(0, 1f).OnComplete(()=>
         {
             ambientSource.Stop();
@@ -35,7 +47,6 @@ public class AudioController : MonoBehaviour {
     public void UpgradeAudioController() {
         if (currentDataID < audioLoopDataList.Count - 1)
         {
-            currentDataID++;
             currentDataID++;
         }
         audioSourceAux.clip = currentAudioLoop.audioClip;

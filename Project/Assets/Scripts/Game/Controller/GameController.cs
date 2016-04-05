@@ -72,6 +72,8 @@ public class GameController : MonoBehaviour {
 
     //public AudioSource audioSourceAmbient;
     public CountdownController countdownController;
+
+    public LifeController lifeController;
     // Use this for initialization
     public int life = 3;
     public void ResetWaves()
@@ -104,7 +106,7 @@ public class GameController : MonoBehaviour {
         _beatCounter = 0;
         points = 0;
         life = 3;
-
+        lifeController.Reset();
         chainController.ResetChain();
         currency = GetCurrency();
         levelGauge = maxGauge / 2;
@@ -165,6 +167,8 @@ public class GameController : MonoBehaviour {
             actionView.ForceDestroy();            
         }
         _actionList = new List<ActionButtonView>();
+        points = 0;
+        updatePointsLabel();
     }
     private void updateLevelGauge()
     {
@@ -226,7 +230,7 @@ public class GameController : MonoBehaviour {
     }
     private void getWave()
     {
-        _beatCounter = 0;
+        _beatCounter = -3;
         if (testWave < 0)
         {
             currentWave = UnityEngine.Random.Range(0, wavesList.Count);
@@ -386,7 +390,7 @@ public class GameController : MonoBehaviour {
                     particleView.initPos = new Vector3(newPosX, newPosY, 0);                   
 
                     particleView.color = actionView.currentState.color; 
-                    particleView.Build(goldenBrain > 0, actionPoints + goldenBrain);                    
+                    particleView.Build(goldenBrain > 0, actionPoints + goldenBrain, i);                    
                 }                
             }
         });
@@ -412,7 +416,8 @@ public class GameController : MonoBehaviour {
     private void reduceLife()
     {
         life--;
-        if(life <= 0)
+        lifeController.UpdateHearthList(life);
+        if (life <= 0)
         {
             gameOver();
         }
@@ -425,15 +430,13 @@ public class GameController : MonoBehaviour {
     }
     private void updatePoints(int actionPoints)
     {
-        //print(actionPoints);
         points += actionPoints;
         updatePointsLabel();
 
-        if (points > 20 && points < 30)
+        if(levelGauge > 100)
         {
-            points = 100;
+            levelGauge = 50;
             audioController.UpgradeAudioController();
-            //    zombieView.updateLevel();
         }
     }
     private void updatePointsLabel()

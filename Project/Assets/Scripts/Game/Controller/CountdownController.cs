@@ -11,10 +11,10 @@ public class CountdownController : MonoBehaviour {
     public bool started;
     public AudioSource audioSource;
     public AudioClip audioClipAlert;
+    public AudioClip audioClipEnd;
     public Action afterCountdownCallback;
     public int maxCounterValue = 3;
-    public float minVolume = 0.2f;
-    public float maxVolume = 0.3f;
+    public float pitchAcum = 0.1f;
     // Use this for initialization
     public void Init (int value, Action afterCountdown) {
         afterCountdownCallback = afterCountdown;
@@ -42,6 +42,7 @@ public class CountdownController : MonoBehaviour {
     {
         UpdateLabel("GO");
         Invoke("Finish", 1);
+        audioSource.PlayOneShot(audioClipEnd);
     }
     public void Finish()
     {
@@ -57,10 +58,9 @@ public class CountdownController : MonoBehaviour {
         label.text = value.ToString();
         container.DOScale(1f, 1f).SetEase(Ease.OutElastic);
         float normalValue = (float)((float)_currentValue / (float)maxCounterValue);
-        float volume = 1 - (minVolume + (normalValue * maxVolume)) ;
-        volume *= maxVolume;
-        audioSource.pitch = 0.8f + volume;
-        audioSource.PlayOneShot(audioClipAlert, maxVolume);
+        float pitch = audioSource.pitch + pitchAcum;
+        audioSource.pitch = pitch;
+        audioSource.PlayOneShot(audioClipAlert);
     }
     internal void Hide()
     {

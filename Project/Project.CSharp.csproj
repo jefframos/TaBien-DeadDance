@@ -83,6 +83,7 @@
     <Compile Include="Assets\Scripts\Game\Controller\ChainController.cs" />
     <Compile Include="Assets\Scripts\Game\Controller\CountdownController.cs" />
     <Compile Include="Assets\Scripts\Game\Controller\GameController.cs" />
+    <Compile Include="Assets\Scripts\Game\Controller\LifeController.cs" />
     <Compile Include="Assets\Scripts\Game\Enum\ActionType.cs" />
     <Compile Include="Assets\Scripts\Game\Enum\BehaviourType.cs" />
     <Compile Include="Assets\Scripts\Game\Enum\ChainActionType.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Assets\Scripts\Game\View\CharSelectView.cs" />
     <Compile Include="Assets\Scripts\Game\View\GetSpecialView.cs" />
     <Compile Include="Assets\Scripts\Game\View\LevelGaugeView.cs" />
+    <Compile Include="Assets\Scripts\Game\View\LifeHearthView.cs" />
     <Compile Include="Assets\Scripts\Game\View\ZombieView.cs" />
     <Compile Include="Assets\Scripts\Metronome.cs" />
   </ItemGroup>

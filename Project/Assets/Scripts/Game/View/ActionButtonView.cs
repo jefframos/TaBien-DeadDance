@@ -220,7 +220,7 @@ public class ActionButtonView : MonoBehaviour {
 
 
         audioSource.gameObject.SetActive(true);
-        audioSource.PlayOneShot(entraceAudioClip, 1f);
+        audioSource.PlayOneShot(entraceAudioClip);
 
     }
 
@@ -311,7 +311,7 @@ public class ActionButtonView : MonoBehaviour {
 
         float distance = Vector2.Distance(new Vector2(currentBehaviourFactor, 0), new Vector2(1, 0));
 
-        
+        float volume = 0.6f;
         if (miss)
         {
             currentFeedbackState = FeedbackStateType.MISS;
@@ -319,7 +319,7 @@ public class ActionButtonView : MonoBehaviour {
             {
                 currentState = missState;
                 currentState.title = "Missed!";
-                audioSource.PlayOneShot(wrongAudioClip, 0.8f);
+                audioSource.PlayOneShot(wrongAudioClip, volume);
             }
             else
             {
@@ -332,46 +332,44 @@ public class ActionButtonView : MonoBehaviour {
 
             currentFeedbackState = FeedbackStateType.SPECIAL;
             currentState = specialState;
-            audioSource.PlayOneShot(specialAudioClip, 1f);
+            audioSource.PlayOneShot(specialAudioClip, volume);
         }
         else if (distance < 0.25f)
         {
             currentFeedbackState = FeedbackStateType.PERFECT;
             currentState = perfectState;
             audioSource.pitch = chainController.currentPitch;
-            audioSource.PlayOneShot(perfectAudioClip, 1f);
+            audioSource.PlayOneShot(perfectAudioClip, volume);
         }
         else if (distance < 0.50f)
         {
             currentFeedbackState = FeedbackStateType.GREAT;
             currentState = greatState;
             audioSource.pitch = chainController.currentPitch;
-            audioSource.PlayOneShot(corretAudioClip, 1f);
+            audioSource.PlayOneShot(corretAudioClip, volume);
         }
         else if (distance < 0.750f)
         {
             currentFeedbackState = FeedbackStateType.GOOD;
             currentState = goodState;
             audioSource.pitch = chainController.currentPitch;
-            audioSource.PlayOneShot(corretAudioClip, 0.8f);
+            audioSource.PlayOneShot(corretAudioClip, volume);
         }
         else if (currentBehaviourFactor < 1)
         {
             currentFeedbackState = FeedbackStateType.TOLATE;
             currentState = wrongState;
             currentState.title = "To late!";
-            audioSource.PlayOneShot(wrongAudioClip, 0.8f);
+            audioSource.PlayOneShot(wrongAudioClip, volume);
         }
         else
         {
             currentFeedbackState = FeedbackStateType.TOEARLY;
             currentState = wrongState;
             currentState.title = "To early!";
-            audioSource.PlayOneShot(wrongAudioClip, 0.8f);
+            audioSource.PlayOneShot(wrongAudioClip, volume);
         }
-
-
-        //print(chainController.chainLevel);
+        
 
         finishCallback();
         if (currentState != null)
