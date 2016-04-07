@@ -26,6 +26,7 @@ public class ChainController : MonoBehaviour {
     public AudioClip badWave;
     public AudioSource audioSource;
     public AudioSource audienceSource;
+    public AudioSource feedbackSource;
     public List<AudioClip> greatChainSounds;
     public List<AudioClip> goodChainSounds;
     public List<AudioClip> badChainSounds;
@@ -150,22 +151,23 @@ public class ChainController : MonoBehaviour {
     {
         audioSource.gameObject.SetActive(true);
         audienceSource.gameObject.SetActive(true);
+        feedbackSource.gameObject.SetActive(true);
 
         AudioClip tempAudioClip;
         switch (finishedType)
         {
             case ChainFinishedType.PERFECT:
-                audioSource.PlayOneShot(perfectWave, 0.6f);
+                feedbackSource.PlayOneShot(perfectWave, 0.6f);
                 tempAudioClip = greatChainSounds[UnityEngine.Random.Range(0, greatChainSounds.Count)];
                
                 break;
             case ChainFinishedType.GOOD:
-                audioSource.PlayOneShot(goodWave, 0.8f);
+                feedbackSource.PlayOneShot(goodWave, 0.8f);
                 tempAudioClip = goodChainSounds[UnityEngine.Random.Range(0, goodChainSounds.Count)];
                 
                 break;
             case ChainFinishedType.BAD:
-                audioSource.PlayOneShot(badWave, 1f);
+                feedbackSource.PlayOneShot(badWave, 1f);
                 print(badWave);
                 tempAudioClip = badChainSounds[UnityEngine.Random.Range(0, badChainSounds.Count)];
                 break;

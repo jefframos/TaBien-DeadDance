@@ -6,11 +6,6 @@ using System.Collections.Generic;
 
 public class ZombieView : MonoBehaviour {
 
-    public RectTransform leftArm;
-    public RectTransform rightArm;
-    public RectTransform leftLeg;
-    public RectTransform rightLeg;
-
     [Serializable]
     public class AnimationData
     {
@@ -30,16 +25,69 @@ public class ZombieView : MonoBehaviour {
     public Vector3 standardLeftArm;
     public AudioSource sourceBreath;
     public AudioSource sourceActions;
+    public AudioSource sourceChangeParts;
+    public AudioClip audioChangeParts;
     public List<AudioClip> audioActionList;
     private bool started;
+
+    private HeadParts headParts;
+    public string[] monsterPath;
+
+    public Transform headContainer;
+
+    private SpriteRenderer[] rendererList;
     // Use this for initialization
     void Awake()
     {
+
+        headParts = new HeadParts();
+        headParts.pathID = 0;
+
+
         started = false;
+        
+        rendererList = GetComponentsInChildren<SpriteRenderer>();
+        
+
+
     }
-    
-	// Update is called once per frame
-	void Update () {
+    public void UpdateHead(int side)
+    {
+        if (headParts.working)
+        {
+            return;
+        }
+
+        headParts.pathID += side;
+        if(headParts.pathID >= monsterPath.Length)
+        {
+            headParts.pathID = 0;
+        }else if (headParts.pathID < 0)
+        {
+            headParts.pathID = monsterPath.Length - 1;
+        }
+
+        headParts.working = true;
+        
+        headContainer.localScale = new Vector3(1f, 1f, 1f);
+        headContainer.DOScale(new Vector3(), 0.3f).OnComplete(()=> {
+
+                headParts.working = false;
+
+                headParts.UpdateParts(rendererList, monsterPath[headParts.pathID]);
+
+                sourceChangeParts.PlayOneShot(audioChangeParts);
+                sourceActions.PlayOneShot(audioActionList[UnityEngine.Random.Range(0, (audioActionList.Count))]);
+                headContainer.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+                headContainer.DOScale(new Vector3(1f, 1f, 1f), 1f).SetEase(Ease.OutElastic).OnComplete(() => {
+
+            });
+        });
+
+        print(headContainer.localScale);
+    }
+    // Update is called once per frame
+    void Update () {
         if (!started)
         {
             return;

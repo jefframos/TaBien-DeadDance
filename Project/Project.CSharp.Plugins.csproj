@@ -150,15 +150,8 @@
     <None Include="Assets\Scripts\DefaultResourcesExtra\AlphaTest-Glossy.shader" />
     <None Include="Assets\Scripts\DefaultResourcesExtra\AlphaTest-SoftEdgeUnlit.shader" />
     <None Include="Assets\Scripts\DefaultResourcesExtra\AlphaTest-VertexLit.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\Cubemaps\CubeBlend.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\Cubemaps\CubeBlur.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\Cubemaps\CubeBlurOdd.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\Cubemaps\CubeCopy.shader" />
     <None Include="Assets\Scripts\DefaultResourcesExtra\Decal.shader" />
     <None Include="Assets\Scripts\DefaultResourcesExtra\Flare.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\GIDebug\TextureUV.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\GIDebug\UV1sAsPositions.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\GIDebug\VertexColors.shader" />
     <None Include="Assets\Scripts\DefaultResourcesExtra\Illumin-BumpSpec.shader" />
     <None Include="Assets\Scripts\DefaultResourcesExtra\Illumin-Bumped.shader" />
     <None Include="Assets\Scripts\DefaultResourcesExtra\Illumin-Diffuse.shader" />
@@ -186,20 +179,6 @@
     <None Include="Assets\Scripts\DefaultResourcesExtra\Mobile\Mobile-Skybox.shader" />
     <None Include="Assets\Scripts\DefaultResourcesExtra\Mobile\Mobile-VertexLit-OnlyDirectionalLights.shader" />
     <None Include="Assets\Scripts\DefaultResourcesExtra\Mobile\Mobile-VertexLit.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\Nature\SoftOcclusion\TreeSoftOcclusionBark.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\Nature\SoftOcclusion\TreeSoftOcclusionBarkRendertex.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\Nature\SoftOcclusion\TreeSoftOcclusionLeaves.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\Nature\SoftOcclusion\TreeSoftOcclusionLeavesRendertex.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\Nature\SpeedTree.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\Nature\SpeedTreeBillboard.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\Nature\TreeCreator\TreeCreatorBark.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\Nature\TreeCreator\TreeCreatorBarkOptimized.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\Nature\TreeCreator\TreeCreatorBarkRendertex.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\Nature\TreeCreator\TreeCreatorLeaves.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\Nature\TreeCreator\TreeCreatorLeavesFast.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\Nature\TreeCreator\TreeCreatorLeavesFastOptimized.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\Nature\TreeCreator\TreeCreatorLeavesOptimized.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\Nature\TreeCreator\TreeCreatorLeavesRendertex.shader" />
     <None Include="Assets\Scripts\DefaultResourcesExtra\Normal-BumpSpec.shader" />
     <None Include="Assets\Scripts\DefaultResourcesExtra\Normal-Bumped.shader" />
     <None Include="Assets\Scripts\DefaultResourcesExtra\Normal-Diffuse.shader" />
@@ -233,18 +212,6 @@
     <None Include="Assets\Scripts\DefaultResourcesExtra\Sprites-Diffuse.shader" />
     <None Include="Assets\Scripts\DefaultResourcesExtra\Standard.shader" />
     <None Include="Assets\Scripts\DefaultResourcesExtra\StandardSpecular.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\TerrainShaders\Details\VertexLit.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\TerrainShaders\Details\WavingGrass.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\TerrainShaders\Details\WavingGrassBillboard.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\TerrainShaders\Splats\AddPass.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\TerrainShaders\Splats\FirstPass.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\TerrainShaders\Splats\Specular-AddPass.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\TerrainShaders\Splats\Specular-Base.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\TerrainShaders\Splats\Specular-FirstPass.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\TerrainShaders\Splats\Standard-AddPass.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\TerrainShaders\Splats\Standard-Base.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\TerrainShaders\Splats\Standard-FirstPass.shader" />
-    <None Include="Assets\Scripts\DefaultResourcesExtra\TerrainShaders\Trees\BillboardTree.shader" />
     <None Include="Assets\Scripts\DefaultResourcesExtra\UI\UI-Default.shader" />
     <None Include="Assets\Scripts\DefaultResourcesExtra\UI\UI-DefaultFont.shader" />
     <None Include="Assets\Scripts\DefaultResourcesExtra\UI\UI-Lit-Bumped.shader" />
@@ -260,6 +227,7 @@
     <None Include="Assets\Scripts\DefaultResourcesExtra\Unlit\Unlit-AlphaTest.shader" />
     <None Include="Assets\Scripts\DefaultResourcesExtra\Unlit\Unlit-Color.shader" />
     <None Include="Assets\Scripts\DefaultResourcesExtra\Unlit\Unlit-Normal.shader" />
+    <None Include="Assets\testcommit.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>
