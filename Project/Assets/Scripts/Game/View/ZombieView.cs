@@ -34,6 +34,7 @@ public class ZombieView : MonoBehaviour {
     public string[] monsterPath;
 
     public Transform headContainer;
+    public CanvasGroup headCanvasGroup;
 
     private SpriteRenderer[] rendererList;
     // Use this for initialization
@@ -70,8 +71,9 @@ public class ZombieView : MonoBehaviour {
         headParts.working = true;
         
         headContainer.localScale = new Vector3(1f, 1f, 1f);
-        headContainer.DOScale(new Vector3(), 0.3f).OnComplete(()=> {
-
+        headCanvasGroup.DOFade(0, 0.3f);
+        headContainer.DOScale(new Vector3(1.3f, 1.3f, 1.3f), 0.3f).OnComplete(()=> {
+                headCanvasGroup.DOFade(1, 0.2f);
                 headParts.working = false;
 
                 headParts.UpdateParts(rendererList, monsterPath[headParts.pathID]);
