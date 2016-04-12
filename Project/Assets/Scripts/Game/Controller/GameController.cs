@@ -74,6 +74,8 @@ public class GameController : MonoBehaviour {
     public CountdownController countdownController;
 
     public LifeController lifeController;
+
+    public MainHUDController MainHUDController;
     // Use this for initialization
     public int life = 3;
     public void ResetWaves()
@@ -105,15 +107,19 @@ public class GameController : MonoBehaviour {
         _beatAcum = 0;
         _beatCounter = 0;
         points = 0;
-        life = 3;
+        life = 1;
         lifeController.Reset();
         chainController.ResetChain();
         currency = GetCurrency();
         levelGauge = maxGauge / 2;
         _actionList = new List<ActionButtonView>();
         zombieView.Reset();
-        countdownController.Init(3, AfterCountdown);
+        countdownController.Init(3, AfterCountdown, 1.5f);
         updatePoints(points);
+
+        MainHUDController.Hide();
+
+        print("INIT");
     }
 
     void AfterCountdown()
@@ -157,11 +163,13 @@ public class GameController : MonoBehaviour {
             return;
         }
         //audioSourceAmbient.DOFade(0.1f, 1f);
-        middleHUD.SetActive(true);
+        //middleHUD.SetActive(true);
         initedGame = false;
         chainController.ResetChain();
         audioController.Reset();
         zombieView.GameOver();
+
+        MainHUDController.ShowPreEndGame();
         foreach (ActionButtonView actionView in _actionList)
         {
             actionView.ForceDestroy();            

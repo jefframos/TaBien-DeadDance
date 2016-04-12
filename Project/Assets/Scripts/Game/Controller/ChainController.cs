@@ -10,7 +10,7 @@ public class ChainController : MonoBehaviour {
     public RectTransform chainTransformer;
     public float chainLevel;
     public float chainCounter;
-    private float chainLevelAcum;
+    //private float chainLevelAcum;
     public float maxPitch;
     private float pitchAcum;
     public float currentPitch;
@@ -42,7 +42,7 @@ public class ChainController : MonoBehaviour {
         set {
             actionsInWave = value;
             pitchAcum = (maxPitch - 1) / actionsInWave;
-            chainLevelAcum = 1;
+            //chainLevelAcum = 1;
         }
     }
 

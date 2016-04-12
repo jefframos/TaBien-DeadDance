@@ -16,13 +16,13 @@ public class CountdownController : MonoBehaviour {
     public int maxCounterValue = 3;
     public float pitchAcum = 0.1f;
     // Use this for initialization
-    public void Init (int value, Action afterCountdown) {
+    public void Init (int value, Action afterCountdown, float delay) {
         afterCountdownCallback = afterCountdown;
         _currentValue = maxCounterValue;
         label.gameObject.SetActive(true);
         started = true;
         label.text = "";
-        Invoke("UpdateCounter", 0.5f);
+        Invoke("UpdateCounter", delay);
     }
 
     // Update is called once per frame
@@ -57,7 +57,7 @@ public class CountdownController : MonoBehaviour {
         container.transform.localScale = new Vector3(0.5f, 0.5f);
         label.text = value.ToString();
         container.DOScale(1f, 1f).SetEase(Ease.OutElastic);
-        float normalValue = (float)((float)_currentValue / (float)maxCounterValue);
+        //float normalValue = (float)((float)_currentValue / (float)maxCounterValue);
         float pitch = audioSource.pitch + pitchAcum;
         audioSource.pitch = pitch;
         audioSource.PlayOneShot(audioClipAlert);
