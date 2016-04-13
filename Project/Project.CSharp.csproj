@@ -92,6 +92,7 @@
     <Compile Include="Assets\Scripts\Game\Model\ActionButtonModel.cs" />
     <Compile Include="Assets\Scripts\Game\Model\HeadParts.cs" />
     <Compile Include="Assets\Scripts\Game\Model\WaveModel.cs" />
+    <Compile Include="Assets\Scripts\Game\UI\GameEffects.cs" />
     <Compile Include="Assets\Scripts\Game\UI\MainHUDController.cs" />
     <Compile Include="Assets\Scripts\Game\View\ActionButtonView.cs" />
     <Compile Include="Assets\Scripts\Game\View\ActionParticleView.cs" />

@@ -21,7 +21,7 @@ public class AudioController : MonoBehaviour {
     private int currentDataID = 0;
     void Start()
     {
-        print("START");
+
         ambientSource.gameObject.SetActive(true);
         ambientSource.clip = ambientAudioClipList[UnityEngine.Random.Range(0, ambientAudioClipList.Count)];
         ambientSource.Play();

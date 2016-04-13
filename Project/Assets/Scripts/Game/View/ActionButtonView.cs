@@ -138,6 +138,8 @@ public class ActionButtonView : MonoBehaviour {
     public ActionButtonModel model;
     public CanvasGroup outherCanvasGroup;
     public ChainController chainController;
+    public int id;
+
     internal void ForceDestroy()
     {
         Destroy(this.gameObject);
@@ -158,7 +160,7 @@ public class ActionButtonView : MonoBehaviour {
     internal void Build(ActionButtonModel _model)
     {
         model = _model;
-
+        
         //corretAudioClip = model.beatSound;
         //perfectAudioClip = model.beatSound;
         //wrongAudioClip = model.wrongSound;

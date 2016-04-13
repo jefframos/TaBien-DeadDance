@@ -34,7 +34,8 @@ public class ChainController : MonoBehaviour {
 
     public Text resultLabel;
     public RectTransform container;
-
+    public int PlacedActions;
+    public int FinishedActions;
     public int ActionsInWave {
         get{
             return actionsInWave;
@@ -48,9 +49,12 @@ public class ChainController : MonoBehaviour {
 
     public void ResetChain()
     {
+        print("reset");
         chainCounter = 0;
         chainLevel = 0;
         chainFactor = 0;
+        PlacedActions = 0;
+        FinishedActions = 0;
         currentPitch = 1;
         activeChain = false;
 
@@ -65,10 +69,6 @@ public class ChainController : MonoBehaviour {
     public ChainActionType UpdateChain(FeedbackStateType stateType)
     {
 
-        if (!activeChain)
-        {
-            InitChain();
-        }
         bool finished = false;
         bool broke = false;
         switch (stateType)
@@ -142,6 +142,8 @@ public class ChainController : MonoBehaviour {
         seq.Append(container.DOScale(1.5f, 0.8f).SetEase(Ease.InBack));
         seq.Insert(1, canvasGroup.DOFade(0, 0.3f).SetDelay(0.5f));
 
+        print(finishedType);
+
     }
     internal void BreakChain(ChainFinishedType finishedType)
     {
@@ -168,7 +170,7 @@ public class ChainController : MonoBehaviour {
                 break;
             case ChainFinishedType.BAD:
                 feedbackSource.PlayOneShot(badWave, 1f);
-                print(badWave);
+                //print(badWave);
                 tempAudioClip = badChainSounds[UnityEngine.Random.Range(0, badChainSounds.Count)];
                 break;
             default:

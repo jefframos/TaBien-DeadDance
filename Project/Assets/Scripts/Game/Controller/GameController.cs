@@ -2,12 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
-
 using UnityEngine.UI;
 using DG.Tweening;
 
 public class GameController : MonoBehaviour {
-    
+
+    public GameEffects GameEffects;
+    public RectTransform GameContainer;
     public List<WaveModel> wavesList;
     public List<BeatterView> beatterList;
 
@@ -76,6 +77,8 @@ public class GameController : MonoBehaviour {
     public LifeController lifeController;
 
     public MainHUDController MainHUDController;
+
+    public Animator MainAnimator;
     // Use this for initialization
     public int life = 3;
     public void ResetWaves()
@@ -101,25 +104,43 @@ public class GameController : MonoBehaviour {
     }
     public void InitGame()
     {
+
+        
+
+
         middleHUD.SetActive(false);
         //audioSourceAmbient.DOFade(0.25f, 1f);
-        getWave();
+       
         _beatAcum = 0;
         _beatCounter = 0;
         points = 0;
         life = 1;
-        lifeController.Reset();
-        chainController.ResetChain();
         currency = GetCurrency();
+        lifeController.Reset();
+
+        //Reset Chain
+        chainController.ResetChain();
+        
+
+
+        //Reinit level gauge
         levelGauge = maxGauge / 2;
+
+        //Reinit action list
         _actionList = new List<ActionButtonView>();
+
+        //Reset Zombie
         zombieView.Reset();
         countdownController.Init(3, AfterCountdown, 1.5f);
         updatePoints(points);
 
+        //Force hide main HUD
         MainHUDController.Hide();
 
-        print("INIT");
+        
+
+
+        getWave();
     }
 
     void AfterCountdown()
@@ -127,6 +148,12 @@ public class GameController : MonoBehaviour {
         initedGame = true;
         zombieView.Init();
         audioController.InitAudioController();
+
+        MainAnimator.Stop();
+
+        GameEffects.ShakePos(GameContainer);
+        GameEffects.ShakeScale(GameContainer);
+
     }
     private int GetCurrency()
     {
@@ -191,10 +218,10 @@ public class GameController : MonoBehaviour {
         levelGaugeText.text = Math.Ceiling(levelGauge).ToString();
         levelGaugeView.UpdateBar(levelGauge / 100);
 
-        if(levelGauge <= 0)
-        {
-            gameOver();
-        }
+        //if(levelGauge <= 0)
+        //{
+        //    gameOver();
+        //}
     }
 
     // Update is called once per frame
@@ -202,40 +229,43 @@ public class GameController : MonoBehaviour {
         
         if (!audioController.audioSource.isPlaying || !initedGame)
         {
+            
             return;
         }
         metronome.BPM = audioController.currentAudioLoop.BPM;
         foreach (ActionButtonModel model in wavesList[currentWave].actionList)
         {
-            if(!model.placed && _beatCounter >= ((float)(model.quarterBeatAppear - model.quarterBeatToTap)/4))
+            if (!model.placed && _beatCounter >= ((float)(model.quarterBeatAppear - model.quarterBeatToTap)/4))
             {
                 addAction(model);
             }
         }
 
-        if (_beatCounter > wavesList[currentWave].totalBeats)
-        {            
+        if (_beatCounter - 1 > wavesList[currentWave].totalBeats)
+        {
+            print(_beatCounter + " = " + wavesList[currentWave].totalBeats);
             foreach (ActionButtonModel model in wavesList[currentWave].actionList)
             {
                 model.placed = false;
             }
+
             getWave();
         }
         
     }
-    private void breakWave()
-    {
-        foreach (ActionButtonView actionView in _actionList)
-        {
-            actionView.ForceDestroy();
-        }
-        _actionList = new List<ActionButtonView>();
-        foreach (ActionButtonModel model in wavesList[currentWave].actionList)
-        {
-            model.placed = false;
-        }
-        getWave();
-    }
+    //private void breakWave()
+    //{
+    //    foreach (ActionButtonView actionView in _actionList)
+    //    {
+    //        actionView.ForceDestroy();
+    //    }
+    //    _actionList = new List<ActionButtonView>();
+    //    foreach (ActionButtonModel model in wavesList[currentWave].actionList)
+    //    {
+    //        model.placed = false;
+    //    }
+    //    getWave();
+    //}
     private void getWave()
     {
         _beatCounter = -3;
@@ -247,12 +277,18 @@ public class GameController : MonoBehaviour {
         {
             currentWave = testWave;
         }
+        foreach (ActionButtonModel model in wavesList[currentWave].actionList)
+        {
+            model.placed = false;
+        }
         chainController.ActionsInWave = (wavesList[currentWave].actionList.Count);
         chainController.ResetChain();
     }
     private void addAction(ActionButtonModel model)
     {
+       
 
+        chainController.PlacedActions++;
         Vector3 tempV3 = new Vector3();
 
         int rndX = (int)model.gridPosition.x;// UnityEngine.Random.Range(0, (int)grid.x);
@@ -269,13 +305,16 @@ public class GameController : MonoBehaviour {
         tempObject.transform.SetParent(actionArea.transform, false);
         ActionButtonView actionView = tempObject.GetComponent<ActionButtonView>();
         actionView.chainController = chainController;
+
         actionView.Build(model);
+        actionView.id = _actionList.Count;
         actionView.gameObject.SetActive(true);
         _actionList.Add(actionView);
 
         actionView.finishCallback = (() =>
         {
             _actionList.Remove(actionView);
+            chainController.FinishedActions++;
             int actionPoints = 0;
             int goldenBrain = 0;
             float gaugeAccum = 0;
@@ -325,7 +364,9 @@ public class GameController : MonoBehaviour {
             ChainActionType chainActionType = chainController.UpdateChain(actionView.currentFeedbackState);
 
             ChainFinishedType finishedType = ChainFinishedType.BAD;
-            if (chainActionType != ChainActionType.STANDARD)
+
+            print(chainController.FinishedActions +"=="+ chainController.ActionsInWave);
+            if (chainController.FinishedActions == chainController.ActionsInWave)
             {
 
                 float finishedFactor = chainController.chainLevel / (chainController.ActionsInWave * 3);
@@ -340,16 +381,20 @@ public class GameController : MonoBehaviour {
                     finishedType = ChainFinishedType.GOOD;
                 }
 
-                if (chainActionType == ChainActionType.FINISHED)
-                {
-                    chainController.FinishChain(finishedType);
-                }
-                else if (chainActionType == ChainActionType.BROKE)
-                {
-                    //finishedType = ChainController.ChainFinishedType.BAD;
-                    chainController.BreakChain(finishedType);
-                    breakWave();
-                }
+
+                chainController.FinishChain(finishedType);
+
+
+                //if (chainActionType == ChainActionType.FINISHED)
+                //{
+                //    chainController.FinishChain(finishedType);
+                //}
+                //else if (chainActionType == ChainActionType.BROKE)
+                //{
+                //    //finishedType = ChainController.ChainFinishedType.BAD;
+                //    chainController.BreakChain(finishedType);
+                //    breakWave();
+                //}
 
                 updateGameState(finishedType);
                 zombieView.SetAnimation(finishedType);
@@ -423,11 +468,14 @@ public class GameController : MonoBehaviour {
 
     private void reduceLife()
     {
+        //GameContainer.DOShakePosition(2f, 100f, 100);
+        //GameContainer.DOShakeScale(2f, 2f);
         life--;
         lifeController.UpdateHearthList(life);
         if (life <= 0)
         {
-            gameOver();
+            Invoke("gameOver", 5f);
+            //gameOver();
         }
     }
 

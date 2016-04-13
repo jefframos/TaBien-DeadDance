@@ -18,7 +18,6 @@ public class MainHUDController : MonoBehaviour {
         }
         public void Show()
         {
-            print(this);
             reseted = false;
             Animator.gameObject.SetActive(true);
             Container.gameObject.SetActive(true);
