@@ -79,6 +79,7 @@ public class GameController : MonoBehaviour {
     public MainHUDController MainHUDController;
 
     public Animator MainAnimator;
+    public Animator HUDAnimator;
     // Use this for initialization
     public int life = 3;
     public void ResetWaves()
@@ -101,6 +102,17 @@ public class GameController : MonoBehaviour {
         middleHUD.SetActive(true);
         countdownController.Hide();
         //InitGame();
+    }
+    public void ToShop()
+    {
+
+    }
+    public void ToHome()
+    {
+        middleHUD.SetActive(true);
+
+        //MainAnimator.Play(0);
+        MainAnimator.SetTrigger("ToStandard");
     }
     public void InitGame()
     {
@@ -149,9 +161,9 @@ public class GameController : MonoBehaviour {
         zombieView.Init();
         audioController.InitAudioController();
 
-        MainAnimator.Stop();
+        //MainAnimator.Stop();
 
-        GameEffects.ShakePos(GameContainer);
+        GameEffects.ShakePos(GameContainer,10f);
         GameEffects.ShakeScale(GameContainer);
 
     }
@@ -192,7 +204,7 @@ public class GameController : MonoBehaviour {
         //audioSourceAmbient.DOFade(0.1f, 1f);
         //middleHUD.SetActive(true);
         initedGame = false;
-        chainController.ResetChain();
+        //chainController.ResetChain();
         audioController.Reset();
         zombieView.GameOver();
 
@@ -282,7 +294,7 @@ public class GameController : MonoBehaviour {
             model.placed = false;
         }
         chainController.ActionsInWave = (wavesList[currentWave].actionList.Count);
-        chainController.ResetChain();
+        //chainController.ResetChain();
     }
     private void addAction(ActionButtonModel model)
     {
@@ -365,7 +377,7 @@ public class GameController : MonoBehaviour {
 
             ChainFinishedType finishedType = ChainFinishedType.BAD;
 
-            print(chainController.FinishedActions +"=="+ chainController.ActionsInWave);
+            //print(chainController.FinishedActions +"=="+ chainController.ActionsInWave);
             if (chainController.FinishedActions == chainController.ActionsInWave)
             {
 
@@ -384,7 +396,7 @@ public class GameController : MonoBehaviour {
 
                 chainController.FinishChain(finishedType);
 
-
+                print("FINISH");
                 //if (chainActionType == ChainActionType.FINISHED)
                 //{
                 //    chainController.FinishChain(finishedType);
@@ -474,7 +486,7 @@ public class GameController : MonoBehaviour {
         lifeController.UpdateHearthList(life);
         if (life <= 0)
         {
-            Invoke("gameOver", 5f);
+            Invoke("gameOver", 2f);
             //gameOver();
         }
     }

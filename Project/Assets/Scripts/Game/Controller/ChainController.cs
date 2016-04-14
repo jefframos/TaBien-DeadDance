@@ -46,7 +46,11 @@ public class ChainController : MonoBehaviour {
             //chainLevelAcum = 1;
         }
     }
-
+    void Awake()
+    {
+        chainLabel.gameObject.SetActive(false);
+        chainTransformer.gameObject.SetActive(false);
+    }
     public void ResetChain()
     {
         print("reset");

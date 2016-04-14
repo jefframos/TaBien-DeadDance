@@ -113,7 +113,7 @@ public class ZombieView : MonoBehaviour {
 
     private void changeAnimation(ChainFinishedType type)
     {
-        
+        return;
         List <AnimationData> tempAnimations = perfectAnimationData;
         switch (type)
         {
