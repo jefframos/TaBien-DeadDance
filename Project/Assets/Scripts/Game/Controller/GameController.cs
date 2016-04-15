@@ -9,86 +9,86 @@ public class GameController : MonoBehaviour {
 
     public GameEffects GameEffects;
     public RectTransform GameContainer;
-    public List<WaveModel> wavesList;
-    public List<BeatterView> beatterList;
+    public List<WaveModel> WavesList;
+    public List<BeatterView> BeatterList;
 
     private List<ActionButtonView> _actionList;
 
-    public GameObject actionButtonPrefab;
-    public GameObject particlePrefab;
+    public GameObject ActionButtonPrefab;
+    public GameObject ParticlePrefab;
 
-    public RectTransform actionArea;
-    public RectTransform particlesContainer;
+    public RectTransform ActionArea;
+    public RectTransform ParticlesContainer;
 
-    public int testWave = -1;
-    public int currentWave = 1;
+    public int TestWave = -1;
+    public int CurrentWave = 1;
 
-    public AudioController audioController;
-    public Metronome metronome;
+    public AudioController AudioController;
+    public Metronome Metronome;
 
-    public Text beatCounter;
+    public Text BeatCounterLabel;
 
 
-    public int points;
-    public Text pointsLabel;
-    public RectTransform pointsLabelRect;
+    public int Points;
+    public Text PointsLabel;
+    public RectTransform PointsLabelRect;
 
 
     private int currency;
-    public Text currencyLabel;
-    public RectTransform currencyLabelRect;
-    public RectTransform currencyRect;
+    public Text CurrencyLabel;
+    public RectTransform CurrencyLabelRect;
+    public RectTransform CurrencyRect;
 
 
-    public ChainController chainController;
+    public ChainController ChainController;
 
-    public ZombieView zombieView;
-    public bool initedGame;
+    public ZombieView Zombie;
+    public bool InitedGame;
 
     private List<ActionButtonView> buttonWave;
     private float _beatCounter = 0;
     private int _beatAcum = 0;
 
-    public float levelGauge;
-    public float maxGauge;
-    public float levelGaugeDecress;
-    public Text levelGaugeText;
-    public LevelGaugeView levelGaugeView;
+    public float LevelGauge;
+    public float MaxGauge;
+
+    public Text LevelGaugeLabel;
+    public LevelGaugeView LevelGaugeView;
 
 
     [Serializable]
-    public class GaugeValues
+    public class GaugeValuesData
     {
-        public float miss = 0; 
-        public float good = 0; 
-        public float great = 0; 
-        public float perfect = 0; 
-        public float tolate = 0;
-        public float toearly = 0;
+        public float Miss = 0; 
+        public float Good = 0; 
+        public float Great = 0; 
+        public float Perfect = 0; 
+        public float ToLate = 0;
+        public float ToEarly = 0;
     }
-    public GaugeValues gaugeValues;
-
-    public GameObject middleHUD;
-    public Button playButton;
+    public GaugeValuesData GaugeValues;
+    
 
     //public AudioSource audioSourceAmbient;
-    public CountdownController countdownController;
+    public CountdownController CountdownController;
 
-    public LifeController lifeController;
+    public LifeController LifeController;
 
     public MainHUDController MainHUDController;
 
     public Animator MainAnimator;
     public Animator HUDAnimator;
     // Use this for initialization
-    public int life = 3;
+    public int Life = 3;
+    public bool Paused;
+    public int CurrentLevel;
     public void ResetWaves()
     {
-        wavesList = new List<WaveModel>();
+        WavesList = new List<WaveModel>();
     }
     public void AddWave(WaveModel wave)
     {
-        wavesList.Add(wave);
+        WavesList.Add(wave);
     }
     void Start () {
         //ResetWaves();
@@ -96,11 +96,11 @@ public class GameController : MonoBehaviour {
         //ActionButtonModel tempActionModel = new ActionButtonModel();
         //tempWave.totalBeats = 20;
         //tempWave.actionList = new List<ActionButtonModel>();
-        initedGame = false;        
-        metronome.beatCallback = BeatCallback;
-        chainController.ResetChain();
-        middleHUD.SetActive(true);
-        countdownController.Hide();
+        InitedGame = false;        
+        Metronome.beatCallback = BeatCallback;
+        ChainController.ResetChain();
+        //middleHUD.SetActive(true);
+        CountdownController.Hide();
         //InitGame();
     }
     public void ToShop()
@@ -109,57 +109,55 @@ public class GameController : MonoBehaviour {
     }
     public void ToHome()
     {
-        middleHUD.SetActive(true);
+        //middleHUD.SetActive(true);
 
-        //MainAnimator.Play(0);
-        MainAnimator.SetTrigger("ToStandard");
+        //MainAnimator.gameObject.SetActive(true);
+        //MainAnimator.Play("HUDAnimator");
+        //MainAnimator.SetTrigger("ToStandard");
     }
     public void InitGame()
     {
 
-        
 
+        UnpauseGame();
 
-        middleHUD.SetActive(false);
+        //middleHUD.SetActive(false);
         //audioSourceAmbient.DOFade(0.25f, 1f);
-       
+
         _beatAcum = 0;
         _beatCounter = 0;
-        points = 0;
-        life = 1;
+        Points = 0;
+        Life = 1;
         currency = GetCurrency();
-        lifeController.Reset();
+        LifeController.Reset();
 
         //Reset Chain
-        chainController.ResetChain();
-        
+        ChainController.ResetChain();
 
+        CurrentLevel = 1;
 
         //Reinit level gauge
-        levelGauge = maxGauge / 2;
+        LevelGauge = MaxGauge / 2;
 
         //Reinit action list
         _actionList = new List<ActionButtonView>();
 
         //Reset Zombie
-        zombieView.Reset();
-        countdownController.Init(3, AfterCountdown, 1.5f);
-        updatePoints(points);
+        Zombie.Reset();
+        CountdownController.Init(3, AfterCountdown, 1.5f);
+        updatePoints(Points);
 
         //Force hide main HUD
         MainHUDController.Hide();
-
-        
-
 
         getWave();
     }
 
     void AfterCountdown()
     {
-        initedGame = true;
-        zombieView.Init();
-        audioController.InitAudioController();
+        InitedGame = true;
+        Zombie.Init();
+        AudioController.InitAudioController();
 
         //MainAnimator.Stop();
 
@@ -174,7 +172,7 @@ public class GameController : MonoBehaviour {
 
     private void BeatCallback()
     {
-        if (!initedGame)
+        if (!InitedGame || Paused)
         {
             return;
         }
@@ -183,69 +181,113 @@ public class GameController : MonoBehaviour {
 
         if(_beatAcum >= 4)
         {
-            zombieView.Beat();
+            Zombie.Beat();
             _beatAcum = 0;
-            foreach (BeatterView item in beatterList)
+            foreach (BeatterView item in BeatterList)
             {
                 item.Beat();
             }            
         }
         
         updateLevelGauge();
-        beatCounter.text = Mathf.Floor(_beatCounter).ToString();
+        BeatCounterLabel.text = Mathf.Floor(_beatCounter).ToString();
     }
 
+    private void reduceLife()
+    {
+        //GameContainer.DOShakePosition(2f, 100f, 100);
+        //GameContainer.DOShakeScale(2f, 2f);
+        Life--;
+        LifeController.UpdateHearthList(Life);
+        if (Life <= 0)
+        {
+            Invoke("preGameOver", 2f);
+            //gameOver();
+        }
+    }
+    public void AcceptDeal()
+    {
+        AddLife(1);
+        MainHUDController.AcceptMoreLife();
+        _beatCounter = -1;
+        getWave();
+    }
+
+    public void RejectDeal()
+    {
+        gameOver();
+        MainHUDController.ShowEndGame();
+    }
+
+    public void AddLife(int value = 1)
+    {
+        Life += value;
+        LifeController.UpdateHearthList(Life);
+        UnpauseGame();
+
+    }
+    public void UnpauseGame()
+    {
+        Paused = false;
+    }
+    public void PauseGame()
+    {
+        Paused = true;
+    }
+    private void preGameOver()
+    {
+        PauseGame();
+        MainHUDController.ShowPreEndGame();
+    }
     private void gameOver()
     {
-        if (!initedGame)
+        if (!InitedGame)
         {
             return;
         }
         //audioSourceAmbient.DOFade(0.1f, 1f);
         //middleHUD.SetActive(true);
-        initedGame = false;
+        InitedGame = false;
         //chainController.ResetChain();
-        audioController.Reset();
-        zombieView.GameOver();
-
-        MainHUDController.ShowPreEndGame();
+        AudioController.Reset();
+        Zombie.GameOver();
         foreach (ActionButtonView actionView in _actionList)
         {
             actionView.ForceDestroy();            
         }
         _actionList = new List<ActionButtonView>();
-        points = 0;
+        Points = 0;
         updatePointsLabel();
+
+        print("GameOver");
     }
     private void updateLevelGauge()
     {
-        if(levelGauge < 0)
+        if(LevelGauge < 0)
         {
-            levelGauge = 0;
+            LevelGauge = 0;
         }
-        if (levelGauge > maxGauge)
+        if (LevelGauge > MaxGauge)
         {
-            levelGauge = maxGauge;
+            LevelGauge = MaxGauge;
         }
-        levelGaugeText.text = Math.Ceiling(levelGauge).ToString();
-        levelGaugeView.UpdateBar(levelGauge / 100);
-
-        //if(levelGauge <= 0)
-        //{
-        //    gameOver();
-        //}
+        LevelGaugeLabel.text = Math.Ceiling(LevelGauge).ToString();
+        LevelGaugeView.UpdateBar(LevelGauge / 100);
     }
 
     // Update is called once per frame
     void Update () {
-        
-        if (!audioController.audioSource.isPlaying || !initedGame)
+        if (Paused)
+        {
+            return;
+        }
+        if (!AudioController.audioSource.isPlaying || !InitedGame)
         {
             
             return;
         }
-        metronome.BPM = audioController.currentAudioLoop.BPM;
-        foreach (ActionButtonModel model in wavesList[currentWave].actionList)
+        Metronome.BPM = AudioController.currentAudioLoop.BPM;
+        foreach (ActionButtonModel model in WavesList[CurrentWave].actionList)
         {
             if (!model.placed && _beatCounter >= ((float)(model.quarterBeatAppear - model.quarterBeatToTap)/4))
             {
@@ -253,10 +295,9 @@ public class GameController : MonoBehaviour {
             }
         }
 
-        if (_beatCounter - 1 > wavesList[currentWave].totalBeats)
+        if (_beatCounter - 1 > WavesList[CurrentWave].totalBeats)
         {
-            print(_beatCounter + " = " + wavesList[currentWave].totalBeats);
-            foreach (ActionButtonModel model in wavesList[currentWave].actionList)
+            foreach (ActionButtonModel model in WavesList[CurrentWave].actionList)
             {
                 model.placed = false;
             }
@@ -280,43 +321,43 @@ public class GameController : MonoBehaviour {
     //}
     private void getWave()
     {
-        _beatCounter = -3;
-        if (testWave < 0)
+        _beatCounter = 0;
+        if (TestWave < 0)
         {
-            currentWave = UnityEngine.Random.Range(0, wavesList.Count);
+            CurrentWave = UnityEngine.Random.Range(0, WavesList.Count);
         }
         else
         {
-            currentWave = testWave;
+            CurrentWave = TestWave;
         }
-        foreach (ActionButtonModel model in wavesList[currentWave].actionList)
+        foreach (ActionButtonModel model in WavesList[CurrentWave].actionList)
         {
             model.placed = false;
         }
-        chainController.ActionsInWave = (wavesList[currentWave].actionList.Count);
+        ChainController.ActionsInWave = (WavesList[CurrentWave].actionList.Count);
         //chainController.ResetChain();
     }
     private void addAction(ActionButtonModel model)
     {
        
 
-        chainController.PlacedActions++;
+        ChainController.PlacedActions++;
         Vector3 tempV3 = new Vector3();
 
         int rndX = (int)model.gridPosition.x;// UnityEngine.Random.Range(0, (int)grid.x);
         int rndY = (int)model.gridPosition.y;//UnityEngine.Random.Range(0, (int)grid.y);
         
        
-        float tempX = (actionArea.rect.max.x - actionArea.rect.min.x) / wavesList[currentWave].grid.x;
-        float tempY = (actionArea.rect.max.y - actionArea.rect.min.y) / wavesList[currentWave].grid.y;
+        float tempX = (ActionArea.rect.max.x - ActionArea.rect.min.x) / WavesList[CurrentWave].grid.x;
+        float tempY = (ActionArea.rect.max.y - ActionArea.rect.min.y) / WavesList[CurrentWave].grid.y;
 
-        tempV3.x = rndX * tempX + actionArea.rect.min.x;
-        tempV3.y = rndY * tempY + actionArea.rect.min.y;
+        tempV3.x = rndX * tempX + ActionArea.rect.min.x;
+        tempV3.y = rndY * tempY + ActionArea.rect.min.y;
 
-        GameObject tempObject = (GameObject)Instantiate(actionButtonPrefab, tempV3, Quaternion.identity);
-        tempObject.transform.SetParent(actionArea.transform, false);
+        GameObject tempObject = (GameObject)Instantiate(ActionButtonPrefab, tempV3, Quaternion.identity);
+        tempObject.transform.SetParent(ActionArea.transform, false);
         ActionButtonView actionView = tempObject.GetComponent<ActionButtonView>();
-        actionView.chainController = chainController;
+        actionView.chainController = ChainController;
 
         actionView.Build(model);
         actionView.id = _actionList.Count;
@@ -326,7 +367,7 @@ public class GameController : MonoBehaviour {
         actionView.finishCallback = (() =>
         {
             _actionList.Remove(actionView);
-            chainController.FinishedActions++;
+            ChainController.FinishedActions++;
             int actionPoints = 0;
             int goldenBrain = 0;
             float gaugeAccum = 0;
@@ -345,43 +386,43 @@ public class GameController : MonoBehaviour {
                 {
                     case FeedbackStateType.MISS:
                         //zombieView.updatePart(tempV3);
-                        gaugeAccum = gaugeValues.miss;
+                        gaugeAccum = GaugeValues.Miss;
                         break;
                     case FeedbackStateType.GOOD:
-                        gaugeAccum = gaugeValues.good;
+                        gaugeAccum = GaugeValues.Good;
                         actionPoints = 1;
                         break;
                     case FeedbackStateType.GREAT:
-                        gaugeAccum = gaugeValues.great;
+                        gaugeAccum = GaugeValues.Great;
                         actionPoints = 2;
                         break;
                     case FeedbackStateType.BAD:
-                        gaugeAccum = gaugeValues.miss;
+                        gaugeAccum = GaugeValues.Miss;
                         break;
                     case FeedbackStateType.PERFECT:
-                        gaugeAccum = gaugeValues.perfect;
+                        gaugeAccum = GaugeValues.Perfect;
                         actionPoints = 3;
                         break;
                     case FeedbackStateType.TOLATE:
-                        gaugeAccum = gaugeValues.tolate;
+                        gaugeAccum = GaugeValues.ToLate;
                         break;
                     case FeedbackStateType.TOEARLY:
-                        gaugeAccum = gaugeValues.toearly;
+                        gaugeAccum = GaugeValues.ToEarly;
                         break;
                     default:
                         break;
                 }
             }
 
-            ChainActionType chainActionType = chainController.UpdateChain(actionView.currentFeedbackState);
+            ChainActionType chainActionType = ChainController.UpdateChain(actionView.currentFeedbackState);
 
             ChainFinishedType finishedType = ChainFinishedType.BAD;
 
             //print(chainController.FinishedActions +"=="+ chainController.ActionsInWave);
-            if (chainController.FinishedActions == chainController.ActionsInWave)
+            if (ChainController.FinishedActions == ChainController.ActionsInWave)
             {
 
-                float finishedFactor = chainController.chainLevel / (chainController.ActionsInWave * 3);
+                float finishedFactor = ChainController.chainLevel / (ChainController.ActionsInWave * 3);
                 
                 if (finishedFactor >= 0.85)
                 {
@@ -392,11 +433,16 @@ public class GameController : MonoBehaviour {
                 {
                     finishedType = ChainFinishedType.GOOD;
                 }
+                else
+                {
+                    _beatCounter = -999;
+                    PauseGame();
+                }
 
 
-                chainController.FinishChain(finishedType);
+                ChainController.FinishChain(finishedType);
 
-                print("FINISH");
+                //print("FINISH");
                 //if (chainActionType == ChainActionType.FINISHED)
                 //{
                 //    chainController.FinishChain(finishedType);
@@ -409,13 +455,13 @@ public class GameController : MonoBehaviour {
                 //}
 
                 updateGameState(finishedType);
-                zombieView.SetAnimation(finishedType);
+                Zombie.SetAnimation(finishedType);
             }
 
             
 
 
-            levelGauge += gaugeAccum;
+            LevelGauge += gaugeAccum;
 
             //updateLevelGauge();
 
@@ -424,23 +470,23 @@ public class GameController : MonoBehaviour {
                 for (int i = 0; i < actionPoints + goldenBrain; i++)
                 {
                     GameObject tempParticle;
-                    tempParticle = (GameObject)Instantiate(particlePrefab, new Vector3(), Quaternion.identity);
-                    tempParticle.transform.SetParent(particlesContainer.transform, false);
+                    tempParticle = (GameObject)Instantiate(ParticlePrefab, new Vector3(), Quaternion.identity);
+                    tempParticle.transform.SetParent(ParticlesContainer.transform, false);
                     ActionParticleView particleView = tempParticle.GetComponent<ActionParticleView>();
 
-                    float distance = Vector2.Distance(new Vector2(pointsLabelRect.position.x, pointsLabelRect.position.y), new Vector2(tempV3.x, tempV3.y));
+                    float distance = Vector2.Distance(new Vector2(PointsLabelRect.position.x, PointsLabelRect.position.y), new Vector2(tempV3.x, tempV3.y));
                     
                     particleView.time = Screen.height / distance * 0.8f;
                     particleView.delay = 0.1f + i * 0.2f;
-                    particleView.destiny = pointsLabelRect.position;
-                    particleView.rectTarget = pointsLabelRect;
+                    particleView.destiny = PointsLabelRect.position;
+                    particleView.rectTarget = PointsLabelRect;
 
                     float newPosX = tempV3.x;
                     float newPosY = tempV3.y;
                     if (goldenBrain > 0)
                     {
-                        particleView.destiny = currencyRect.position;
-                        particleView.rectTarget = currencyRect;
+                        particleView.destiny = CurrencyRect.position;
+                        particleView.rectTarget = CurrencyRect;
                         particleView.endTweenCallback = (() => { updateCurrency(1); });
                         particleView.delay = 0.7f + i * 0.2f;
                         particleView.time *= 1.2f;
@@ -478,18 +524,7 @@ public class GameController : MonoBehaviour {
         }
     }
 
-    private void reduceLife()
-    {
-        //GameContainer.DOShakePosition(2f, 100f, 100);
-        //GameContainer.DOShakeScale(2f, 2f);
-        life--;
-        lifeController.UpdateHearthList(life);
-        if (life <= 0)
-        {
-            Invoke("gameOver", 2f);
-            //gameOver();
-        }
-    }
+
 
     private void updateCurrency(int currencyPoints)
     {
@@ -498,21 +533,23 @@ public class GameController : MonoBehaviour {
     }
     private void updatePoints(int actionPoints)
     {
-        points += actionPoints;
+        Points += actionPoints;
         updatePointsLabel();
 
-        if(levelGauge > 100)
+        if(LevelGauge > MaxGauge)
         {
-            levelGauge = 50;
-            audioController.UpgradeAudioController();
+            LevelGauge = MaxGauge/2;
+            AudioController.UpgradeAudioController();
+            CurrentLevel++;
+            
         }
     }
     private void updatePointsLabel()
     {
-        pointsLabel.text = points.ToString();
+        PointsLabel.text = Points.ToString();
     }
     private void updateCurrencyLabel()
     {
-        currencyLabel.text = currency.ToString();
+        CurrencyLabel.text = currency.ToString();
     }
 }

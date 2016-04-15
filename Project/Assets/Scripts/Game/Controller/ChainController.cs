@@ -53,7 +53,7 @@ public class ChainController : MonoBehaviour {
     }
     public void ResetChain()
     {
-        print("reset");
+        //print("reset");
         chainCounter = 0;
         chainLevel = 0;
         chainFactor = 0;
@@ -137,6 +137,7 @@ public class ChainController : MonoBehaviour {
     internal void ShowResult(ChainFinishedType finishedType)
     {
         resultLabel.gameObject.SetActive(true);
+        container.gameObject.SetActive(true);
         container.transform.localScale = new Vector3(0.5f, 0.5f);
         CanvasGroup canvasGroup = container.GetComponent<CanvasGroup>();
         canvasGroup.alpha = 1;
@@ -146,7 +147,7 @@ public class ChainController : MonoBehaviour {
         seq.Append(container.DOScale(1.5f, 0.8f).SetEase(Ease.InBack));
         seq.Insert(1, canvasGroup.DOFade(0, 0.3f).SetDelay(0.5f));
 
-        print(finishedType);
+        //print(finishedType);
 
     }
     internal void BreakChain(ChainFinishedType finishedType)

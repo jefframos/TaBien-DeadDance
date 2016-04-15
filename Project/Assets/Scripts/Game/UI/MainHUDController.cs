@@ -46,7 +46,16 @@ public class MainHUDController : MonoBehaviour {
     }
     public PopUpModel PreEndPopUp;
     public PopUpModel EndPopUp;
-    
+
+
+    public GameObject GameHUD;
+    public GameObject TopHUD;
+    public GameObject InitHUD;
+
+    public Animator GameHUDAnimator;
+    public Animator ClosetUIAnimator;
+    public Animator GameScreenAnimator;
+
     // Use this for initialization
     void Awake()
     {
@@ -74,5 +83,53 @@ public class MainHUDController : MonoBehaviour {
     public void ShowEndGame()
     {
         PreEndPopUp.Change(EndPopUp);
+        HideGameHUD();
+    }
+    public void HideGameHUD()
+    {
+        GameHUDAnimator.SetTrigger("ToOutGame");
+
+        Invoke("disableGameHUD", 0.5f);
+
+    }
+    private void disableGameHUD()
+    {
+        GameHUD.SetActive(false);
+    }
+    public void AcceptMoreLife()
+    {
+        PreEndPopUp.Hide();
+    }
+    public void ToGame()
+    {
+        GameHUD.SetActive(true);
+        GameScreenAnimator.SetTrigger("ToGame");
+        GameHUDAnimator.SetTrigger("ToGame");
+        ClosetUIAnimator.SetTrigger("TransitionOut");
+
+    }
+
+    public void ToShop()
+    {
+        InitHUD.SetActive(true);
+        GameHUD.SetActive(true);
+        GameScreenAnimator.SetTrigger("ToEditMode");
+        GameHUDAnimator.SetTrigger("ToOutGame");
+        ClosetUIAnimator.SetTrigger("TransitionIn");
+
+        Hide();
+
+    }
+
+    public void ToHome()
+    {
+        InitHUD.SetActive(true);
+        GameHUD.SetActive(true);
+        GameScreenAnimator.SetTrigger("ToStandard");
+        GameHUDAnimator.SetTrigger("ToOutGame");
+        ClosetUIAnimator.SetTrigger("TransitionOut");
+
+        Hide();
+
     }
 }

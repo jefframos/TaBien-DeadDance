@@ -174,13 +174,13 @@ public class ZombieView : MonoBehaviour {
         currentAnimation = standardAnimationData[0];
         oldAnimation = currentAnimation;
         //bodyAnimator.Play(currentAnimation.label, -1, 0f);
-        bodyAnimator.CrossFade(currentAnimation.label, 0.2f);
+        //bodyAnimator.CrossFade(currentAnimation.label, 0.2f);
     }
 
     internal void GameOver()
     {
         started = false;
-        bodyAnimator.CrossFade("Lost1", 0.2f);
+        //bodyAnimator.CrossFade("Lost1", 0.2f);
     }
 
     internal void SetAnimation(ChainFinishedType finishedType)
