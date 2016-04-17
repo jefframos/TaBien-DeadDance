@@ -76,8 +76,6 @@ public class GameController : MonoBehaviour {
 
     public MainHUDController MainHUDController;
 
-    public Animator MainAnimator;
-    public Animator HUDAnimator;
     // Use this for initialization
     public int Life = 3;
     public bool Paused;
@@ -103,18 +101,7 @@ public class GameController : MonoBehaviour {
         CountdownController.Hide();
         //InitGame();
     }
-    public void ToShop()
-    {
 
-    }
-    public void ToHome()
-    {
-        //middleHUD.SetActive(true);
-
-        //MainAnimator.gameObject.SetActive(true);
-        //MainAnimator.Play("HUDAnimator");
-        //MainAnimator.SetTrigger("ToStandard");
-    }
     public void InitGame()
     {
 
@@ -158,9 +145,7 @@ public class GameController : MonoBehaviour {
         InitedGame = true;
         Zombie.Init();
         AudioController.InitAudioController();
-
-        //MainAnimator.Stop();
-
+        
         GameEffects.ShakePos(GameContainer,10f);
         GameEffects.ShakeScale(GameContainer);
 
@@ -185,6 +170,7 @@ public class GameController : MonoBehaviour {
             _beatAcum = 0;
             foreach (BeatterView item in BeatterList)
             {
+                item.Running = true;
                 item.Beat();
             }            
         }
@@ -245,6 +231,12 @@ public class GameController : MonoBehaviour {
         {
             return;
         }
+
+        foreach (BeatterView item in BeatterList)
+        {
+            item.Running = false;
+        }
+
         //audioSourceAmbient.DOFade(0.1f, 1f);
         //middleHUD.SetActive(true);
         InitedGame = false;

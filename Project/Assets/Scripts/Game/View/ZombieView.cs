@@ -34,22 +34,22 @@ public class ZombieView : MonoBehaviour {
     public string[] monsterPath;
 
     public Transform headContainer;
-    public CanvasGroup headCanvasGroup;
+    public CanvasRenderer HeadCanvasRenderer;
 
     private SpriteRenderer[] rendererList;
     // Use this for initialization
     void Awake()
     {
 
-        headParts = new HeadParts();
-        headParts.pathID = 0;
+        
 
 
         started = false;
         
         rendererList = GetComponentsInChildren<SpriteRenderer>();
-        
 
+        headParts = new HeadParts(rendererList);
+        headParts.pathID = 0;
 
     }
     public void UpdateHead(int side)
@@ -71,20 +71,26 @@ public class ZombieView : MonoBehaviour {
         headParts.working = true;
         
         headContainer.localScale = new Vector3(1f, 1f, 1f);
-        headCanvasGroup.DOFade(0, 0.3f);
-        headContainer.DOScale(new Vector3(1.3f, 1.3f, 1.3f), 0.3f).OnComplete(()=> {
-                headCanvasGroup.DOFade(1, 0.2f);
-                headParts.working = false;
 
-                headParts.UpdateParts(rendererList, monsterPath[headParts.pathID]);
+        //headParts.UpdateParts(rendererList, monsterPath[headParts.pathID]);
+        headParts.FadeOut(0.2f,0.3f);
 
-                sourceChangeParts.PlayOneShot(audioChangeParts);
-                sourceActions.PlayOneShot(audioActionList[UnityEngine.Random.Range(0, (audioActionList.Count))]);
-                headContainer.localScale = new Vector3(0.3f, 0.3f, 0.3f);
-                headContainer.DOScale(new Vector3(1f, 1f, 1f), 1f).SetEase(Ease.OutElastic).OnComplete(() => {
+        headContainer.DOScale(new Vector3(1.4f, 1.4f, 4f), 0.4f).OnComplete(() =>
+        {
+            
+            headParts.working = false;
+
+            headParts.UpdateParts(monsterPath[headParts.pathID]);
+            sourceChangeParts.PlayOneShot(audioChangeParts);
+            sourceActions.PlayOneShot(audioActionList[UnityEngine.Random.Range(0, (audioActionList.Count))]);
+
+            headParts.ForceFadeIn(0.2f, 0.45f);
+            headContainer.localScale = new Vector3(0.3f, 0.3f,1f);
+            headContainer.DOScale(new Vector3(1f, 1f, 1f), 1f).SetDelay(0.5f).SetEase(Ease.OutElastic).OnComplete(() =>
+            {
 
             });
-        });
+        }).SetEase(Ease.InBack);
 
         print(headContainer.localScale);
     }

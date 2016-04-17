@@ -57,6 +57,7 @@ public class MainHUDController : MonoBehaviour {
     public Animator GameScreenAnimator;
 
     // Use this for initialization
+
     void Awake()
     {
         Reset();
@@ -88,12 +89,12 @@ public class MainHUDController : MonoBehaviour {
     public void HideGameHUD()
     {
         GameHUDAnimator.SetTrigger("ToOutGame");
-
         Invoke("disableGameHUD", 0.5f);
 
     }
     private void disableGameHUD()
     {
+        print("disableGameHUD");
         GameHUD.SetActive(false);
     }
     public void AcceptMoreLife()
@@ -103,8 +104,12 @@ public class MainHUDController : MonoBehaviour {
     public void ToGame()
     {
         GameHUD.SetActive(true);
-        GameScreenAnimator.SetTrigger("ToGame");
+        TopHUD.SetActive(true);
+
         GameHUDAnimator.SetTrigger("ToGame");
+        
+        GameScreenAnimator.SetTrigger("ToGame");
+        
         ClosetUIAnimator.SetTrigger("TransitionOut");
 
     }
@@ -120,9 +125,15 @@ public class MainHUDController : MonoBehaviour {
         Hide();
 
     }
-
+    public void ToSectionSelected()
+    {
+        print("ToSectionSelected");
+        GameScreenAnimator.SetTrigger("ToSectionSelected");
+        ClosetUIAnimator.SetTrigger("ToSectionSelected");
+    }
     public void ToHome()
     {
+        print("ToHome");
         InitHUD.SetActive(true);
         GameHUD.SetActive(true);
         GameScreenAnimator.SetTrigger("ToStandard");
