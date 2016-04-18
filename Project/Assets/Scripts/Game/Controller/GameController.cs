@@ -149,6 +149,8 @@ public class GameController : MonoBehaviour {
         GameEffects.ShakePos(GameContainer,10f);
         GameEffects.ShakeScale(GameContainer);
 
+        MainHUDController.ShowGameplayUI();
+
     }
     private int GetCurrency()
     {
@@ -181,12 +183,18 @@ public class GameController : MonoBehaviour {
 
     private void reduceLife()
     {
+        if(Metronome.Multiplier > 1)
+        {
+            StopMadness();
+            return;
+        }
         //GameContainer.DOShakePosition(2f, 100f, 100);
         //GameContainer.DOShakeScale(2f, 2f);
         Life--;
         LifeController.UpdateHearthList(Life);
         if (Life <= 0)
         {
+            PauseGame();
             Invoke("preGameOver", 2f);
             //gameOver();
         }
@@ -419,33 +427,24 @@ public class GameController : MonoBehaviour {
                 if (finishedFactor >= 0.85)
                 {
                     finishedType = ChainFinishedType.PERFECT;
+                    goldenBrain = 1;
 
                 }
-                else if (finishedFactor >= 0.5)
+                else if (finishedFactor >= 0.4)
                 {
                     finishedType = ChainFinishedType.GOOD;
+
+                    StopMadness();
+
                 }
                 else
                 {
-                    _beatCounter = -999;
-                    PauseGame();
+                    //_beatCounter = -999;
+                    
                 }
 
 
                 ChainController.FinishChain(finishedType);
-
-                //print("FINISH");
-                //if (chainActionType == ChainActionType.FINISHED)
-                //{
-                //    chainController.FinishChain(finishedType);
-                //}
-                //else if (chainActionType == ChainActionType.BROKE)
-                //{
-                //    //finishedType = ChainController.ChainFinishedType.BAD;
-                //    chainController.BreakChain(finishedType);
-                //    breakWave();
-                //}
-
                 updateGameState(finishedType);
                 Zombie.SetAnimation(finishedType);
             }
@@ -455,51 +454,97 @@ public class GameController : MonoBehaviour {
 
             LevelGauge += gaugeAccum;
 
+
+            if(ChainController.PerfectInARow >= 3)
+            {
+                StartMadness();
+            }
             //updateLevelGauge();
 
             if (actionPoints + goldenBrain > 0)
             {
-                for (int i = 0; i < actionPoints + goldenBrain; i++)
+                for (int i = 0; i < goldenBrain; i++)
                 {
-                    GameObject tempParticle;
-                    tempParticle = (GameObject)Instantiate(ParticlePrefab, new Vector3(), Quaternion.identity);
-                    tempParticle.transform.SetParent(ParticlesContainer.transform, false);
-                    ActionParticleView particleView = tempParticle.GetComponent<ActionParticleView>();
+                    ActionParticleView particleView = addParticle();
+
+                    float distance = Vector2.Distance(new Vector2(PointsLabelRect.position.x, PointsLabelRect.position.y), new Vector2(tempV3.x, tempV3.y));
+
+                    particleView.time = Screen.height / distance * 0.8f;
+                    particleView.delay = 0.1f + i * 0.2f;
+
+                    particleView.rectTarget = PointsLabelRect;
+                    
+                    float newPosX = ChainController.resultLabel.rectTransform.position.x;
+                    float newPosY = ChainController.resultLabel.rectTransform.position.y;
+
+                    //float newPosX = tempV3.x;
+                    //float newPosY = tempV3.y;
+
+                    particleView.destiny = CurrencyRect.position;
+                    //particleView.destiny.z = 500f;
+                    particleView.rectTarget = CurrencyRect;
+                    particleView.endTweenCallback = (() => { updateCurrency(ChainController.PerfectInARow); });
+                    particleView.delay = 0.7f + i * 0.2f;
+                    particleView.time *= 1.2f;
+                        //colocar aqui os destinos certos dos cerebros
+                    
+                    particleView.initPos = new Vector3(newPosX, newPosY, 0);
+
+                    particleView.color = actionView.currentState.color;
+
+                    particleView.Build(true, 1 , ChainController.PerfectInARow);
+                }
+                for (int i = 0; i < actionPoints; i++)
+                {
+                    ActionParticleView particleView = addParticle();
 
                     float distance = Vector2.Distance(new Vector2(PointsLabelRect.position.x, PointsLabelRect.position.y), new Vector2(tempV3.x, tempV3.y));
                     
                     particleView.time = Screen.height / distance * 0.8f;
                     particleView.delay = 0.1f + i * 0.2f;
                     particleView.destiny = PointsLabelRect.position;
+                    
                     particleView.rectTarget = PointsLabelRect;
 
                     float newPosX = tempV3.x;
                     float newPosY = tempV3.y;
-                    if (goldenBrain > 0)
-                    {
-                        particleView.destiny = CurrencyRect.position;
-                        particleView.rectTarget = CurrencyRect;
-                        particleView.endTweenCallback = (() => { updateCurrency(1); });
-                        particleView.delay = 0.7f + i * 0.2f;
-                        particleView.time *= 1.2f;
-                        //colocar aqui os destinos certos dos cerebros
-                    }
-                    else
-                    {
-                        particleView.endTweenCallback = (() => { updatePoints(1); });
-                        newPosX = tempV3.x + UnityEngine.Random.Range(-actionView.innerContent.rect.width / 2, actionView.innerContent.rect.width / 2);
-                        newPosY = tempV3.y + UnityEngine.Random.Range(-actionView.innerContent.rect.height / 2, actionView.innerContent.rect.height / 2);
-                    }                    
+                   
+                    particleView.endTweenCallback = (() => { updatePoints(1); });
+                    newPosX = tempV3.x + UnityEngine.Random.Range(-actionView.innerContent.rect.width / 2, actionView.innerContent.rect.width / 2);
+                    newPosY = tempV3.y + UnityEngine.Random.Range(-actionView.innerContent.rect.height / 2, actionView.innerContent.rect.height / 2);
+                                    
                     particleView.initPos = new Vector3(newPosX, newPosY, 0);                   
 
                     particleView.color = actionView.currentState.color; 
-                    particleView.Build(goldenBrain > 0, actionPoints + goldenBrain, i);                    
+                    particleView.Build(false, actionPoints, i);                    
                 }                
             }
         });
         model.placed = true;
     }
 
+    private void StopMadness()
+    {
+        
+        //print("STOP MADNESS");
+        Metronome.NoMoreMadness();
+        Zombie.NoMoreMadness();
+    }
+    private void StartMadness()
+    {
+        GameContainer.DOShakePosition(2f, 100f, 100);
+        GameContainer.DOShakeScale(2f, 2f);
+        Metronome.Madness(2,5);
+        Zombie.Madness(2,5);
+    }
+
+    private ActionParticleView addParticle()
+    {
+        GameObject tempParticle;
+        tempParticle = (GameObject)Instantiate(ParticlePrefab, new Vector3(), Quaternion.identity);
+        tempParticle.transform.SetParent(ParticlesContainer.transform, false);
+        return tempParticle.GetComponent<ActionParticleView>();
+    }
     private void updateGameState(ChainFinishedType chainActionType)
     {
         switch (chainActionType)
@@ -520,6 +565,7 @@ public class GameController : MonoBehaviour {
 
     private void updateCurrency(int currencyPoints)
     {
+        //print("CURRENCY");
         currency += currencyPoints;
         updateCurrencyLabel();
     }

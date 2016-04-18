@@ -36,6 +36,7 @@ public class ChainController : MonoBehaviour {
     public RectTransform container;
     public int PlacedActions;
     public int FinishedActions;
+    public int PerfectInARow;
     public int ActionsInWave {
         get{
             return actionsInWave;
@@ -61,7 +62,6 @@ public class ChainController : MonoBehaviour {
         FinishedActions = 0;
         currentPitch = 1;
         activeChain = false;
-
         chainLabel.gameObject.SetActive(false);
         chainTransformer.gameObject.SetActive(false);
     }
@@ -142,6 +142,16 @@ public class ChainController : MonoBehaviour {
         CanvasGroup canvasGroup = container.GetComponent<CanvasGroup>();
         canvasGroup.alpha = 1;
         resultLabel.text = finishedType.ToString();
+
+        if(finishedType == ChainFinishedType.PERFECT)
+        {
+            PerfectInARow++;
+        }
+        else
+        {
+            PerfectInARow = 0;
+        }
+
         Sequence seq = DOTween.Sequence();
         seq.Append(container.DOScale(1f, 1f).SetEase(Ease.OutElastic));
         seq.Append(container.DOScale(1.5f, 0.8f).SetEase(Ease.InBack));

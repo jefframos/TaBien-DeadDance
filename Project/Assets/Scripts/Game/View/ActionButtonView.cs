@@ -253,7 +253,8 @@ public class ActionButtonView : MonoBehaviour {
         else
         {
             
-            Vector2 position = outerContent.localPosition;
+            Vector3 position = outerContent.localPosition;
+            position.z = 30f;
             switch (behaviour)
             {
                 case BehaviourType.FROM_TOP:
