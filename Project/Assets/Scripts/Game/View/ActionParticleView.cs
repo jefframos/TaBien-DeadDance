@@ -69,7 +69,7 @@ public class ActionParticleView : MonoBehaviour {
             brainImage.gameObject.SetActive(false);
             image.gameObject.SetActive(true);
             image.color = color;
-            //Trail.material.SetColor("_TintColor", color);
+            Trail.material.SetColor("_TintColor", color);
         }
         
         this.gameObject.SetActive(true);
@@ -99,7 +99,7 @@ public class ActionParticleView : MonoBehaviour {
                 }
                 int audioID = 1;// UnityEngine.Random.Range(0, audioClipCoin.Count);
                 audioSource.pitch = 1 + order * UnityEngine.Random.Range(0.1f, 0.2f);//UnityEngine.Random.Range(1f, 1.2f);
-                audioSource.PlayOneShot(audioClipCoin[audioID]);
+                audioSource.PlayOneShot(audioClipCoin[audioID], 1f);
                 _finished = true;
             });
 
@@ -118,7 +118,7 @@ public class ActionParticleView : MonoBehaviour {
                 }
                 int audioID = 1;// UnityEngine.Random.Range(0, audioClipCoin.Count);
                 audioSource.pitch = 1 + order * UnityEngine.Random.Range(0.1f, 0.2f);//UnityEngine.Random.Range(1f, 1.2f);
-                audioSource.PlayOneShot(audioClipCoin[audioID]);
+                audioSource.PlayOneShot(audioClipCoin[audioID], 1f);
                 _finished = true;
             });
             imageContainer.DOScale(new Vector3(0.5f, 0.5f, 1f), time).SetDelay(delay);

@@ -4,7 +4,21 @@ using DG.Tweening;
 
 public class GameEffects : MonoBehaviour {
 
-	public void ShakePos(RectTransform rect, float _force = 50f, float _time = 0.8f, int _steps = 8)
+    public GameObject MadnessLayer;
+    public GameObject BackgroundLayer;
+    void Awake()
+    {
+        StopMadness();
+    }
+	public void StartMadness()
+    {
+        MadnessLayer.SetActive(true);
+    }
+    public void StopMadness()
+    {
+        MadnessLayer.SetActive(false);
+    }
+    public void ShakePos(RectTransform rect, float _force = 50f, float _time = 0.8f, int _steps = 8)
     {
         Sequence positionSequence = DOTween.Sequence();
         float time = _time;

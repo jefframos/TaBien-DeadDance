@@ -19,14 +19,16 @@ public class AudioController : MonoBehaviour {
     public float maxAmbientVolume = 0.3f;
     // Use this for initialization
     private int currentDataID = 0;
+    private bool started;
     void Start()
     {
-
+        started = false;
         ambientSource.gameObject.SetActive(true);
         ambientSource.clip = ambientAudioClipList[UnityEngine.Random.Range(0, ambientAudioClipList.Count)];
         ambientSource.Play();
         ambientSource.volume = 0;
         ambientSource.DOFade(maxAmbientVolume, 2f);
+        
     }
     public void InitAudioController () {
         currentDataID = 0;
@@ -42,8 +44,7 @@ public class AudioController : MonoBehaviour {
         audioSource.volume = 0;
         audioSource.DOFade(maxAmbientVolume, 2f);
     }
-
-    // Update is called once per frame
+    
     public void UpgradeAudioController() {
         if (currentDataID < audioLoopDataList.Count - 1)
         {
@@ -76,6 +77,25 @@ public class AudioController : MonoBehaviour {
         audioSource.Play();
     }
 
+    internal void UpdateSongSpeed(float value)
+    {
+        if (started)
+        {
+            return;
+        }
+        started = true;
+        audioSource.DOPitch(value, 2f).SetEase(Ease.InElastic);
+        audioSourceAux.DOPitch(value, 2f).SetEase(Ease.InElastic);
+    }
+
+    internal void StopMadness()
+    {
+        started = false;
+        audioSource.DOPitch(1f, 1f).SetEase(Ease.OutElastic);
+        audioSourceAux.DOPitch(1f, 1f).SetEase(Ease.OutElastic);
+    }
+
+
     internal void Reset()
     {
         audioSource.DOFade(0, 3f).OnComplete(() =>
@@ -86,4 +106,6 @@ public class AudioController : MonoBehaviour {
         ambientSource.volume = 0;
         ambientSource.DOFade(maxAmbientVolume, 3f);
     }
+
+    
 }

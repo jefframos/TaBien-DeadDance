@@ -41,6 +41,7 @@ public class GameController : MonoBehaviour {
 
 
     public ChainController ChainController;
+    public MadnessController MadnessController;
 
     public ZombieView Zombie;
     public bool InitedGame;
@@ -99,6 +100,7 @@ public class GameController : MonoBehaviour {
         ChainController.ResetChain();
         //middleHUD.SetActive(true);
         CountdownController.Hide();
+        MadnessController.Reset();
         //InitGame();
     }
 
@@ -138,6 +140,8 @@ public class GameController : MonoBehaviour {
         MainHUDController.Hide();
 
         getWave();
+
+        MadnessController.Reset();
     }
 
     void AfterCountdown()
@@ -145,7 +149,6 @@ public class GameController : MonoBehaviour {
         InitedGame = true;
         Zombie.Init();
         AudioController.InitAudioController();
-        
         GameEffects.ShakePos(GameContainer,10f);
         GameEffects.ShakeScale(GameContainer);
 
@@ -183,7 +186,7 @@ public class GameController : MonoBehaviour {
 
     private void reduceLife()
     {
-        if(Metronome.Multiplier > 1)
+        if(MadnessFactor.Multiplier > 1)
         {
             StopMadness();
             return;
@@ -454,10 +457,10 @@ public class GameController : MonoBehaviour {
 
             LevelGauge += gaugeAccum;
 
-
-            if(ChainController.PerfectInARow >= 3)
+            MadnessController.UpdateMadness(ChainController.PerfectInARow);
+            if(ChainController.PerfectInARow >= MadnessController.MadnessValue)
             {
-                StartMadness();
+                StartMadness();                
             }
             //updateLevelGauge();
 
@@ -525,17 +528,21 @@ public class GameController : MonoBehaviour {
 
     private void StopMadness()
     {
-        
+
         //print("STOP MADNESS");
-        Metronome.NoMoreMadness();
-        Zombie.NoMoreMadness();
+        GameEffects.StopMadness();
+        AudioController.StopMadness();
+        MadnessFactor.NoMoreMadness();
     }
     private void StartMadness()
     {
-        GameContainer.DOShakePosition(2f, 100f, 100);
-        GameContainer.DOShakeScale(2f, 2f);
-        Metronome.Madness(2,5);
-        Zombie.Madness(2,5);
+
+        //GameContainer.DOShakePosition(2f, 100f, 100);
+        //GameContainer.DOShakeScale(2f, 2f);
+        GameEffects.StartMadness();
+        MadnessController.StartMadness();
+        AudioController.UpdateSongSpeed(1.8f);
+        MadnessFactor.Madness(1.8f, 5);
     }
 
     private ActionParticleView addParticle()

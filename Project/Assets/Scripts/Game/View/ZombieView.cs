@@ -37,10 +37,7 @@ public class ZombieView : MonoBehaviour {
     public CanvasRenderer HeadCanvasRenderer;
 
     private SpriteRenderer[] rendererList;
-
-    public float AnimationMultiplyer;
-    private Tweener multiplierTween;
-    // Use this for initialization
+    
     void Awake()
     {
 
@@ -104,7 +101,7 @@ public class ZombieView : MonoBehaviour {
             return;
         }
 
-        bodyAnimator.speed = AnimationMultiplyer;
+        bodyAnimator.speed = MadnessFactor.Multiplier;
     }
 
     internal void Beat()
@@ -124,7 +121,7 @@ public class ZombieView : MonoBehaviour {
 
     private void changeAnimation(ChainFinishedType type)
     {
-        return;
+        //return;
         List <AnimationData> tempAnimations = perfectAnimationData;
         switch (type)
         {
@@ -200,18 +197,5 @@ public class ZombieView : MonoBehaviour {
     {
         changeAnimation(finishedType);
         
-    }
-
-
-    public void NoMoreMadness(float time = 1)
-    {
-        multiplierTween.Kill();
-        multiplierTween = DOTween.To(() => AnimationMultiplyer, x => AnimationMultiplyer = x, 1, time);
-        //Multiplier = 1;
-    }
-    public void Madness(float factor, float time = 3)
-    {
-        multiplierTween.Kill();
-        multiplierTween = DOTween.To(() => AnimationMultiplyer, x => AnimationMultiplyer = x, factor, time);
     }
 }

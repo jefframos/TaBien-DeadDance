@@ -141,9 +141,15 @@ public class ChainController : MonoBehaviour {
         container.transform.localScale = new Vector3(0.5f, 0.5f);
         CanvasGroup canvasGroup = container.GetComponent<CanvasGroup>();
         canvasGroup.alpha = 1;
-        resultLabel.text = finishedType.ToString();
+        string label = finishedType.ToString();
+        if (MadnessFactor.MadnessMode)
+        {
+            label += " MAD";
+        }
+        resultLabel.text = label;
+        
 
-        if(finishedType == ChainFinishedType.PERFECT)
+        if (finishedType == ChainFinishedType.PERFECT)
         {
             PerfectInARow++;
         }
@@ -152,6 +158,10 @@ public class ChainController : MonoBehaviour {
             PerfectInARow = 0;
         }
 
+        //if (finishedType == ChainFinishedType.BAD)
+        //{
+        //    PerfectInARow = 0;
+        //}
         Sequence seq = DOTween.Sequence();
         seq.Append(container.DOScale(1f, 1f).SetEase(Ease.OutElastic));
         seq.Append(container.DOScale(1.5f, 0.8f).SetEase(Ease.InBack));
@@ -185,7 +195,6 @@ public class ChainController : MonoBehaviour {
                 break;
             case ChainFinishedType.BAD:
                 feedbackSource.PlayOneShot(badWave, 1f);
-                //print(badWave);
                 tempAudioClip = badChainSounds[UnityEngine.Random.Range(0, badChainSounds.Count)];
                 break;
             default:

@@ -14,11 +14,9 @@ public class Metronome : MonoBehaviour
     private float _interval;    //the time between beats
     private const float CROTCHET = 4.0f;    //a constant crotchet/quater note value
     public Action beatCallback;
-    public float Multiplier;
-    private Tweener multiplierTween;
     void Start()
     {
-        Multiplier = 1;
+        MadnessFactor.Multiplier = 1;
     }
 
     void Update()
@@ -29,17 +27,7 @@ public class Metronome : MonoBehaviour
 
         Time.fixedDeltaTime = CalculateInterval();  //set the fixed update to play tick N.B.* could use co-routine instead. 
     }
-    public void NoMoreMadness(float time = 1)
-    {
-        multiplierTween.Kill();
-        multiplierTween = DOTween.To(() => Multiplier, x => Multiplier = x, 1, time);
-        //Multiplier = 1;
-    }
-    public void Madness(float factor, float time = 3)
-    {
-        multiplierTween.Kill();
-        multiplierTween = DOTween.To(() => Multiplier, x => Multiplier = x, factor, time);
-    }
+
     void FixedUpdate()
     {
         _beatCounter+= 0.25f; //incrementbeat;
@@ -65,7 +53,7 @@ public class Metronome : MonoBehaviour
     float CalculateInterval()
     {
         float tickSize = CROTCHET / (float)noteValue;
-        float interval = (60.0f / (BPM * Multiplier)) * tickSize;
+        float interval = (60.0f / (BPM * MadnessFactor.Multiplier)) * tickSize;
         return interval / 4;
     }
 }
