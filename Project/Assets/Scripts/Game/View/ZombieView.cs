@@ -6,6 +6,12 @@ using System.Collections.Generic;
 
 public class ZombieView : MonoBehaviour {
 
+    public ZombiePartsController HatData;
+    public ZombiePartsController HeadData;
+    public ZombiePartsController AcessoryData;
+    public ZombiePartsController BodyData;
+    public ZombiePartsController PantsData;
+
     [Serializable]
     public class AnimationData
     {
@@ -29,8 +35,7 @@ public class ZombieView : MonoBehaviour {
     public AudioClip audioChangeParts;
     public List<AudioClip> audioActionList;
     private bool started;
-
-    private HeadParts headParts;
+    
     public string[] monsterPath;
 
     public Transform headContainer;
@@ -41,59 +46,156 @@ public class ZombieView : MonoBehaviour {
     void Awake()
     {
 
-        
-
-
-        started = false;
-        
         rendererList = GetComponentsInChildren<SpriteRenderer>();
 
-        headParts = new HeadParts(rendererList);
-        headParts.pathID = 0;
+        HeadData = new ZombiePartsController(rendererList, new List<string>(new string[] {
+            "eye1_closed",
+            "eye2_closed",
+            "ear_left",
+            "ear_right",
+            "hair",
+            "eye1",
+            "eye2",
+            "mouth",
+            "pupila1",
+            "pupila2",
+            "head",
+            "hat",
+            "acessory",
+            "queixo"
+        }));
+
+        AcessoryData = new ZombiePartsController(rendererList, new List<string>(new string[] {
+            "acessory"
+        }));
+
+        HatData = new ZombiePartsController(rendererList, new List<string>(new string[] {
+            "hat"
+        }));
+
+        PantsData = new ZombiePartsController(rendererList, new List<string>(new string[] {
+            "ass",
+            "coxa_left",
+            "coxa_right",
+            "feet_left",
+            "feet_right",
+            "leg_left",
+            "leg_right"
+        }));
+
+        BodyData = new ZombiePartsController(rendererList, new List<string>(new string[] {            
+            "arm_left",
+            "arm_right",
+            "hand_left",
+            "hand_right",
+            "hand_left_closed",
+            "hand_right_closed",
+            "hand_left_open",
+            "hand_right_open",
+            "shoulder_left",
+            "shoulder_right",
+            "body"
+        }));
+        started = false;
+        
 
     }
     public void UpdateHead(int side)
     {
-        if (headParts.working)
-        {
-            return;
-        }
 
-        headParts.pathID += side;
-        if(headParts.pathID >= monsterPath.Length)
-        {
-            headParts.pathID = 0;
-        }else if (headParts.pathID < 0)
-        {
-            headParts.pathID = monsterPath.Length - 1;
-        }
-
-        headParts.working = true;
-        
-        headContainer.localScale = new Vector3(1f, 1f, 1f);
-
-        //headParts.UpdateParts(rendererList, monsterPath[headParts.pathID]);
-        headParts.FadeOut(0.2f,0.3f);
-
-        headContainer.DOScale(new Vector3(1.4f, 1.4f, 4f), 0.4f).OnComplete(() =>
-        {
-            
-            headParts.working = false;
-
-            headParts.UpdateParts(monsterPath[headParts.pathID]);
-            sourceChangeParts.PlayOneShot(audioChangeParts);
-            sourceActions.PlayOneShot(audioActionList[UnityEngine.Random.Range(0, (audioActionList.Count))]);
-
-            headParts.ForceFadeIn(0.2f, 0.45f);
-            headContainer.localScale = new Vector3(0.3f, 0.3f,1f);
-            headContainer.DOScale(new Vector3(1f, 1f, 1f), 1f).SetDelay(0.5f).SetEase(Ease.OutElastic).OnComplete(() =>
-            {
-
-            });
-        }).SetEase(Ease.InBack);
-
-        print(headContainer.localScale);
     }
+    //public void UpdateHead(int side)
+    //{
+    //    if (headParts.working)
+    //    {
+    //        return;
+    //    }
+
+    //    headParts.pathID += side;
+    //    if(headParts.pathID >= monsterPath.Length)
+    //    {
+    //        headParts.pathID = 0;
+    //    }else if (headParts.pathID < 0)
+    //    {
+    //        headParts.pathID = monsterPath.Length - 1;
+    //    }
+
+    //    headParts.working = true;
+        
+    //    headContainer.localScale = new Vector3(1f, 1f, 1f);
+
+    //    //headParts.UpdateParts(rendererList, monsterPath[headParts.pathID]);
+    //    headParts.FadeOut(0.2f,0.3f);
+
+    //    headContainer.DOScale(new Vector3(1.4f, 1.4f, 4f), 0.4f).OnComplete(() =>
+    //    {            
+    //        headParts.working = false;
+    //        headParts.UpdateParts(monsterPath[headParts.pathID]);
+    //        sourceChangeParts.PlayOneShot(audioChangeParts);
+    //        sourceActions.PlayOneShot(audioActionList[UnityEngine.Random.Range(0, (audioActionList.Count))]);
+
+    //        headParts.ForceFadeIn(0.2f, 0.45f);
+    //        headContainer.localScale = new Vector3(0.3f, 0.3f,1f);
+    //        headContainer.DOScale(new Vector3(1f, 1f, 1f), 1f).SetDelay(0.5f).SetEase(Ease.OutElastic).OnComplete(() =>
+    //        {
+
+    //        });
+    //    }).SetEase(Ease.InBack);
+
+    //    print(headContainer.localScale);
+    //}
+
+    internal void UpdatePart(PartsModel partModel)
+    {
+        print(partModel.PartType);
+        sourceChangeParts.PlayOneShot(audioChangeParts);
+        switch (partModel.PartType)
+        {
+            case ShopSectionType.HEAD:
+                HeadData.working = true;
+
+                headContainer.localScale = new Vector3(1f, 1f, 1f);
+
+                //headParts.UpdateParts(rendererList, monsterPath[headParts.pathID]);
+                HeadData.FadeOut(0.2f, 0.3f);
+
+                headContainer.DOScale(new Vector3(1.4f, 1.4f, 4f), 0.4f).OnComplete(() =>
+                {
+                    HeadData.working = false;
+                    HeadData.UpdateParts(partModel);
+                    
+                    sourceActions.PlayOneShot(audioActionList[UnityEngine.Random.Range(0, (audioActionList.Count))]);
+
+                    HeadData.ForceFadeIn(0.2f, 0.45f);
+                    headContainer.localScale = new Vector3(0.3f, 0.3f, 1f);
+                    headContainer.DOScale(new Vector3(1f, 1f, 1f), 1f).SetDelay(0.5f).SetEase(Ease.OutElastic).OnComplete(() =>
+                    {
+
+                    });
+                }).SetEase(Ease.InBack);
+                //HeadData.UpdateParts(partModel);
+                break;
+            case ShopSectionType.BODY:
+                BodyData.UpdateParts(partModel);
+                BodyData.ForceFadeIn(0.2f, 0.45f);
+                break;
+            case ShopSectionType.PANTS:
+                PantsData.UpdateParts(partModel);
+                PantsData.ForceFadeIn(0.2f, 0.45f);
+                break;
+            case ShopSectionType.HATS:
+                HatData.UpdateParts(partModel);
+                HatData.ForceFadeIn(0.2f, 0.45f);
+                break;
+            case ShopSectionType.ACESSORY:
+                AcessoryData.UpdateParts(partModel);
+                AcessoryData.ForceFadeIn(0.2f, 0.45f);
+                break;
+            default:
+                break;
+        }
+    }
+
     // Update is called once per frame
     void Update () {
         if (!started)

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 6bfee2de3172a074cb36428874047ef0
-timeCreated: 1460756757
+timeCreated: 1461179067
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -150,18 +150,18 @@ TextureImporter:
         y: 432
         width: 45
         height: 40
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.50000066, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -19.5, y: 20}
-        - {x: -22.5, y: 19}
-        - {x: -22.5, y: -14}
-        - {x: -19.5, y: -20}
-        - {x: 18.5, y: -20}
-        - {x: 22.5, y: -18}
-        - {x: 22.5, y: 18}
-        - {x: 18.5, y: 20}
+      - - {x: -19.50003, y: 0}
+        - {x: -22.50003, y: -1}
+        - {x: -22.50003, y: -34}
+        - {x: -19.50003, y: -40}
+        - {x: 18.49997, y: -40}
+        - {x: 22.49997, y: -38}
+        - {x: 22.49997, y: -2}
+        - {x: 18.49997, y: 0}
     - name: eye1
       rect:
         serializedVersion: 2
@@ -187,17 +187,17 @@ TextureImporter:
         y: 330
         width: 51
         height: 47
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5, y: 1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline:
-      - - {x: -22.5, y: 23.5}
-        - {x: -25.5, y: 16.5}
-        - {x: -25.5, y: -21.5}
-        - {x: -21.5, y: -23.5}
-        - {x: 25.5, y: -23.5}
-        - {x: 25.5, y: 21.5}
-        - {x: 20.5, y: 23.5}
+      - - {x: -22.5, y: 0}
+        - {x: -25.5, y: -7}
+        - {x: -25.5, y: -45}
+        - {x: -21.5, y: -47}
+        - {x: 25.5, y: -47}
+        - {x: 25.5, y: -2}
+        - {x: 20.5, y: 0}
     - name: hair
       rect:
         serializedVersion: 2

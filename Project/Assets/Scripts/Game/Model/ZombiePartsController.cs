@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
-public class HeadParts{
+public class ZombiePartsController{
 
     public string head;
     public string basePath = "Game/Chars/";
@@ -12,22 +12,10 @@ public class HeadParts{
     public bool working;
     public int pathID;
     private List<SpriteRenderer> renderers;
-    public HeadParts(SpriteRenderer[] rendererList)
+    public PartsModel CurrentModel;
+    public ZombiePartsController(SpriteRenderer[] rendererList, List<string> partsNames)
     {
-        names = new List<string>(new string[] {
-            "eye1_closed",
-            "eye2_closed",
-            "ear_left",
-            "ear_right",
-            "hair",
-            "eye1",
-            "eye2",
-            "mouth",
-            "pupila1",
-            "pupila2",
-            "head",
-            "queixo"
-        });
+        names = partsNames;
 
         renderers = new List<SpriteRenderer>();
 
@@ -101,16 +89,16 @@ public class HeadParts{
             }).SetDelay(_delay);
         }
     }
-    internal void UpdateParts(string _path)
+    internal void UpdateParts(PartsModel partsModel)
     {
-        path = _path;
+        CurrentModel = partsModel;
 
-        
-        var subSprites = Resources.LoadAll<Sprite>(basePath + path + "/head");
 
+        var subSprites = Resources.LoadAll<Sprite>(basePath + CurrentModel.Path);
 
         foreach (var renderer in renderers)
         {
+
             var newSprite = Array.Find(subSprites, item => item.name == renderer.name);
             if (newSprite)
             {

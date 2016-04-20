@@ -125,6 +125,7 @@
     <None Include="Assets\Plugins\Demigiant\DOTween\Editor\DOTweenEditor.XML" />
     <None Include="Assets\Plugins\Demigiant\DOTween\readme.txt" />
     <None Include="Assets\Resources\Game\Sounds\Ambient\Mood1\bpms.txt" />
+    <None Include="Assets\Resources\Shader\UVScroller.shader" />
     <None Include="Assets\Scripts\DefaultResources\PerformanceTools\FrameDebuggerRenderTargetDisplay.shader" />
     <None Include="Assets\Scripts\DefaultResources\Sprites-Default.shader" />
     <None Include="Assets\Scripts\DefaultResourcesExtra\Mobile\Mobile-BumpSpec-1DirectionalLight.shader" />

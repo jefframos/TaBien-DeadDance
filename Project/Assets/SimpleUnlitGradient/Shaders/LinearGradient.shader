@@ -38,6 +38,7 @@
 			{
 				float4 color = i.color;
 				color.a = 1;
+				color.a += -0.001;
 				return color;
 			}
 			ENDCG

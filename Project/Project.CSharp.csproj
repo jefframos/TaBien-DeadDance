@@ -85,6 +85,7 @@
     <Compile Include="Assets\Scripts\Game\Controller\GameController.cs" />
     <Compile Include="Assets\Scripts\Game\Controller\LifeController.cs" />
     <Compile Include="Assets\Scripts\Game\Controller\MadnessController.cs" />
+    <Compile Include="Assets\Scripts\Game\Controller\PartButtonController.cs" />
     <Compile Include="Assets\Scripts\Game\Controller\ShopButtonController.cs" />
     <Compile Include="Assets\Scripts\Game\Enum\ActionType.cs" />
     <Compile Include="Assets\Scripts\Game\Enum\BehaviourType.cs" />
@@ -95,8 +96,9 @@
     <Compile Include="Assets\Scripts\Game\MadnessFactor.cs" />
     <Compile Include="Assets\Scripts\Game\Metronome.cs" />
     <Compile Include="Assets\Scripts\Game\Model\ActionButtonModel.cs" />
-    <Compile Include="Assets\Scripts\Game\Model\HeadParts.cs" />
+    <Compile Include="Assets\Scripts\Game\Model\PartsModel.cs" />
     <Compile Include="Assets\Scripts\Game\Model\WaveModel.cs" />
+    <Compile Include="Assets\Scripts\Game\Model\ZombiePartsController.cs" />
     <Compile Include="Assets\Scripts\Game\UI\GameEffects.cs" />
     <Compile Include="Assets\Scripts\Game\UI\MainHUDController.cs" />
     <Compile Include="Assets\Scripts\Game\UI\ShopController.cs" />
@@ -118,6 +120,7 @@
     <None Include="Assets\Plugins\Demigiant\DOTween\Editor\DOTweenEditor.XML" />
     <None Include="Assets\Plugins\Demigiant\DOTween\readme.txt" />
     <None Include="Assets\Resources\Game\Sounds\Ambient\Mood1\bpms.txt" />
+    <None Include="Assets\Resources\Shader\UVScroller.shader" />
     <None Include="Assets\Scripts\DefaultResources\PerformanceTools\FrameDebuggerRenderTargetDisplay.shader" />
     <None Include="Assets\Scripts\DefaultResources\Sprites-Default.shader" />
     <None Include="Assets\Scripts\DefaultResourcesExtra\Mobile\Mobile-BumpSpec-1DirectionalLight.shader" />

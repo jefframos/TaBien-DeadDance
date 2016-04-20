@@ -417,7 +417,8 @@ public class GameController : MonoBehaviour {
                 }
             }
 
-            ChainActionType chainActionType = ChainController.UpdateChain(actionView.currentFeedbackState);
+            //ChainActionType chainActionType = ChainController.UpdateChain(actionView.currentFeedbackState);
+            ChainController.UpdateChain(actionView.currentFeedbackState);
 
             ChainFinishedType finishedType = ChainFinishedType.BAD;
 
