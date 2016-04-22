@@ -33,8 +33,7 @@ public class GameController : MonoBehaviour {
     public Text PointsLabel;
     public RectTransform PointsLabelRect;
 
-
-    private int currency;
+    
     public Text CurrencyLabel;
     public RectTransform CurrencyLabelRect;
     public RectTransform CurrencyRect;
@@ -117,7 +116,6 @@ public class GameController : MonoBehaviour {
         _beatCounter = 0;
         Points = 0;
         Life = 1;
-        currency = GetCurrency();
         LifeController.Reset();
 
         //Reset Chain
@@ -154,10 +152,6 @@ public class GameController : MonoBehaviour {
 
         MainHUDController.ShowGameplayUI();
 
-    }
-    private int GetCurrency()
-    {
-        return 0;
     }
 
     private void BeatCallback()
@@ -574,7 +568,7 @@ public class GameController : MonoBehaviour {
     private void updateCurrency(int currencyPoints)
     {
         //print("CURRENCY");
-        currency += currencyPoints;
+        GameDataManager.CurrentSoftCurrency += currencyPoints;
         updateCurrencyLabel();
     }
     private void updatePoints(int actionPoints)
@@ -596,6 +590,6 @@ public class GameController : MonoBehaviour {
     }
     private void updateCurrencyLabel()
     {
-        CurrencyLabel.text = currency.ToString();
+        CurrencyLabel.text = GameDataManager.CurrentSoftCurrency.ToString();
     }
 }

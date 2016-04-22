@@ -39,13 +39,38 @@ public class ZombieView : MonoBehaviour {
     public string[] monsterPath;
 
     public Transform headContainer;
+
+    internal void Show()
+    {
+        HeadData.ForceFadeIn(0.2f, 0.45f);
+        BodyData.ForceFadeIn(0.2f, 0.45f);
+        PantsData.ForceFadeIn(0.2f, 0.45f);
+    }
+
+    internal void Hide()
+    {
+        HeadData.ForceFadeOut(0, 0);
+        BodyData.ForceFadeOut(0, 0);
+        PantsData.ForceFadeOut(0, 0);
+    }
+
     public CanvasRenderer HeadCanvasRenderer;
 
     private SpriteRenderer[] rendererList;
-    
+    private bool built = false;
     void Awake()
     {
+        
 
+    }
+    public void Build()
+    {
+        if (built)
+        {
+            print("ALREADY BUILD");
+            return;
+        }
+        built = true;
         rendererList = GetComponentsInChildren<SpriteRenderer>();
 
         HeadData = new ZombiePartsController(rendererList, new List<string>(new string[] {
@@ -83,7 +108,7 @@ public class ZombieView : MonoBehaviour {
             "leg_right"
         }));
 
-        BodyData = new ZombiePartsController(rendererList, new List<string>(new string[] {            
+        BodyData = new ZombiePartsController(rendererList, new List<string>(new string[] {
             "arm_left",
             "arm_right",
             "hand_left",
@@ -97,83 +122,45 @@ public class ZombieView : MonoBehaviour {
             "body"
         }));
         started = false;
-        
-
     }
-    public void UpdateHead(int side)
+    internal void UpdatePart(PartsModel partModel, bool force = false)
     {
-
-    }
-    //public void UpdateHead(int side)
-    //{
-    //    if (headParts.working)
-    //    {
-    //        return;
-    //    }
-
-    //    headParts.pathID += side;
-    //    if(headParts.pathID >= monsterPath.Length)
-    //    {
-    //        headParts.pathID = 0;
-    //    }else if (headParts.pathID < 0)
-    //    {
-    //        headParts.pathID = monsterPath.Length - 1;
-    //    }
-
-    //    headParts.working = true;
-        
-    //    headContainer.localScale = new Vector3(1f, 1f, 1f);
-
-    //    //headParts.UpdateParts(rendererList, monsterPath[headParts.pathID]);
-    //    headParts.FadeOut(0.2f,0.3f);
-
-    //    headContainer.DOScale(new Vector3(1.4f, 1.4f, 4f), 0.4f).OnComplete(() =>
-    //    {            
-    //        headParts.working = false;
-    //        headParts.UpdateParts(monsterPath[headParts.pathID]);
-    //        sourceChangeParts.PlayOneShot(audioChangeParts);
-    //        sourceActions.PlayOneShot(audioActionList[UnityEngine.Random.Range(0, (audioActionList.Count))]);
-
-    //        headParts.ForceFadeIn(0.2f, 0.45f);
-    //        headContainer.localScale = new Vector3(0.3f, 0.3f,1f);
-    //        headContainer.DOScale(new Vector3(1f, 1f, 1f), 1f).SetDelay(0.5f).SetEase(Ease.OutElastic).OnComplete(() =>
-    //        {
-
-    //        });
-    //    }).SetEase(Ease.InBack);
-
-    //    print(headContainer.localScale);
-    //}
-
-    internal void UpdatePart(PartsModel partModel)
-    {
-        print(partModel.PartType);
-        sourceChangeParts.PlayOneShot(audioChangeParts);
+        //print(partModel.Path);
+        if (!force)
+        {
+            sourceChangeParts.PlayOneShot(audioChangeParts);
+        }
         switch (partModel.PartType)
         {
             case ShopSectionType.HEAD:
-                HeadData.working = true;
-
-                headContainer.localScale = new Vector3(1f, 1f, 1f);
-
-                //headParts.UpdateParts(rendererList, monsterPath[headParts.pathID]);
-                HeadData.FadeOut(0.2f, 0.3f);
-
-                headContainer.DOScale(new Vector3(1.4f, 1.4f, 4f), 0.4f).OnComplete(() =>
+                if (force)
                 {
-                    HeadData.working = false;
                     HeadData.UpdateParts(partModel);
-                    
-                    sourceActions.PlayOneShot(audioActionList[UnityEngine.Random.Range(0, (audioActionList.Count))]);
-
                     HeadData.ForceFadeIn(0.2f, 0.45f);
-                    headContainer.localScale = new Vector3(0.3f, 0.3f, 1f);
-                    headContainer.DOScale(new Vector3(1f, 1f, 1f), 1f).SetDelay(0.5f).SetEase(Ease.OutElastic).OnComplete(() =>
-                    {
+                }
+                else {
+                    HeadData.working = true;
+                    headContainer.localScale = new Vector3(1f, 1f, 1f);
 
-                    });
-                }).SetEase(Ease.InBack);
-                //HeadData.UpdateParts(partModel);
+                    //headParts.UpdateParts(rendererList, monsterPath[headParts.pathID]);
+                    HeadData.FadeOut(0.2f, 0.3f);
+
+                    headContainer.DOScale(new Vector3(1.4f, 1.4f, 4f), 0.4f).OnComplete(() =>
+                    {
+                        HeadData.working = false;
+                        HeadData.UpdateParts(partModel);
+
+                        sourceActions.PlayOneShot(audioActionList[UnityEngine.Random.Range(0, (audioActionList.Count))]);
+
+                        HeadData.ForceFadeIn(0.2f, 0.45f);
+                        headContainer.localScale = new Vector3(0.3f, 0.3f, 1f);
+                        headContainer.DOScale(new Vector3(1f, 1f, 1f), 1f).SetDelay(0.5f).SetEase(Ease.OutElastic).OnComplete(() =>
+                        {
+
+                        });
+                    }).SetEase(Ease.InBack);
+                    //HeadData.UpdateParts(partModel);
+                }
                 break;
             case ShopSectionType.BODY:
                 BodyData.UpdateParts(partModel);
@@ -198,6 +185,10 @@ public class ZombieView : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+        if (!built)
+        {
+            Build();
+        }
         if (!started)
         {
             return;

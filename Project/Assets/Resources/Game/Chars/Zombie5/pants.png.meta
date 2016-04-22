@@ -1,0 +1,191 @@
+fileFormatVersion: 2
+guid: f031808c0049cbc45a4dd5b5838955e7
+timeCreated: 1460756879
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: leg_left
+    21300002: leg_right
+    21300004: coxa_left
+    21300006: coxa_right
+    21300008: feet_left
+    21300010: feet_right
+    21300012: ass
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 2
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: leg_left
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 270
+        width: 52
+        height: 202
+      alignment: 9
+      pivot: {x: 0.5719748, y: 0.90761983}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 5.257309, y: 18.660797}
+        - {x: -18.742691, y: 8.660797}
+        - {x: -29.742691, y: -136.3392}
+        - {x: -29.742691, y: -181.3392}
+        - {x: -28.742691, y: -183.3392}
+        - {x: 15.257309, y: -183.3392}
+        - {x: 22.257309, y: -179.3392}
+        - {x: 22.257309, y: -41.339203}
+        - {x: 21.257309, y: 18.660797}
+    - name: leg_right
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 277
+        width: 52
+        height: 195
+      alignment: 9
+      pivot: {x: 0.41003153, y: 0.9462438}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -21.32164, y: -177.51755}
+        - {x: -19.32164, y: -179.51755}
+        - {x: -13.32164, y: -184.51755}
+        - {x: 17.67836, y: -184.51755}
+        - {x: 30.67836, y: -183.51755}
+        - {x: 30.67836, y: -142.51755}
+        - {x: 18.67836, y: 10.482452}
+        - {x: -19.32164, y: 10.482452}
+        - {x: -21.32164, y: -59.517548}
+    - name: coxa_left
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 315
+        width: 57
+        height: 157
+      alignment: 9
+      pivot: {x: 0.6313225, y: 0.89929974}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -35.985382, y: 15.809937}
+        - {x: -35.985382, y: -141.19006}
+        - {x: 3.014618, y: -141.19006}
+        - {x: 21.014618, y: -31.190063}
+        - {x: 21.014618, y: 14.809937}
+        - {x: 16.014618, y: 15.809937}
+    - name: coxa_right
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 317
+        width: 57
+        height: 155
+      alignment: 9
+      pivot: {x: 0.3686775, y: 0.904452}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -21.014618, y: -34.190063}
+        - {x: 1.9853821, y: -140.19006}
+        - {x: 35.985382, y: -140.19006}
+        - {x: 35.985382, y: -24.190063}
+        - {x: 33.985382, y: 14.809937}
+        - {x: -21.014618, y: 14.809937}
+    - name: feet_left
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 178
+        width: 81
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -13.5, y: 26}
+        - {x: -22.5, y: 24}
+        - {x: -40.5, y: 9}
+        - {x: -40.5, y: -26}
+        - {x: 23.5, y: -26}
+        - {x: 40.5, y: -18}
+        - {x: 40.5, y: 14}
+        - {x: 22.5, y: 26}
+    - name: feet_right
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 179
+        width: 83
+        height: 51
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -39.5, y: 25.5}
+        - {x: -41.5, y: 23.5}
+        - {x: -41.5, y: -23.5}
+        - {x: -37.5, y: -25.5}
+        - {x: 41.5, y: -25.5}
+        - {x: 41.5, y: 15.5}
+        - {x: 24.5, y: 25.5}
+    - name: ass
+      rect:
+        serializedVersion: 2
+        x: 284
+        y: 193
+        width: 124
+        height: 37
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -62, y: 18.5}
+        - {x: -62, y: -18.5}
+        - {x: 51, y: -18.5}
+        - {x: 62, y: -7.5}
+        - {x: 62, y: 18.5}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

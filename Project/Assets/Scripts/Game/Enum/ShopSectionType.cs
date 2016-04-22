@@ -1,1 +1,1 @@
-﻿public enum ShopSectionType { HEAD, BODY, PANTS, HATS, ACESSORY }
+﻿public enum ShopSectionType { HEAD, BODY, PANTS, HATS, ACESSORY, NONE }

@@ -8,75 +8,14 @@ public class ShopController : MonoBehaviour {
     public RectTransform ShopButtonsContainer;
     public GameObject ShopButtonPrefab;
     public List<PartButtonController> CurrentShopButtonsList;
+    public List<ShopButtonController> ShopButtonControllerList;
     private bool firstShow;
     public ZombieView Zombie;
-    private List<PartsModel> headData;
-    private List<PartsModel> acessoryData;
-    private List<PartsModel> hatData;
-    private List<PartsModel> pantsData;
-    private List<PartsModel> bodyData;
+
     // Use this for initialization
     void Start () {
         firstShow = true;
-        headData = new List<PartsModel>();
-
-        PartsModel tempModel;
-
-        tempModel = new PartsModel();
-        tempModel.Path = "Zombie1/head";
-        headData.Add(tempModel);
-
-        tempModel = new PartsModel();
-        tempModel.Path = "Zombie2/head";
-        headData.Add(tempModel);
-
-
-        acessoryData = new List<PartsModel>();
-
-        tempModel = new PartsModel();
-        tempModel.Path = "acessory";
-        acessoryData.Add(tempModel);
-
-        tempModel = new PartsModel();
-        tempModel.Path = "Acessories/Mustache/acessory";
-        acessoryData.Add(tempModel);
-
-
-        hatData = new List<PartsModel>();
-
-        tempModel = new PartsModel();
-        tempModel.Path = "hat";
-        hatData.Add(tempModel);
-
-        tempModel = new PartsModel();
-        tempModel.Path = "Hats/Gentleman/hat";
-        hatData.Add(tempModel);
-
-
-
-
-        pantsData = new List<PartsModel>();
-
-        tempModel = new PartsModel();
-        tempModel.Path = "Zombie1/pants";
-        pantsData.Add(tempModel);
-
-        tempModel = new PartsModel();
-        tempModel.Path = "Zombie2/pants";
-        pantsData.Add(tempModel);
-
-
-
-
-        bodyData = new List<PartsModel>();
-
-        tempModel = new PartsModel();
-        tempModel.Path = "Zombie1/body";
-        bodyData.Add(tempModel);
-
-        tempModel = new PartsModel();
-        tempModel.Path = "Zombie2/body";
-        bodyData.Add(tempModel);
+        currentType = ShopSectionType.NONE;
     }
 	
 	// Update is called once per frame
@@ -84,12 +23,35 @@ public class ShopController : MonoBehaviour {
 	
 	}
 
+    public void Reset()
+    {
+        print("RESET");
+        foreach (var item in ShopButtonControllerList)
+        {
+            item.Unselect(true);
+        }
+    }
+    public void ActiveShopButton(ShopSectionType type)
+    {
+        foreach (var item in ShopButtonControllerList)
+        {
+            if(item.Type == type)
+            {
+                item.Select(true);
+            }
+            else
+            {
+                item.Unselect(true);
+            }
+        }
+    }
     public void ChangeSection(ShopSectionType type)
     {
         if(currentType == type)
         {
             return;
         }
+        ActiveShopButton(type);
         switch (type)
         {
             case ShopSectionType.HEAD:
@@ -110,11 +72,11 @@ public class ShopController : MonoBehaviour {
 
     public void HideSection(ShopSectionType type)
     {
+        print(type);
         if(CurrentShopButtonsList != null)
         {
             for (int i = 0; i < CurrentShopButtonsList.Count; i++)
             {
-                   //CurrentShopButtonsList[i].Kill(0.1f * i);
                    CurrentShopButtonsList[i].DestroyPart();
             }
             CurrentShopButtonsList = new List<PartButtonController>();
@@ -124,61 +86,92 @@ public class ShopController : MonoBehaviour {
 
         Invoke("ShowSection", 0.3f);
     }
-    public void PartShopCallback(PartsModel partModel)
+    public void PartShopCallback(PartsModel partModel, PartButtonController buttonController)
     {
-        switch (partModel.PartType)
+        if (partModel.Active)
         {
-            case ShopSectionType.HEAD:
-                break;
-            case ShopSectionType.BODY:
-                break;
-            case ShopSectionType.PANTS:
-                break;
-            case ShopSectionType.HATS:
-                break;
-            case ShopSectionType.ACESSORY:
-                break;
-            default:
-                break;
+            return;
         }
-        Zombie.UpdatePart(partModel);
+        if (partModel.Purchased)
+        {
+            switch (partModel.PartType)
+            {
+                case ShopSectionType.HEAD:
+                    break;
+                case ShopSectionType.BODY:
+                    break;
+                case ShopSectionType.PANTS:
+                    break;
+                case ShopSectionType.HATS:
+                    break;
+                case ShopSectionType.ACESSORY:
+                    break;
+                default:
+                    break;
+            }
+            //PartsDataManager.GetModelById(partModel.PartType, partModel);
+
+            List<PartsModel> currentList = PartsDataManager.GetPartListByID(currentType);
+            foreach (var item in currentList)
+            {
+                item.Active = false;
+            }
+
+            partModel.Active = true;
+
+            UpdateActiveButtons();
+
+            Zombie.UpdatePart(partModel);
+        }
+        else
+        {
+            //try to buy, if return -1 is cause have no money
+            int spentCurrency = GameDataManager.PurchasePart(partModel);
+            if(spentCurrency >= 0)
+            {
+                PurchaseCallback(true);
+                buttonController.UpdateState(partModel);
+            }
+            else
+            {
+                PurchaseCallback(false);
+            }
+        }
+    }
+    public void UpdateActiveButtons()
+    {
+        foreach (var item in CurrentShopButtonsList)
+        {
+            item.UpdateActiveState();
+        }
+    }
+    public void PurchaseCallback(bool success)
+    {
+        if (success)
+        {
+            //HideSection(currentType);
+        }
+        else
+        {
+            print("NOMONEY");
+        }
     }
     public void ShowSection()
     {
-        List<PartsModel> tempList;
-        switch (currentType)
+        List<PartsModel> currentList = PartsDataManager.GetPartListByID(currentType);
+       
+        for (int i = 0; i < currentList.Count; i++)
         {
-            case ShopSectionType.HEAD:
-                tempList = headData;
-                break;
-            case ShopSectionType.BODY:
-                tempList = bodyData;
-                break;
-            case ShopSectionType.PANTS:
-                tempList = pantsData;
-                break;
-            case ShopSectionType.HATS:
-                tempList = hatData;
-                break;
-            case ShopSectionType.ACESSORY:
-                tempList = acessoryData;
-                break;
-            default:
-                tempList = headData;
-                break;
-        }
-        //print(currentType);
-        for (int i = 0; i < tempList.Count; i++)
-        {
-            tempList[i].PartType = currentType;
+            currentList[i].PartType = currentType;
             GameObject content = Instantiate(ShopButtonPrefab);
             content.transform.localScale = new Vector3(1f, 1f, 1f);
             content.transform.SetParent(ShopButtonsContainer, false);
             PartButtonController shopButton = content.GetComponent<PartButtonController>();
-            shopButton.Build(tempList[i], PartShopCallback);
+            shopButton.Build(currentList[i], PartShopCallback);
             shopButton.Show(0.1f * i + (firstShow?0.8f:0f));            
             CurrentShopButtonsList.Add(shopButton);
         }
         firstShow = false;
+        UpdateActiveButtons();
     }
 }

@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
-public class PartsModel {
+public class PartsModel : PurchaseModel{
     public string Path;
     public string ThumbPath;
-    public int Value;
-    public bool Purchased;
     public bool Active;
-    public int Id;
+    public string BasePath = "Game/Chars/";
     public ShopSectionType PartType;
 }

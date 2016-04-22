@@ -36,7 +36,7 @@ public class MainHUDController : MonoBehaviour {
         }
         public void Hide()
         {
-            if(Animator != null)
+            if(Animator != null && Animator.runtimeAnimatorController != null)
                 Animator.Play("TransitionOut");
         }
         public void Change(PopUpModel next)
@@ -56,6 +56,9 @@ public class MainHUDController : MonoBehaviour {
     public Animator GameHUDAnimator;
     public Animator ClosetUIAnimator;
     public Animator GameScreenAnimator;
+
+    public ShopController ShopController;
+    private bool inGame;
 
     // Use this for initialization
 
@@ -104,6 +107,7 @@ public class MainHUDController : MonoBehaviour {
     }
     public void ToGame()
     {
+        inGame = true;
         GameHUD.SetActive(true);
         TopHUD.SetActive(true);
 
@@ -119,31 +123,41 @@ public class MainHUDController : MonoBehaviour {
     }
     public void ToShop()
     {
+        
         InitHUD.SetActive(true);
-        GameHUD.SetActive(true);
+        //GameHUD.SetActive(true);
         GameScreenAnimator.SetTrigger("ToEditMode");
         //GameHUDAnimator.SetTrigger("ToOutGame");
         ClosetUIAnimator.SetTrigger("TransitionIn");
 
-        Hide();
+        ShopController.Reset();
+        if(inGame)
+            Hide();
+
+        inGame = false;
 
     }
     public void ToSectionSelected()
     {
-        print("ToSectionSelected");
+        //print("ToSectionSelected");
         GameScreenAnimator.SetTrigger("ToSectionSelected");
         ClosetUIAnimator.SetTrigger("ToSectionSelected");
+        inGame = false;
     }
     public void ToHome()
     {
-        print("ToHome");
+        //print("ToHome");
+
         InitHUD.SetActive(true);
         GameHUD.SetActive(true);
         GameScreenAnimator.SetTrigger("ToStandard");
         //GameHUDAnimator.SetTrigger("ToOutGame");
         ClosetUIAnimator.SetTrigger("TransitionOut");
 
-        Hide();
+        if (inGame)
+            Hide();
+
+        inGame = false;
 
     }
 }

@@ -53,8 +53,8 @@ public class ZombiePartsController{
     {
         foreach (var renderer in renderers)
         {
-            renderer.color = new Color(1, 1, 1, 1f);
             renderer.DOKill();
+            renderer.color = new Color(1, 1, 1, 1f);
             renderer.DOFade(0, _time).OnComplete(() => {
                 if (callback != null)
                 {
@@ -68,6 +68,7 @@ public class ZombiePartsController{
     {
         foreach (var renderer in renderers)
         {
+            renderer.DOKill();
             renderer.DOFade(0, _time).OnComplete(()=> {
                 if (callback != null)
                 {
@@ -81,6 +82,7 @@ public class ZombiePartsController{
     {
         foreach (var renderer in renderers)
         {
+            renderer.DOKill();
             renderer.DOFade(1, _time).OnComplete(() => {
                 if (callback != null)
                 {
@@ -93,15 +95,19 @@ public class ZombiePartsController{
     {
         CurrentModel = partsModel;
 
-
+        
         var subSprites = Resources.LoadAll<Sprite>(basePath + CurrentModel.Path);
 
         foreach (var renderer in renderers)
         {
 
             var newSprite = Array.Find(subSprites, item => item.name == renderer.name);
+            //Debug.Log(CurrentModel.Path+" "+renderer.name);
+
             if (newSprite)
             {
+                //Debug.Log(newSprite.name);
+                renderer.DOKill();
                 renderer.sprite = newSprite;
                 renderer.DOFade(0.5f, 0.3f);
             }

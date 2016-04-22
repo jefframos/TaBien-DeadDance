@@ -93,12 +93,16 @@
     <Compile Include="Assets\Scripts\Game\Enum\ChainFinishedType.cs" />
     <Compile Include="Assets\Scripts\Game\Enum\FeedbackStateType.cs" />
     <Compile Include="Assets\Scripts\Game\Enum\ShopSectionType.cs" />
+    <Compile Include="Assets\Scripts\Game\GameDataManager.cs" />
+    <Compile Include="Assets\Scripts\Game\GameInitializer.cs" />
     <Compile Include="Assets\Scripts\Game\MadnessFactor.cs" />
     <Compile Include="Assets\Scripts\Game\Metronome.cs" />
     <Compile Include="Assets\Scripts\Game\Model\ActionButtonModel.cs" />
     <Compile Include="Assets\Scripts\Game\Model\PartsModel.cs" />
+    <Compile Include="Assets\Scripts\Game\Model\PurchaseModel.cs" />
     <Compile Include="Assets\Scripts\Game\Model\WaveModel.cs" />
     <Compile Include="Assets\Scripts\Game\Model\ZombiePartsController.cs" />
+    <Compile Include="Assets\Scripts\Game\PartsDataManager.cs" />
     <Compile Include="Assets\Scripts\Game\UI\GameEffects.cs" />
     <Compile Include="Assets\Scripts\Game\UI\MainHUDController.cs" />
     <Compile Include="Assets\Scripts\Game\UI\ShopController.cs" />

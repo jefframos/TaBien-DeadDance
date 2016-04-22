@@ -1,0 +1,283 @@
+fileFormatVersion: 2
+guid: e5efe49a45498a44eb76af7cd819a67b
+timeCreated: 1460756572
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: hand_left_open
+    21300002: hand_right_open
+    21300004: hand_right_closed
+    21300006: body
+    21300008: hand_right
+    21300010: arm_right
+    21300012: shoulder_right
+    21300014: hand_left_closed
+    21300016: hand_left
+    21300018: arm_left
+    21300020: shoulder_left
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 2
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: hand_left_open
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 849
+        width: 107
+        height: 135
+      alignment: 9
+      pivot: {x: 0.55214125, y: 0.88020563}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 20.920883, y: 16.172241}
+        - {x: -26.079117, y: 16.172241}
+        - {x: -59.079117, y: -30.827759}
+        - {x: -59.079117, y: -117.82776}
+        - {x: -54.079117, y: -118.82776}
+        - {x: 20.920883, y: -118.82776}
+        - {x: 47.920883, y: -104.82776}
+        - {x: 47.920883, y: -34.82776}
+        - {x: 39.920883, y: 8.172241}
+    - name: hand_right_open
+      rect:
+        serializedVersion: 2
+        x: 187
+        y: 849
+        width: 107
+        height: 135
+      alignment: 9
+      pivot: {x: 0.45828703, y: 0.8967367}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 21.963287, y: 13.940552}
+        - {x: -18.036713, y: 13.940552}
+        - {x: -36.036713, y: 6.9405518}
+        - {x: -49.036713, y: -43.05945}
+        - {x: -49.036713, y: -115.05945}
+        - {x: -39.036713, y: -121.05945}
+        - {x: 48.963287, y: -121.05945}
+        - {x: 57.963287, y: -69.05945}
+        - {x: 57.963287, y: -35.05945}
+        - {x: 27.963287, y: 6.9405518}
+    - name: hand_right_closed
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 882
+        width: 77
+        height: 102
+      alignment: 9
+      pivot: {x: 0.7318591, y: 0.86806595}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -25.35315, y: 13.457275}
+        - {x: -56.35315, y: -16.542725}
+        - {x: -56.35315, y: -56.542725}
+        - {x: -53.35315, y: -73.542725}
+        - {x: -37.35315, y: -88.542725}
+        - {x: 8.646851, y: -88.542725}
+        - {x: 20.64685, y: -83.542725}
+        - {x: 20.64685, y: 3.4572754}
+        - {x: 14.646851, y: 13.457275}
+    - name: body
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 614
+        width: 134
+        height: 195
+      alignment: 9
+      pivot: {x: 0.50832707, y: 0.07083803}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 51.88417, y: 181.18658}
+        - {x: -58.11583, y: 181.18658}
+        - {x: -68.11583, y: 171.18658}
+        - {x: -68.11583, y: -6.8134155}
+        - {x: -58.11583, y: -13.813416}
+        - {x: 57.88417, y: -13.813416}
+        - {x: 65.88417, y: -7.8134155}
+        - {x: 65.88417, y: 146.18658}
+        - {x: 58.88417, y: 172.18658}
+    - name: hand_right
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 679
+        width: 50
+        height: 130
+      alignment: 9
+      pivot: {x: 0.61158234, y: 0.87766254}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -30.579117, y: 15.90387}
+        - {x: -30.579117, y: -100.09613}
+        - {x: -16.579117, y: -114.09613}
+        - {x: 5.420883, y: -114.09613}
+        - {x: 8.420883, y: -110.09613}
+        - {x: 19.420883, y: -92.09613}
+        - {x: 19.420883, y: 15.90387}
+    - name: arm_right
+      rect:
+        serializedVersion: 2
+        x: 304
+        y: 666
+        width: 42
+        height: 143
+      alignment: 9
+      pivot: {x: 0.34059724, y: 0.9238789}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 17.694916, y: 10.885315}
+        - {x: -14.305084, y: 10.885315}
+        - {x: -14.305084, y: -123.114685}
+        - {x: -8.305084, y: -132.11469}
+        - {x: 15.694916, y: -132.11469}
+        - {x: 22.694916, y: -129.11469}
+        - {x: 27.694916, y: -125.114685}
+        - {x: 27.694916, y: -53.114685}
+    - name: shoulder_right
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 393
+        width: 104
+        height: 181
+      alignment: 9
+      pivot: {x: 0.24283871, y: 0.8593538}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 21.744774, y: 25.45697}
+        - {x: -25.255226, y: 25.45697}
+        - {x: -25.255226, y: -105.54303}
+        - {x: 31.744774, y: -155.54303}
+        - {x: 78.744774, y: -155.54303}
+        - {x: 78.744774, y: -120.54303}
+        - {x: 51.744774, y: -9.54303}
+    - name: hand_left_closed
+      rect:
+        serializedVersion: 2
+        x: 184
+        y: 472
+        width: 77
+        height: 102
+      alignment: 9
+      pivot: {x: 0.28263202, y: 0.8387798}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -21.762665, y: 16.444458}
+        - {x: -21.762665, y: -85.55554}
+        - {x: 50.237335, y: -85.55554}
+        - {x: 55.237335, y: -59.555542}
+        - {x: 55.237335, y: -10.555542}
+        - {x: 31.237335, y: 16.444458}
+    - name: hand_left
+      rect:
+        serializedVersion: 2
+        x: 301
+        y: 451
+        width: 50
+        height: 123
+      alignment: 9
+      pivot: {x: 0.5, y: 0.8930133}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 21, y: 13.159363}
+        - {x: -20, y: 13.159363}
+        - {x: -25, y: 8.159363}
+        - {x: -25, y: -69.84064}
+        - {x: -21, y: -106.84064}
+        - {x: -18, y: -109.84064}
+        - {x: 8, y: -109.84064}
+        - {x: 13, y: -108.84064}
+        - {x: 25, y: -83.84064}
+        - {x: 25, y: 1.1593628}
+        - {x: 24, y: 12.159363}
+    - name: arm_left
+      rect:
+        serializedVersion: 2
+        x: 391
+        y: 412
+        width: 43
+        height: 162
+      alignment: 9
+      pivot: {x: 0.70759547, y: 0.8946126}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -17.426605, y: 17.072754}
+        - {x: -20.426605, y: 9.072754}
+        - {x: -30.426605, y: -59.927246}
+        - {x: -30.426605, y: -132.92725}
+        - {x: -22.426605, y: -142.92725}
+        - {x: -20.426605, y: -144.92725}
+        - {x: 2.5733948, y: -144.92725}
+        - {x: 12.573395, y: -142.92725}
+        - {x: 12.573395, y: 17.072754}
+    - name: shoulder_left
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 180
+        width: 100
+        height: 173
+      alignment: 9
+      pivot: {x: 0.7523378, y: 0.8568237}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -75.23378, y: -88.2305}
+        - {x: -75.23378, y: -148.2305}
+        - {x: -44.23378, y: -148.2305}
+        - {x: 24.76622, y: -57.2305}
+        - {x: 24.76622, y: 13.769501}
+        - {x: 23.76622, y: 14.769501}
+        - {x: 9.76622, y: 24.7695}
+        - {x: -19.23378, y: 24.7695}
+        - {x: -43.23378, y: 10.769501}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
