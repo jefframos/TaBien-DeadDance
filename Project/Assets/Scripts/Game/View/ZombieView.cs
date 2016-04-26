@@ -205,7 +205,7 @@ public class ZombieView : MonoBehaviour {
         }
         
         //if (currentAnimation != null && !bodyAnimator.GetCurrentAnimatorStateInfo(0).IsName(currentAnimation.label))
-        if (currentAnimation != null && bodyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.95)
+        if (currentAnimation != null && bodyAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
         {
             changeAnimation(ChainFinishedType.GOOD);            
         }
@@ -232,13 +232,13 @@ public class ZombieView : MonoBehaviour {
             default:
                 break;
         }
-        int counter = 0;
+        int counter = -1;
         if (tempAnimations.Count == 1)
         {
             currentAnimation = tempAnimations[0];
         }
         else {
-            while (currentAnimation.label == oldAnimation.label)// || counter < 20)
+            while (currentAnimation.label == oldAnimation.label || counter > 0)// || counter < 20)
             {
                 int rnd = UnityEngine.Random.Range(0, tempAnimations.Count);
                 currentAnimation = tempAnimations[rnd];

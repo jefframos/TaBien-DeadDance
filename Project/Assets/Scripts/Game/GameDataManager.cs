@@ -14,14 +14,17 @@ public class GameDataManager : MonoBehaviour {
         {
             CurrentSoftCurrency -= purchaseModel.Value;
             PartsDataManager.GetModelById(purchaseModel.PartType ,purchaseModel).Purchased = true;
+            UpdateCurrencyLabel();
             return purchaseModel.Value;
-        }
+        }        
         return -1;
     }
 
     internal static void Init()
     {
         PartsDataManager.Init();
+
+        
 
         Zombie.Hide();
 
@@ -32,6 +35,9 @@ public class GameDataManager : MonoBehaviour {
         Zombie.UpdatePart(PartsDataManager.GetActivePart(ShopSectionType.BODY), true);
         
         ShowZombie();
+
+        GameDataManager.CurrentSoftCurrency = 30;
+        UpdateCurrencyLabel();
     }
 
     public static void ShowZombie()
@@ -54,7 +60,7 @@ public class GameDataManager : MonoBehaviour {
     }
 
 
-    public static void UpdatePurchaseLabel()
+    public static void UpdateCurrencyLabel()
     {
         if(LabelSoftCurrency == null)
         {

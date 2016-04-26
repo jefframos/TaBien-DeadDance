@@ -52,12 +52,14 @@ public class MainHUDController : MonoBehaviour {
     public GameObject GameHUD;
     public GameObject TopHUD;
     public GameObject InitHUD;
+    public LogoController LogoController;
 
     public Animator GameHUDAnimator;
     public Animator ClosetUIAnimator;
     public Animator GameScreenAnimator;
 
     public ShopController ShopController;
+    public PlayButtonController PlayButtonController;
     private bool inGame;
 
     // Use this for initialization
@@ -116,6 +118,11 @@ public class MainHUDController : MonoBehaviour {
         ClosetUIAnimator.SetTrigger("TransitionOut");
         
 
+    }
+    public void UpdateTurboMode()
+    {
+        LogoController.UpdateLogoStatus();
+        PlayButtonController.UpdateShape();
     }
     public void ShowGameplayUI()
     {

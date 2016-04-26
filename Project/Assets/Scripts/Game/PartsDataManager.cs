@@ -214,11 +214,17 @@ public class PartsDataManager : MonoBehaviour {
 
 
         ActiveIds = new List<int>();
-        ActiveIds.Add(UnityEngine.Random.Range(0, HeadData.Count));//HEAD
-        ActiveIds.Add(UnityEngine.Random.Range(0, AcessoryData.Count));//ACESSORY
-        ActiveIds.Add(UnityEngine.Random.Range(0, HatData.Count));//HAT
-        ActiveIds.Add(UnityEngine.Random.Range(0, BodyData.Count));//BODY
-        ActiveIds.Add(UnityEngine.Random.Range(0, PantsData.Count));//PANTS
+        //ActiveIds.Add(UnityEngine.Random.Range(0, HeadData.Count));//HEAD
+        //ActiveIds.Add(UnityEngine.Random.Range(0, AcessoryData.Count));//ACESSORY
+        //ActiveIds.Add(UnityEngine.Random.Range(0, HatData.Count));//HAT
+        //ActiveIds.Add(UnityEngine.Random.Range(0, BodyData.Count));//BODY
+        //ActiveIds.Add(UnityEngine.Random.Range(0, PantsData.Count));//PANTS
+
+        ActiveIds.Add(0);//HEAD
+        ActiveIds.Add(0);//ACESSORY
+        ActiveIds.Add(0);//HAT
+        ActiveIds.Add(0);//BODY
+        ActiveIds.Add(0);//PANTS
 
         PurchaseEverything();
         UpdateInitActiveList();
@@ -227,25 +233,30 @@ public class PartsDataManager : MonoBehaviour {
     //purchase everything
     internal static void PurchaseEverything()
     {
-        for (int i = 0; i < HeadData.Count; i++)
+        for (int i = 1; i < HeadData.Count; i++)
         {
-            HeadData[i].Purchased = true;
+            HeadData[i].Purchased = false;
+            HeadData[i].Value = i * 2;
         }
-        for (int i = 0; i < AcessoryData.Count; i++)
+        for (int i = 1; i < AcessoryData.Count; i++)
         {
-            AcessoryData[i].Purchased = true;
+            AcessoryData[i].Purchased = false;
+            AcessoryData[i].Value = i * 2;
         }
-        for (int i = 0; i < HatData.Count; i++)
+        for (int i = 1; i < HatData.Count; i++)
         {
-            HatData[i].Purchased = true;
+            HatData[i].Purchased = false;
+            HatData[i].Value = i * 2;
         }
-        for (int i = 0; i < BodyData.Count; i++)
+        for (int i = 1; i < BodyData.Count; i++)
         {
-            BodyData[i].Purchased = true;
+            BodyData[i].Purchased = false;
+            BodyData[i].Value = i * 2;
         }
-        for (int i = 0; i < PantsData.Count; i++)
+        for (int i = 1; i < PantsData.Count; i++)
         {
-            PantsData[i].Purchased = true;
+            PantsData[i].Purchased = false;
+            PantsData[i].Value = i * 2;
         }
     }
     //initial actives

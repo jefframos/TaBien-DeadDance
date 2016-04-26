@@ -53,6 +53,7 @@ public class CountdownController : MonoBehaviour {
 
     internal void UpdateLabel(string value)
     {
+        container.DOKill();
         label.gameObject.SetActive(true);
         container.transform.localScale = new Vector3(0.5f, 0.5f);
         label.text = value.ToString();

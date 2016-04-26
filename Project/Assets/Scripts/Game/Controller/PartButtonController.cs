@@ -33,6 +33,7 @@ public class PartButtonController : MonoBehaviour {
     }
     internal void UpdatePurchaseState()
     {
+        print(partsModel.Purchased);
         if (partsModel.Purchased)
         {
             EquipContainer.SetActive(true);
@@ -72,14 +73,16 @@ public class PartButtonController : MonoBehaviour {
 
     internal void ActiveState()
     {
+        if (!partsModel.Purchased) return;
         EquipContainer.SetActive(false);
-        ImageThumb.color = new Color(1, 1, 1, 1);
+        //ImageThumb.color = new Color(1, 1, 1, 1);
     }
 
     internal void UnactiveState()
     {
+        if (!partsModel.Purchased) return;
         EquipContainer.SetActive(true);
-        ImageThumb.color = new Color(1, 1, 1, 0.5f);
+        //ImageThumb.color = new Color(1, 1, 1, 0.5f);
     }
 
     internal void UpdateActiveState()

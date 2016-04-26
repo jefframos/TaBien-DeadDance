@@ -16,7 +16,7 @@ public class Metronome : MonoBehaviour
     public Action beatCallback;
     void Start()
     {
-        MadnessFactor.Multiplier = 1;
+        MadnessFactor.Multiplier = MadnessFactor.GameSpeed;
     }
 
     void Update()
@@ -32,6 +32,7 @@ public class Metronome : MonoBehaviour
     {
         _beatCounter+= 0.25f; //incrementbeat;
         quarterBeat();
+        //print(MadnessFactor.Multiplier);
     }
 
     private void quarterBeat()

@@ -84,14 +84,17 @@
     <Compile Include="Assets\Scripts\Game\Controller\CountdownController.cs" />
     <Compile Include="Assets\Scripts\Game\Controller\GameController.cs" />
     <Compile Include="Assets\Scripts\Game\Controller\LifeController.cs" />
+    <Compile Include="Assets\Scripts\Game\Controller\LogoController.cs" />
     <Compile Include="Assets\Scripts\Game\Controller\MadnessController.cs" />
     <Compile Include="Assets\Scripts\Game\Controller\PartButtonController.cs" />
+    <Compile Include="Assets\Scripts\Game\Controller\PlayButtonController.cs" />
     <Compile Include="Assets\Scripts\Game\Controller\ShopButtonController.cs" />
     <Compile Include="Assets\Scripts\Game\Enum\ActionType.cs" />
     <Compile Include="Assets\Scripts\Game\Enum\BehaviourType.cs" />
     <Compile Include="Assets\Scripts\Game\Enum\ChainActionType.cs" />
     <Compile Include="Assets\Scripts\Game\Enum\ChainFinishedType.cs" />
     <Compile Include="Assets\Scripts\Game\Enum\FeedbackStateType.cs" />
+    <Compile Include="Assets\Scripts\Game\Enum\GameModeType.cs" />
     <Compile Include="Assets\Scripts\Game\Enum\ShopSectionType.cs" />
     <Compile Include="Assets\Scripts\Game\GameDataManager.cs" />
     <Compile Include="Assets\Scripts\Game\GameInitializer.cs" />

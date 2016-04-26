@@ -88,12 +88,31 @@ public class GameController : MonoBehaviour {
     {
         WavesList.Add(wave);
     }
+    public void ToggleTurboMode()
+    {
+        switch (MadnessFactor.GameMode)
+        {
+            case GameModeType.STANDARD:
+                MadnessFactor.SetTurboMode(1.5f);
+                break;
+            case GameModeType.TURBO:
+                MadnessFactor.SetHardcoreMode(2f);
+                break;
+            case GameModeType.HARDCORE:
+                MadnessFactor.SetStandardMode();
+                break;
+            default:
+                break;
+        }
+    }
     void Start () {
+        //MadnessFactor.GameSpeed = 2;
         //ResetWaves();
         //WaveModel tempWave = new WaveModel();
         //ActionButtonModel tempActionModel = new ActionButtonModel();
         //tempWave.totalBeats = 20;
         //tempWave.actionList = new List<ActionButtonModel>();
+        MainHUDController.UpdateTurboMode();
         InitedGame = false;        
         Metronome.beatCallback = BeatCallback;
         ChainController.ResetChain();
@@ -180,7 +199,7 @@ public class GameController : MonoBehaviour {
 
     private void reduceLife()
     {
-        if(MadnessFactor.Multiplier > 1)
+        if(MadnessFactor.MadnessMode)
         {
             StopMadness();
             return;
@@ -481,7 +500,7 @@ public class GameController : MonoBehaviour {
                     particleView.destiny = CurrencyRect.position;
                     //particleView.destiny.z = 500f;
                     particleView.rectTarget = CurrencyRect;
-                    particleView.endTweenCallback = (() => { updateCurrency(ChainController.PerfectInARow); });
+                    particleView.endTweenCallback = (() => { updateCurrency(MadnessFactor.GetBrains(ChainController.PerfectInARow)); });
                     particleView.delay = 0.7f + i * 0.2f;
                     particleView.time *= 1.2f;
                         //colocar aqui os destinos certos dos cerebros
@@ -490,7 +509,7 @@ public class GameController : MonoBehaviour {
 
                     particleView.color = actionView.currentState.color;
 
-                    particleView.Build(true, 1 , ChainController.PerfectInARow);
+                    particleView.Build(true, 1 , MadnessFactor.GetBrains(ChainController.PerfectInARow));
                 }
                 for (int i = 0; i < actionPoints; i++)
                 {
@@ -507,7 +526,7 @@ public class GameController : MonoBehaviour {
                     float newPosX = tempV3.x;
                     float newPosY = tempV3.y;
                    
-                    particleView.endTweenCallback = (() => { updatePoints(1); });
+                    particleView.endTweenCallback = (() => {updatePoints(MadnessFactor.GetPoints(1)); });
                     newPosX = tempV3.x + UnityEngine.Random.Range(-actionView.innerContent.rect.width / 2, actionView.innerContent.rect.width / 2);
                     newPosY = tempV3.y + UnityEngine.Random.Range(-actionView.innerContent.rect.height / 2, actionView.innerContent.rect.height / 2);
                                     
@@ -590,6 +609,7 @@ public class GameController : MonoBehaviour {
     }
     private void updateCurrencyLabel()
     {
-        CurrencyLabel.text = GameDataManager.CurrentSoftCurrency.ToString();
+        GameDataManager.UpdateCurrencyLabel();
+        //CurrencyLabel.text = GameDataManager.CurrentSoftCurrency.ToString();
     }
 }
