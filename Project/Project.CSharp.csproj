@@ -101,6 +101,7 @@
     <Compile Include="Assets\Scripts\Game\MadnessFactor.cs" />
     <Compile Include="Assets\Scripts\Game\Metronome.cs" />
     <Compile Include="Assets\Scripts\Game\Model\ActionButtonModel.cs" />
+    <Compile Include="Assets\Scripts\Game\Model\EnvironmentModel.cs" />
     <Compile Include="Assets\Scripts\Game\Model\PartsModel.cs" />
     <Compile Include="Assets\Scripts\Game\Model\PurchaseModel.cs" />
     <Compile Include="Assets\Scripts\Game\Model\WaveModel.cs" />

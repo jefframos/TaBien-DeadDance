@@ -62,6 +62,9 @@ public class MainHUDController : MonoBehaviour {
     public PlayButtonController PlayButtonController;
     private bool inGame;
 
+    enum CurrentStateHUD {ENVIRONMENT, SHOP };
+
+    private CurrentStateHUD currentStateHUD;
     // Use this for initialization
 
     void Awake()
@@ -112,7 +115,6 @@ public class MainHUDController : MonoBehaviour {
         inGame = true;
         GameHUD.SetActive(true);
         TopHUD.SetActive(true);
-
         
         GameScreenAnimator.SetTrigger("ToGame");        
         ClosetUIAnimator.SetTrigger("TransitionOut");
@@ -130,7 +132,7 @@ public class MainHUDController : MonoBehaviour {
     }
     public void ToShop()
     {
-        
+        currentStateHUD = CurrentStateHUD.SHOP;
         InitHUD.SetActive(true);
         //GameHUD.SetActive(true);
         GameScreenAnimator.SetTrigger("ToEditMode");
@@ -139,6 +141,20 @@ public class MainHUDController : MonoBehaviour {
 
         ShopController.Reset();
         if(inGame)
+            Hide();
+
+        inGame = false;
+
+    }
+    public void ToEnvironment()
+    {
+        currentStateHUD = CurrentStateHUD.ENVIRONMENT;
+        InitHUD.SetActive(true);
+        //GameHUD.SetActive(true);
+        GameScreenAnimator.SetTrigger("ToEnvironment");
+
+        ShopController.Reset();
+        if (inGame)
             Hide();
 
         inGame = false;
@@ -153,7 +169,7 @@ public class MainHUDController : MonoBehaviour {
     }
     public void ToHome()
     {
-        //print("ToHome");
+        print("ToHome");
 
         InitHUD.SetActive(true);
         GameHUD.SetActive(true);
@@ -166,5 +182,21 @@ public class MainHUDController : MonoBehaviour {
 
         inGame = false;
 
+    }
+    public void Back()
+    {
+        switch (currentStateHUD)
+        {
+            case CurrentStateHUD.ENVIRONMENT:
+                GameScreenAnimator.SetTrigger("EndEnvironment");
+                break;
+            case CurrentStateHUD.SHOP:
+                GameScreenAnimator.SetTrigger("EndEditMode");
+                ClosetUIAnimator.SetTrigger("TransitionOut");
+                break;
+            default:
+                GameScreenAnimator.SetTrigger("ToStandard");
+                break;
+        }
     }
 }

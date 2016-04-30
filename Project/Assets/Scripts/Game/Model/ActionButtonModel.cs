@@ -20,15 +20,9 @@ public class ActionButtonModel : MonoBehaviour{
     public int frameBeatAppear = 20;
     public int frameBeatToTap = 4;
     
-    public AudioClip beatSound;
-    public AudioClip wrongSound;
-
     public static ActionButtonModel GetActionButtonModel()
     {
         ActionButtonModel action = new ActionButtonModel();
-
-
-
         return action;
     }
 }
