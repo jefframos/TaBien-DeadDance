@@ -21,9 +21,9 @@ public class ChainController : MonoBehaviour {
     public float chainFactorAcum = 0.1f;
 
     private int actionsInWave;
-    public AudioClip perfectWave;
-    public AudioClip goodWave;
-    public AudioClip badWave;
+    private AudioClip perfectWave;
+    private AudioClip goodWave;
+    private AudioClip badWave;
     public AudioSource audioSource;
     public AudioSource audienceSource;
     public AudioSource feedbackSource;
@@ -64,6 +64,10 @@ public class ChainController : MonoBehaviour {
         activeChain = false;
         chainLabel.gameObject.SetActive(false);
         chainTransformer.gameObject.SetActive(false);
+
+        perfectWave = GameDataManager.CurrentEnvironmentModel.SoundPerfectWave;
+        goodWave = GameDataManager.CurrentEnvironmentModel.SoundGoodWave;
+        badWave = GameDataManager.CurrentEnvironmentModel.SoundBadWave;
     }
     public void InitChain()
     {

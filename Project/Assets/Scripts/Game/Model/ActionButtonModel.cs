@@ -8,7 +8,7 @@ public class ActionButtonModel : MonoBehaviour{
     public BehaviourType behaviour = BehaviourType.SCALE;
     public ActionType actionType = ActionType.NORMAL;
     //public float timeToShow = 1;
-    public Color color = new Color();
+    //public Color color = new Color();
     public Vector2 gridPosition = new Vector2();
     public int order = 0;
     public bool placed = false;

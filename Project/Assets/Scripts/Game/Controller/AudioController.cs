@@ -4,18 +4,11 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 public class AudioController : MonoBehaviour {
-    [Serializable]
-    public class AudioLoopData
-    {
-        public AudioClip audioClip;
-        public int BPM = 126;
-    }
     public AudioSource audioSource;
     public AudioSource audioSourceAux;
     public AudioSource ambientSource;
-    public List<AudioLoopData> audioLoopDataList;
-    public List<AudioClip> ambientAudioClipList;
-    public AudioLoopData currentAudioLoop;
+
+    public EnvironmentModel.AudioLoopData currentAudioLoop;
     public float maxAmbientVolume = 0.3f;
     // Use this for initialization
     private int currentDataID = 0;
@@ -24,7 +17,8 @@ public class AudioController : MonoBehaviour {
     {
         started = false;
         ambientSource.gameObject.SetActive(true);
-        ambientSource.clip = ambientAudioClipList[UnityEngine.Random.Range(0, ambientAudioClipList.Count)];
+        
+        ambientSource.clip = GameDataManager.CurrentEnvironmentModel.GetRandomAmbient();
         ambientSource.Play();
         ambientSource.volume = 0;
         ambientSource.DOFade(maxAmbientVolume, 2f);
@@ -32,7 +26,7 @@ public class AudioController : MonoBehaviour {
     }
     public void InitAudioController () {
         currentDataID = 0;
-        currentAudioLoop = audioLoopDataList[currentDataID];
+        currentAudioLoop = GameDataManager.CurrentEnvironmentModel.AudioLoopDataList[currentDataID];
         audioSource.clip = currentAudioLoop.audioClip;
         audioSource.Play();
 
@@ -46,7 +40,7 @@ public class AudioController : MonoBehaviour {
     }
     
     public void UpgradeAudioController() {
-        if (currentDataID < audioLoopDataList.Count - 1)
+        if (currentDataID < GameDataManager.CurrentEnvironmentModel.AudioLoopDataList.Count - 1)
         {
             currentDataID++;
         }
@@ -58,7 +52,7 @@ public class AudioController : MonoBehaviour {
             audioSourceAux.Stop();
         });
 
-        currentAudioLoop = audioLoopDataList[currentDataID];
+        currentAudioLoop = GameDataManager.CurrentEnvironmentModel.AudioLoopDataList[currentDataID];
         audioSource.clip = currentAudioLoop.audioClip;
         audioSource.Play();
         audioSource.volume = 0;
@@ -67,11 +61,11 @@ public class AudioController : MonoBehaviour {
 
     internal void IncreaseBPM()
     {
-        if(currentAudioLoop == audioLoopDataList[1])
+        if(currentAudioLoop == GameDataManager.CurrentEnvironmentModel.AudioLoopDataList[1])
         {
             return;
         }
-        currentAudioLoop = audioLoopDataList[1];
+        currentAudioLoop = GameDataManager.CurrentEnvironmentModel.AudioLoopDataList[1];
         audioSource.clip = currentAudioLoop.audioClip;
         audioSource.volume = 0.1f;
         audioSource.Play();

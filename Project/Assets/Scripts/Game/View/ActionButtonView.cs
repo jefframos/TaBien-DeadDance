@@ -58,6 +58,9 @@ public class ActionButtonView : MonoBehaviour {
     public FeedbackStateType currentFeedbackState;
     public GameObject newState;
     public GameObject special;
+
+    private Color colorStandard;
+
     //public GameObject feedbackState;
 
     [Serializable]
@@ -125,11 +128,7 @@ public class ActionButtonView : MonoBehaviour {
     public FeedbackStateView currentState;
 
     public AudioSource audioSource;
-    public AudioClip corretAudioClip;
-    public AudioClip perfectAudioClip;
-    public AudioClip wrongAudioClip;
-    public AudioClip specialAudioClip;
-    public AudioClip entraceAudioClip;
+
     private int maxBeat;
     private BehaviourType behaviour;
 
@@ -160,10 +159,8 @@ public class ActionButtonView : MonoBehaviour {
     internal void Build(ActionButtonModel _model)
     {
         model = _model;
-        
-        //corretAudioClip = model.beatSound;
-        //perfectAudioClip = model.beatSound;
-        //wrongAudioClip = model.wrongSound;
+        behaviour = model.behaviour;
+
         builded = true;
         newState.SetActive(true);
         actionRectTransform.DOScale(1.75f, 2f).SetEase(Ease.OutElastic);
@@ -187,43 +184,74 @@ public class ActionButtonView : MonoBehaviour {
         //timeDecress = maxTime;
         arrows.Hide();
 
-
+        switch (behaviour)
+        {
+            case BehaviourType.SCALE:
+                colorStandard = GameDataManager.CurrentEnvironmentModel.ColorStandardScale;
+                break;
+            case BehaviourType.FROM_TOP:
+                colorStandard = GameDataManager.CurrentEnvironmentModel.ColorStandardPosition;
+                break;
+            case BehaviourType.FROM_RIGHT:
+                colorStandard = GameDataManager.CurrentEnvironmentModel.ColorStandardPosition;
+                break;
+            case BehaviourType.FROM_BOTTOM:
+                colorStandard = GameDataManager.CurrentEnvironmentModel.ColorStandardPosition;
+                break;
+            case BehaviourType.FROM_LEFT:
+                colorStandard = GameDataManager.CurrentEnvironmentModel.ColorStandardPosition;
+                break;
+            default:
+                colorStandard = GameDataManager.CurrentEnvironmentModel.ColorStandardPosition;
+                break;
+        }
 
         if (model.order > 0)
         {
             text.text = model.order.ToString();
             textBack.text = model.order.ToString();
-            textBack.color = model.color;
+            textBack.color = colorStandard;
         }
         else
         {
             text.text = "";
             textBack.text = "";
         }
-        
-        outerImage.color = model.color;
-        innerImage.color = model.color;
-        actionImage.color = model.color;
+
+        outerImage.color = colorStandard;
+        innerImage.color = colorStandard;
+        actionImage.color = colorStandard;
+
         actionImage.DOFade(0.15f, 0.6f);
 
-        behaviour = model.behaviour;
 
+        missState.color = GameDataManager.CurrentEnvironmentModel.ColorActionMiss;
         missState.Hide();
+
+        goodState.color = GameDataManager.CurrentEnvironmentModel.ColorActionGood;
         goodState.Hide();
+
+        greatState.color = GameDataManager.CurrentEnvironmentModel.ColorActionGreat;
         greatState.Hide();
+
+        perfectState.color = GameDataManager.CurrentEnvironmentModel.ColorActionPerfect;
         perfectState.Hide();
+
+        specialState.color = GameDataManager.CurrentEnvironmentModel.ColorSpecial;
         specialState.Hide();
+
+        wrongState.color = GameDataManager.CurrentEnvironmentModel.ColorActionMiss;
         wrongState.Hide();
+
+        missSpecialState.color = GameDataManager.CurrentEnvironmentModel.ColorMissSpecial;
         missSpecialState.Hide();
 
 
         updateBehaviour(true);
 
-
-
         audioSource.gameObject.SetActive(true);
-        audioSource.PlayOneShot(entraceAudioClip);
-
+        audioSource.PlayOneShot(GameDataManager.CurrentEnvironmentModel.SoundActionEntrance);
+        
     }
 
     private void ClickCallback()
@@ -322,7 +350,7 @@ public class ActionButtonView : MonoBehaviour {
             {
                 currentState = missState;
                 currentState.title = "Missed!";
-                audioSource.PlayOneShot(wrongAudioClip, volume);
+                audioSource.PlayOneShot(GameDataManager.CurrentEnvironmentModel.SoundActionWrong, volume);
             }
             else
             {
@@ -335,42 +363,42 @@ public class ActionButtonView : MonoBehaviour {
 
             currentFeedbackState = FeedbackStateType.SPECIAL;
             currentState = specialState;
-            audioSource.PlayOneShot(specialAudioClip, volume);
+            audioSource.PlayOneShot(GameDataManager.CurrentEnvironmentModel.SoundActionSpecial, volume);
         }
         else if (distance < 0.25f)
         {
             currentFeedbackState = FeedbackStateType.PERFECT;
             currentState = perfectState;
             audioSource.pitch = chainController.currentPitch;
-            audioSource.PlayOneShot(perfectAudioClip, volume);
+            audioSource.PlayOneShot(GameDataManager.CurrentEnvironmentModel.SoundActionPerfect, volume);
         }
         else if (distance < 0.50f)
         {
             currentFeedbackState = FeedbackStateType.GREAT;
             currentState = greatState;
             audioSource.pitch = chainController.currentPitch;
-            audioSource.PlayOneShot(corretAudioClip, volume);
+            audioSource.PlayOneShot(GameDataManager.CurrentEnvironmentModel.SoundActionGreat, volume);
         }
         else if (distance < 0.750f)
         {
             currentFeedbackState = FeedbackStateType.GOOD;
             currentState = goodState;
             audioSource.pitch = chainController.currentPitch;
-            audioSource.PlayOneShot(corretAudioClip, volume);
+            audioSource.PlayOneShot(GameDataManager.CurrentEnvironmentModel.SoundActionGood, volume);
         }
         else if (currentBehaviourFactor < 1)
         {
             currentFeedbackState = FeedbackStateType.TOLATE;
             currentState = wrongState;
             currentState.title = "To late!";
-            audioSource.PlayOneShot(wrongAudioClip, volume);
+            audioSource.PlayOneShot(GameDataManager.CurrentEnvironmentModel.SoundActionWrong, volume);
         }
         else
         {
             currentFeedbackState = FeedbackStateType.TOEARLY;
             currentState = wrongState;
             currentState.title = "To early!";
-            audioSource.PlayOneShot(wrongAudioClip, volume);
+            audioSource.PlayOneShot(GameDataManager.CurrentEnvironmentModel.SoundActionWrong, volume);
         }
         
 

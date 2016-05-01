@@ -10,13 +10,15 @@ public class CountdownController : MonoBehaviour {
     public RectTransform container;
     public bool started;
     public AudioSource audioSource;
-    public AudioClip audioClipAlert;
-    public AudioClip audioClipEnd;
+    private AudioClip audioClipAlert;
+    private AudioClip audioClipEnd;
     public Action afterCountdownCallback;
     public int maxCounterValue = 3;
     public float pitchAcum = 0.1f;
     // Use this for initialization
     public void Init (int value, Action afterCountdown, float delay) {
+        audioClipAlert = GameDataManager.CurrentEnvironmentModel.CountdownAlert;
+        audioClipEnd = GameDataManager.CurrentEnvironmentModel.CountdownEnd;
         afterCountdownCallback = afterCountdown;
         _currentValue = maxCounterValue;
         label.gameObject.SetActive(true);

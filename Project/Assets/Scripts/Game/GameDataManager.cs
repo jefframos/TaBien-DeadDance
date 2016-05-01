@@ -6,6 +6,8 @@ using System.Collections.Generic;
 
 public class GameDataManager : MonoBehaviour {
     public static int CurrentSoftCurrency { get; internal set; }
+    public static EnvironmentModel CurrentEnvironmentModel;
+
     public static Text LabelSoftCurrency;
     public static ZombieView Zombie;
     public static int PurchasePart(PartsModel purchaseModel)
@@ -23,8 +25,8 @@ public class GameDataManager : MonoBehaviour {
     internal static void Init()
     {
         PartsDataManager.Init();
+        EnvironmentDataManager.Init();
 
-        
 
         Zombie.Hide();
 
@@ -37,6 +39,9 @@ public class GameDataManager : MonoBehaviour {
         ShowZombie();
 
         GameDataManager.CurrentSoftCurrency = 30;
+
+        GameDataManager.CurrentEnvironmentModel = EnvironmentDataManager.EnvironmentsData[0].GetEnvironmentMode();
+
         UpdateCurrencyLabel();
     }
 

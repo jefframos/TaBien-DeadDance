@@ -19,8 +19,8 @@ public class ActionButtonModelEditor : Editor
         WaveModel waveModel = myScript.transform.parent.GetComponentInParent<WaveModel>();
         Image image = myScript.transform.GetComponent<Image>();
 
-        myScript.color = image.color;
-        EditorGUILayout.ColorField("Color", image.color);
+        //myScript.color = image.color;
+        //EditorGUILayout.ColorField("Color", image.color);
         //myScript.color = EditorGUILayout.ColorField("New Color", myScript.color);
 
 
