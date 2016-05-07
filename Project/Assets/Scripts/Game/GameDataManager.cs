@@ -4,12 +4,13 @@ using System;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public class GameDataManager : MonoBehaviour {
+public class GameDataManager{
     public static int CurrentSoftCurrency { get; internal set; }
     public static EnvironmentModel CurrentEnvironmentModel;
 
     public static Text LabelSoftCurrency;
     public static ZombieView Zombie;
+    public static PlayerModel PlayerModel;
     public static int PurchasePart(PartsModel purchaseModel)
     {
         if(purchaseModel.Value <= CurrentSoftCurrency)
@@ -24,9 +25,14 @@ public class GameDataManager : MonoBehaviour {
 
     internal static void Init()
     {
+        InventoryManager.Init();
         PartsDataManager.Init();
         EnvironmentDataManager.Init();
 
+        PlayerModel = new PlayerModel();
+        PlayerModel.Init();
+
+        PartsDataManager.UpdateInitActiveList();
 
         Zombie.Hide();
 
@@ -43,6 +49,7 @@ public class GameDataManager : MonoBehaviour {
         GameDataManager.CurrentEnvironmentModel = EnvironmentDataManager.EnvironmentsData[0].GetEnvironmentMode();
 
         UpdateCurrencyLabel();
+        
     }
 
     public static void ShowZombie()
@@ -69,7 +76,7 @@ public class GameDataManager : MonoBehaviour {
     {
         if(LabelSoftCurrency == null)
         {
-            print("SEM CURRENCY LABEL");
+            Debug.Log("SEM CURRENCY LABEL");
         }
         LabelSoftCurrency.text = CurrentSoftCurrency.ToString();
     }

@@ -29,7 +29,7 @@ public class GameController : MonoBehaviour {
     public Text BeatCounterLabel;
 
 
-    public int Points;
+    //public int Points;
     public Text PointsLabel;
     public RectTransform PointsLabelRect;
 
@@ -49,7 +49,7 @@ public class GameController : MonoBehaviour {
     private float _beatCounter = 0;
     private int _beatAcum = 0;
 
-    public float LevelGauge;
+    //public float LevelGauge;
     public float MaxGauge;
 
     public Text LevelGaugeLabel;
@@ -77,9 +77,12 @@ public class GameController : MonoBehaviour {
     public MainHUDController MainHUDController;
 
     // Use this for initialization
-    public int Life = 3;
+    //public int Life = 3;
     public bool Paused;
-    public int CurrentLevel;
+    //public int CurrentLevel;
+
+    public InGameModel GameModel;
+
     public void ResetWaves()
     {
         WavesList = new List<WaveModel>();
@@ -106,22 +109,20 @@ public class GameController : MonoBehaviour {
         }
     }
     void Start () {
-        //MadnessFactor.GameSpeed = 2;
-        //ResetWaves();
-        //WaveModel tempWave = new WaveModel();
-        //ActionButtonModel tempActionModel = new ActionButtonModel();
-        //tempWave.totalBeats = 20;
-        //tempWave.actionList = new List<ActionButtonModel>();
-        MainHUDController.UpdateTurboMode();
-        InitedGame = false;        
-        Metronome.beatCallback = BeatCallback;
-        ChainController.ResetChain();
-        //middleHUD.SetActive(true);
-        CountdownController.Hide();
-        MadnessController.Reset();
-        //InitGame();
+        
+        Build();
     }
 
+
+    public void Build()
+    {
+        MainHUDController.UpdateTurboMode();
+        InitedGame = false;
+        Metronome.beatCallback = BeatCallback;
+        ChainController.ResetChain();
+        CountdownController.Hide();
+        MadnessController.Reset();
+    }
     public void InitGame()
     {
 
@@ -133,17 +134,19 @@ public class GameController : MonoBehaviour {
 
         _beatAcum = 0;
         _beatCounter = 0;
-        Points = 0;
-        Life = 1;
+
+        GameModel = new InGameModel();
+        GameModel.Points = 0;
+        GameModel.Life = 1;
         LifeController.Reset();
 
         //Reset Chain
         ChainController.ResetChain();
 
-        CurrentLevel = 1;
+        GameModel.CurrentLevel = 1;
 
         //Reinit level gauge
-        LevelGauge = MaxGauge / 2;
+        GameModel.LevelGauge = MaxGauge / 2;
 
         //Reinit action list
         _actionList = new List<ActionButtonView>();
@@ -151,7 +154,7 @@ public class GameController : MonoBehaviour {
         //Reset Zombie
         Zombie.Reset();
         CountdownController.Init(3, AfterCountdown, 1.5f);
-        updatePoints(Points);
+        updatePoints(GameModel.Points);
 
         //Force hide main HUD
         MainHUDController.Hide();
@@ -159,8 +162,26 @@ public class GameController : MonoBehaviour {
         getWave();
 
         MadnessController.Reset();
+
+        ApplyInitItens();
     }
 
+    void ApplyInitItens()
+    {
+        foreach (var item in GameDataManager.PlayerModel.EquipablePlayerInventoryModel.ListItemSlotModel)
+        {
+            if (item.ItemModel != null)
+            {
+                if (item.ItemModel.Behaviour.Type == ItemBehaviourActionType.APPLY_ON_INIT)
+                {
+                    item.ItemModel.Behaviour.ApplyEffects(GameModel);
+
+                    print(GameModel.ExtraBrain);
+                }
+            }
+        }
+        
+    }
     void AfterCountdown()
     {
         InitedGame = true;
@@ -206,9 +227,9 @@ public class GameController : MonoBehaviour {
         }
         //GameContainer.DOShakePosition(2f, 100f, 100);
         //GameContainer.DOShakeScale(2f, 2f);
-        Life--;
-        LifeController.UpdateHearthList(Life);
-        if (Life <= 0)
+        GameModel.Life--;
+        LifeController.UpdateHearthList(GameModel.Life);
+        if (GameModel.Life <= 0)
         {
             PauseGame();
             Invoke("preGameOver", 2f);
@@ -231,8 +252,8 @@ public class GameController : MonoBehaviour {
 
     public void AddLife(int value = 1)
     {
-        Life += value;
-        LifeController.UpdateHearthList(Life);
+        GameModel.Life += value;
+        LifeController.UpdateHearthList(GameModel.Life);
         UnpauseGame();
 
     }
@@ -272,23 +293,23 @@ public class GameController : MonoBehaviour {
             actionView.ForceDestroy();            
         }
         _actionList = new List<ActionButtonView>();
-        Points = 0;
+        GameModel.Points = 0;
         updatePointsLabel();
 
         print("GameOver");
     }
     private void updateLevelGauge()
     {
-        if(LevelGauge < 0)
+        if(GameModel.LevelGauge < 0)
         {
-            LevelGauge = 0;
+            GameModel.LevelGauge = 0;
         }
-        if (LevelGauge > MaxGauge)
+        if (GameModel.LevelGauge > MaxGauge)
         {
-            LevelGauge = MaxGauge;
+            GameModel.LevelGauge = MaxGauge;
         }
-        LevelGaugeLabel.text = Math.Ceiling(LevelGauge).ToString();
-        LevelGaugeView.UpdateBar(LevelGauge / 100);
+        LevelGaugeLabel.text = Math.Ceiling(GameModel.LevelGauge).ToString();
+        LevelGaugeView.UpdateBar(GameModel.LevelGauge / 100);
     }
 
     // Update is called once per frame
@@ -466,10 +487,10 @@ public class GameController : MonoBehaviour {
                 Zombie.SetAnimation(finishedType);
             }
 
-            
 
 
-            LevelGauge += gaugeAccum;
+
+            GameModel.LevelGauge += gaugeAccum;
 
             MadnessController.UpdateMadness(ChainController.PerfectInARow);
             if(ChainController.PerfectInARow >= MadnessController.MadnessValue)
@@ -500,7 +521,7 @@ public class GameController : MonoBehaviour {
                     particleView.destiny = CurrencyRect.position;
                     //particleView.destiny.z = 500f;
                     particleView.rectTarget = CurrencyRect;
-                    particleView.endTweenCallback = (() => { updateCurrency(MadnessFactor.GetBrains(ChainController.PerfectInARow)); });
+                    particleView.endTweenCallback = (() => { updateCurrency(MadnessFactor.GetBrains(ChainController.PerfectInARow) + GameModel.ExtraBrain); });
                     particleView.delay = 0.7f + i * 0.2f;
                     particleView.time *= 1.2f;
                         //colocar aqui os destinos certos dos cerebros
@@ -509,7 +530,7 @@ public class GameController : MonoBehaviour {
 
                     particleView.color = actionView.currentState.color;
 
-                    particleView.Build(true, 1 , MadnessFactor.GetBrains(ChainController.PerfectInARow));
+                    particleView.Build(true, 1 , MadnessFactor.GetBrains(ChainController.PerfectInARow) + GameModel.ExtraBrain);
                 }
                 for (int i = 0; i < actionPoints; i++)
                 {
@@ -592,20 +613,19 @@ public class GameController : MonoBehaviour {
     }
     private void updatePoints(int actionPoints)
     {
-        Points += actionPoints;
+        GameModel.Points += actionPoints;
         updatePointsLabel();
 
-        if(LevelGauge > MaxGauge)
+        if(GameModel.LevelGauge > MaxGauge)
         {
-            LevelGauge = MaxGauge/2;
+            GameModel.LevelGauge = MaxGauge/2;
             AudioController.UpgradeAudioController();
-            CurrentLevel++;
-            
+            GameModel.CurrentLevel++;
         }
     }
     private void updatePointsLabel()
     {
-        PointsLabel.text = Points.ToString();
+        PointsLabel.text = GameModel.Points.ToString();
     }
     private void updateCurrencyLabel()
     {

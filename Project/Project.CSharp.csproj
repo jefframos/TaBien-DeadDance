@@ -79,6 +79,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Game\Behaviour\ExtraBrainBehaviour.cs" />
+    <Compile Include="Assets\Scripts\Game\Behaviour\ItemBehaviour.cs" />
     <Compile Include="Assets\Scripts\Game\Controller\AudioController.cs" />
     <Compile Include="Assets\Scripts\Game\Controller\ChainController.cs" />
     <Compile Include="Assets\Scripts\Game\Controller\CountdownController.cs" />
@@ -95,16 +97,25 @@
     <Compile Include="Assets\Scripts\Game\Enum\ChainFinishedType.cs" />
     <Compile Include="Assets\Scripts\Game\Enum\FeedbackStateType.cs" />
     <Compile Include="Assets\Scripts\Game\Enum\GameModeType.cs" />
+    <Compile Include="Assets\Scripts\Game\Enum\ItemBehaviourActionType.cs" />
+    <Compile Include="Assets\Scripts\Game\Enum\ItemBehaviourType.cs" />
+    <Compile Include="Assets\Scripts\Game\Enum\ItemType.cs" />
     <Compile Include="Assets\Scripts\Game\Enum\ShopSectionType.cs" />
     <Compile Include="Assets\Scripts\Game\EnvironmentDataManager.cs" />
     <Compile Include="Assets\Scripts\Game\GameDataManager.cs" />
     <Compile Include="Assets\Scripts\Game\GameInitializer.cs" />
+    <Compile Include="Assets\Scripts\Game\InventoryManager.cs" />
     <Compile Include="Assets\Scripts\Game\MadnessFactor.cs" />
     <Compile Include="Assets\Scripts\Game\Metronome.cs" />
     <Compile Include="Assets\Scripts\Game\Model\ActionButtonModel.cs" />
     <Compile Include="Assets\Scripts\Game\Model\EnvironmentModel.cs" />
     <Compile Include="Assets\Scripts\Game\Model\EnvironmentShopModel.cs" />
+    <Compile Include="Assets\Scripts\Game\Model\InGameModel.cs" />
+    <Compile Include="Assets\Scripts\Game\Model\ItemModel.cs" />
+    <Compile Include="Assets\Scripts\Game\Model\ItemSlotModel.cs" />
     <Compile Include="Assets\Scripts\Game\Model\PartsModel.cs" />
+    <Compile Include="Assets\Scripts\Game\Model\PlayerInventoryModel.cs" />
+    <Compile Include="Assets\Scripts\Game\Model\PlayerModel.cs" />
     <Compile Include="Assets\Scripts\Game\Model\PurchaseModel.cs" />
     <Compile Include="Assets\Scripts\Game\Model\WaveModel.cs" />
     <Compile Include="Assets\Scripts\Game\Model\ZombiePartsController.cs" />

@@ -1,0 +1,1 @@
+﻿public enum ItemBehaviourActionType { APPLY_ON_ACTIONS, APPLY_ON_END, APPLY_ON_INIT }

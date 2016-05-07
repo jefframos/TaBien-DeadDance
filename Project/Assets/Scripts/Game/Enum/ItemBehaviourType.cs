@@ -1,0 +1,1 @@
+﻿public enum ItemBehaviourType { EXTRA_BRAINS, XP_MULTIPLYER }

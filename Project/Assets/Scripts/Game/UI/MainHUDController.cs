@@ -75,12 +75,25 @@ public class MainHUDController : MonoBehaviour {
     {
         PreEndPopUp.Reset();
         EndPopUp.Reset();
+
+        UpdateEquipableInventory();
     }
     public void Hide()
     {
         PreEndPopUp.Hide();
         EndPopUp.Hide();
     }
+    #region CONTROLLER
+
+    public void UpdateEquipableInventory()
+    {
+    }
+
+
+    #endregion
+
+    #region ANIMATION
+
     public void ShowPreEndGame()
     {
         PreEndPopUp.Show();
@@ -199,4 +212,5 @@ public class MainHUDController : MonoBehaviour {
                 break;
         }
     }
+    #endregion
 }

@@ -11,7 +11,7 @@ public class PartsDataManager : MonoBehaviour {
     public static List<PartsModel> PantsData;
     public static List<PartsModel> BodyData;
 
-    public static List<int> ActiveIds;
+    //public static List<int> ActiveIds;
 
 
     public static void Init()
@@ -213,21 +213,21 @@ public class PartsDataManager : MonoBehaviour {
         }
 
 
-        ActiveIds = new List<int>();
-        //ActiveIds.Add(UnityEngine.Random.Range(0, HeadData.Count));//HEAD
-        //ActiveIds.Add(UnityEngine.Random.Range(0, AcessoryData.Count));//ACESSORY
-        //ActiveIds.Add(UnityEngine.Random.Range(0, HatData.Count));//HAT
-        //ActiveIds.Add(UnityEngine.Random.Range(0, BodyData.Count));//BODY
-        //ActiveIds.Add(UnityEngine.Random.Range(0, PantsData.Count));//PANTS
+        //ActiveIds = new List<int>();
+        ////ActiveIds.Add(UnityEngine.Random.Range(0, HeadData.Count));//HEAD
+        ////ActiveIds.Add(UnityEngine.Random.Range(0, AcessoryData.Count));//ACESSORY
+        ////ActiveIds.Add(UnityEngine.Random.Range(0, HatData.Count));//HAT
+        ////ActiveIds.Add(UnityEngine.Random.Range(0, BodyData.Count));//BODY
+        ////ActiveIds.Add(UnityEngine.Random.Range(0, PantsData.Count));//PANTS
 
-        ActiveIds.Add(0);//HEAD
-        ActiveIds.Add(0);//ACESSORY
-        ActiveIds.Add(0);//HAT
-        ActiveIds.Add(0);//BODY
-        ActiveIds.Add(0);//PANTS
+        //ActiveIds.Add(0);//HEAD
+        //ActiveIds.Add(0);//ACESSORY
+        //ActiveIds.Add(0);//HAT
+        //ActiveIds.Add(0);//BODY
+        //ActiveIds.Add(0);//PANTS
 
         PurchaseEverything();
-        UpdateInitActiveList();
+        //UpdateInitActiveList();
 
     }
     //purchase everything
@@ -264,7 +264,7 @@ public class PartsDataManager : MonoBehaviour {
     {
         for (int i = 0; i < HeadData.Count; i++)
         {
-            if(HeadData[i].Id == ActiveIds[0])
+            if(HeadData[i].Id == GameDataManager.PlayerModel.CurrentHeadID)
             {
                 HeadData[i].Active = true;
             }
@@ -275,7 +275,7 @@ public class PartsDataManager : MonoBehaviour {
         }
         for (int i = 0; i < AcessoryData.Count; i++)
         {
-            if (AcessoryData[i].Id == ActiveIds[1])
+            if (AcessoryData[i].Id == GameDataManager.PlayerModel.CurrentAcessoryID)
             {
                 AcessoryData[i].Active = true;
             }
@@ -286,7 +286,7 @@ public class PartsDataManager : MonoBehaviour {
         }
         for (int i = 0; i < HatData.Count; i++)
         {
-            if (HatData[i].Id == ActiveIds[2])
+            if (HatData[i].Id == GameDataManager.PlayerModel.CurrentHatID)
             {
                 HatData[i].Active = true;
             }
@@ -297,7 +297,7 @@ public class PartsDataManager : MonoBehaviour {
         }
         for (int i = 0; i < BodyData.Count; i++)
         {
-            if (BodyData[i].Id == ActiveIds[3])
+            if (BodyData[i].Id == GameDataManager.PlayerModel.CurrentBodyID)
             {
                 BodyData[i].Active = true;
             }
@@ -308,7 +308,7 @@ public class PartsDataManager : MonoBehaviour {
         }
         for (int i = 0; i < PantsData.Count; i++)
         {
-            if (PantsData[i].Id == ActiveIds[4])
+            if (PantsData[i].Id == GameDataManager.PlayerModel.CurrentPantsID)
             {
                 PantsData[i].Active = true;
             }
@@ -410,19 +410,19 @@ public class PartsDataManager : MonoBehaviour {
         switch (partsModel.PartType)
         {
             case ShopSectionType.HEAD:
-                ActiveIds[0] = partsModel.Id;
+                GameDataManager.PlayerModel.CurrentHeadID = partsModel.Id;
                 break;
             case ShopSectionType.BODY:
-                ActiveIds[3] = partsModel.Id;
+                GameDataManager.PlayerModel.CurrentBodyID = partsModel.Id;
                 break;
             case ShopSectionType.PANTS:
-                ActiveIds[4] = partsModel.Id;
+                GameDataManager.PlayerModel.CurrentPantsID = partsModel.Id;
                 break;
             case ShopSectionType.HATS:
-                ActiveIds[2] = partsModel.Id;
+                GameDataManager.PlayerModel.CurrentHatID = partsModel.Id;
                 break;
             case ShopSectionType.ACESSORY:
-                ActiveIds[1] = partsModel.Id;
+                GameDataManager.PlayerModel.CurrentAcessoryID = partsModel.Id;
                 break;
             default:
                 print("SetActivePartModel Default");
