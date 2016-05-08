@@ -78,6 +78,7 @@
     <Compile Include="Assets\Plugins\Animations\IncreaseSortingOrder.cs" />
     <Compile Include="Assets\Plugins\Animations\ReSkinAnimation.cs" />
     <Compile Include="Assets\Plugins\Animations\SimpleCCD.cs" />
+    <Compile Include="Assets\Plugins\Singleton\Singleton.cs" />
     <Compile Include="Assets\Standard Assets\Effects\ImageEffects\Scripts\Antialiasing.cs" />
     <Compile Include="Assets\Standard Assets\Effects\ImageEffects\Scripts\Bloom.cs" />
     <Compile Include="Assets\Standard Assets\Effects\ImageEffects\Scripts\BloomAndFlares.cs" />

@@ -26,8 +26,9 @@ public class PlayerModel{
         EquipablePlayerInventoryModel.Build();
 
         //ADICIONA UM ITEM
-        EquipablePlayerInventoryModel.AddItem(0, InventoryManager.ListItemData[0]);
-        EquipablePlayerInventoryModel.AddItem(1, InventoryManager.ListItemData[0]);
+        EquipablePlayerInventoryModel.AddItem(0, InventoryManager.ListEquipableItemData[0]);
+        EquipablePlayerInventoryModel.AddItem(1, InventoryManager.ListEquipableItemData[1]);
+        EquipablePlayerInventoryModel.AddItem(2, InventoryManager.ListEquipableItemData[2]);
     }
 
     internal void Init()

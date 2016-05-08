@@ -3,21 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class ItemModel
+public class ItemModel : PurchaseModel
 {
-    public string Name;
     public ItemType Type;
     public int Level;
     public int XP;
     public int ToNextLevel;
     public List<int> LevelsList;
     public List<int> PriceList;
+    public List<float> ReferenceValueList;
     public Action<int> ActionLevelUp;
     public int BasePrice;
     public int UnitPrice;
-
     public string ImageName;
     public string ImagePartName;
+
+    public string Description;
 
     public ItemBehaviour Behaviour;
     public ItemBehaviourType BehaviourType;

@@ -42,9 +42,13 @@ public class ZombieView : MonoBehaviour {
 
     internal void Show()
     {
-        HeadData.ForceFadeIn(0.2f, 0.45f);
-        BodyData.ForceFadeIn(0.2f, 0.45f);
-        PantsData.ForceFadeIn(0.2f, 0.45f);
+        //HeadData.ForceFadeIn(0.2f, 0.45f);
+        //BodyData.ForceFadeIn(0.2f, 0.45f);
+        //PantsData.ForceFadeIn(0.2f, 0.45f);
+
+        HeadData.ForceFadeIn(0.2f);
+        BodyData.ForceFadeIn(0.2f);
+        PantsData.ForceFadeIn(0.2f);
     }
 
     internal void Hide()

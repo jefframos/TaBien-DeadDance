@@ -67,6 +67,9 @@ public class MainHUDController : MonoBehaviour {
     private CurrentStateHUD currentStateHUD;
     // Use this for initialization
 
+    public EquipableItensController EquipableItensController;
+    public EquipableItemPopUpController EquipableItemPopUpController;
+
     void Awake()
     {
         Reset();
@@ -87,6 +90,11 @@ public class MainHUDController : MonoBehaviour {
 
     public void UpdateEquipableInventory()
     {
+        EquipableItensController.Build();
+        EquipableItemPopUpController.Build();
+
+        EquipableItensController.EquipableItemPopUp = EquipableItemPopUpController;
+        EquipableItemPopUpController.gameObject.SetActive(false);
     }
 
 

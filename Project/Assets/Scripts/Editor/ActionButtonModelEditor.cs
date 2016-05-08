@@ -17,7 +17,7 @@ public class ActionButtonModelEditor : Editor
         Vector2 tempV3 = new Vector2();
         RectTransform actionArea = myScript.transform.parent.GetComponent<RectTransform>();
         WaveModel waveModel = myScript.transform.parent.GetComponentInParent<WaveModel>();
-        Image image = myScript.transform.GetComponent<Image>();
+        //Image image = myScript.transform.GetComponent<Image>();
 
         //myScript.color = image.color;
         //EditorGUILayout.ColorField("Color", image.color);

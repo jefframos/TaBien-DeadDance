@@ -9,7 +9,7 @@ public class EnvironmentShopModel : PurchaseModel
     public bool Active;
     public string BasePath = "Game/Environments/";
     private EnvironmentModel environmentModel;
-    bool environmentLoaded = false;
+    private bool environmentLoaded = false;
     public EnvironmentModel GetEnvironmentMode()
     {
         environmentModel = Resources.Load<EnvironmentModel>(BasePath + Path);

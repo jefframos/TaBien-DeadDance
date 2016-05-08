@@ -121,6 +121,10 @@
     <Compile Include="Assets\Scripts\Game\Model\ZombiePartsController.cs" />
     <Compile Include="Assets\Scripts\Game\PartsDataManager.cs" />
     <Compile Include="Assets\Scripts\Game\UI\GameEffects.cs" />
+    <Compile Include="Assets\Scripts\Game\UI\Itens\EquipableItemPopUpController.cs" />
+    <Compile Include="Assets\Scripts\Game\UI\Itens\EquipableItensController.cs" />
+    <Compile Include="Assets\Scripts\Game\UI\Itens\ItemShopController.cs" />
+    <Compile Include="Assets\Scripts\Game\UI\Itens\ItemSlotController.cs" />
     <Compile Include="Assets\Scripts\Game\UI\MainHUDController.cs" />
     <Compile Include="Assets\Scripts\Game\UI\ShopController.cs" />
     <Compile Include="Assets\Scripts\Game\View\ActionButtonView.cs" />
